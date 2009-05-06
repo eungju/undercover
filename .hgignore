@@ -1,0 +1,10 @@
+syntax: glob
+
+.DS_Store
+.classpath
+.project
+.settings
+target
+*~
+.#*
+infinitest.log*
