@@ -10,7 +10,9 @@
 	<name>Undercover Aggregator</name>
 
 	<modules>
+		<module>undercover-parent</module>
 		<module>undercover</module>
+		<module>undercover-maven-plugin</module>
 	</modules>
 
 	<scm>

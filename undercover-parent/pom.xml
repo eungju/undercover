@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>undercover</groupId>
+	<artifactId>undercover-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>Undercover Parent</name>
+	<inceptionYear>2009</inceptionYear>
+
+	<properties>
+		<maven.compiler.encoding>utf-8</maven.compiler.encoding>
+		<maven.compiler.target>1.5</maven.compiler.target>
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<jmock.version>2.5.1</jmock.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>${jmock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>${jmock.version}</version>
+			<scope>test</scope>
+		</dependency> 
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${maven.compiler.encoding}</encoding>
+					<debug>true</debug>
+					<optimize>true</optimize>
+					<showDeprecations>true</showDeprecations>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.maven.plugin</groupId>
+				<artifactId>emma-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype.org</id>
+			<name>Public Sonatype Maven Repository</name>
+			<url>http://repository.sonatype.org/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

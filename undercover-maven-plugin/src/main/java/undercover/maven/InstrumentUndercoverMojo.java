@@ -1,7 +1,9 @@
 package undercover.maven;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,18 +47,23 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 		super.checkParameters();
 
 		if (instrumentationPaths == null) {
-			instrumentationPaths = new File[] {
-					new File(project.getBuild().getOutputDirectory()),
-					new File(project.getBuild().getTestOutputDirectory())
-
-			};
+			List<File> paths = new ArrayList<File>();
+			File outputDirectory = new File(project.getBuild().getOutputDirectory());
+			getLog().info("Instrumentation path: " + outputDirectory);
+			paths.add(outputDirectory);
+			File testOutputDirectory = new File(project.getBuild().getTestOutputDirectory()); 
+			getLog().info("Instrumentation path: " + testOutputDirectory);
+			if (testOutputDirectory.exists()) {
+				paths.add(testOutputDirectory);
+			}
+			instrumentationPaths = paths.toArray(new File[paths.size()]);
 		}
 	}
 
     protected void doExecute() throws MojoExecutionException {
     	Instrument instrument = new Instrument();
     	instrument.instrumentDirs(instrumentationPaths, outputDirectory);
-    	//addUndercoverDependenciesToTestClasspath();
+    	addUndercoverDependenciesToTestClasspath();
 	}
 
     /**
