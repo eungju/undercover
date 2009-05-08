@@ -8,7 +8,6 @@ import java.util.List;
 import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
 public class SourceReport {
 	private HtmlReport parent;
@@ -16,7 +15,6 @@ public class SourceReport {
 	public String path;
 	public String name;
 	public String language;
-	public String text;
 	public List<SourceLine> lines;
 	
 	public SourceReport(HtmlReport htmlReport, File file) {
@@ -28,7 +26,6 @@ public class SourceReport {
 		path = sourceHtmlPath(parent.getRelativeSourcePath(file));
 		name = file.getName();
 		language = FilenameUtils.getExtension(name);
-		text = FileUtils.readFileToString(file, parent.sourceEncoding);
 		lines = new ArrayList<SourceLine>();
 		int lineNumber = 1;
 		for (String each : (List<String>) FileUtils.readLines(file, parent.sourceEncoding)) {

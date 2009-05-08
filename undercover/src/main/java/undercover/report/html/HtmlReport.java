@@ -55,23 +55,6 @@ public class HtmlReport {
 	
 	void copyResources() throws IOException {
 		final String[] resources = {
-				"SyntaxHighlighter/scripts/shCore.js",
-				"SyntaxHighlighter/scripts/shBrushJava.js",
-				"SyntaxHighlighter/scripts/shBrushScala.js",
-				"SyntaxHighlighter/scripts/clipboard.swf",
-				"SyntaxHighlighter/styles/help.png",
-				"SyntaxHighlighter/styles/magnifier.png",
-				"SyntaxHighlighter/styles/page_white_code.png",
-				"SyntaxHighlighter/styles/page_white_copy.png",
-				"SyntaxHighlighter/styles/printer.png",
-				"SyntaxHighlighter/styles/shCore.css",
-				"SyntaxHighlighter/styles/shThemeDefault.css",
-				"SyntaxHighlighter/styles/shThemeDjango.css",
-				"SyntaxHighlighter/styles/shThemeEmacs.css",
-				"SyntaxHighlighter/styles/shThemeFadeToGrey.css",
-				"SyntaxHighlighter/styles/shThemeMidnight.css",
-				"SyntaxHighlighter/styles/shThemeRDark.css",
-				"SyntaxHighlighter/styles/wrapping.png",
 		};
 		for (String each : resources) {
 			copyResource("resources/" + each, each);

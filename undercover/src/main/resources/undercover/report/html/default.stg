@@ -5,14 +5,6 @@ header() ::= <<
 
 <html>
 <head>
-	<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/styles/shCore.css" />
-	<link type="text/css" rel="stylesheet" href="SyntaxHighlighter/styles/shThemeDefault.css" />
-	<script type="text/javascript" src="SyntaxHighlighter/scripts/shCore.js"></script>
-	<script type="text/javascript" src="SyntaxHighlighter/scripts/shBrushJava.js"></script>
-	<script type="text/javascript" src="SyntaxHighlighter/scripts/shBrushScala.js"></script>
-	<script type="text/javascript">
-		SyntaxHighlighter.all();
-	</script> 
 </head>
 <body>
 >>
@@ -22,9 +14,16 @@ $header()$
 
 Statistics for $source.name; format="html"$
 
-<pre class="brush:$source.language$">
-$source.text; format="html"$
-</pre>
+<table>
+	<tbody>
+	$source.lines:{ each |
+		<tr>
+			<td>$each.number$</td>
+			<td>$each.text; format="html"$</td>
+		</tr>
+	}$
+	</tbody>
+</table>
 
 $footer()$
 >>
