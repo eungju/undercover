@@ -1,9 +1,7 @@
 package undercover.maven;
 
 import java.io.File;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.AbstractMojo;

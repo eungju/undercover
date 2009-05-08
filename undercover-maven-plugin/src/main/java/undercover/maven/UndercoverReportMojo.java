@@ -64,10 +64,10 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 	protected void executeReport(Locale locale) throws MavenReportException {
 		checkParameters();
 		
-		HtmlReport report = new HtmlReport();
-		report.setSourcePaths(sourcePaths);
-		report.setOutputDirectory(outputDirectory);
 		try {
+			HtmlReport report = new HtmlReport();
+			report.setSourcePaths(sourcePaths);
+			report.setOutputDirectory(outputDirectory);
 			report.generate();
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);

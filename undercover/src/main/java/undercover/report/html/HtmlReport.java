@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -46,13 +47,53 @@ public class HtmlReport {
 	public void generate() throws IOException {
 		outputDir.mkdirs();
 		
+		copyResources();
 		for (File each : findAllSourceFiles()) {
 			new SourceReport(this, each).writeTo(outputDir);
 		}
 	}
 	
+	void copyResources() throws IOException {
+		final String[] resources = {
+				"SyntaxHighlighter/scripts/shCore.js",
+				"SyntaxHighlighter/scripts/shBrushJava.js",
+				"SyntaxHighlighter/scripts/shBrushScala.js",
+				"SyntaxHighlighter/scripts/clipboard.swf",
+				"SyntaxHighlighter/styles/help.png",
+				"SyntaxHighlighter/styles/magnifier.png",
+				"SyntaxHighlighter/styles/page_white_code.png",
+				"SyntaxHighlighter/styles/page_white_copy.png",
+				"SyntaxHighlighter/styles/printer.png",
+				"SyntaxHighlighter/styles/shCore.css",
+				"SyntaxHighlighter/styles/shThemeDefault.css",
+				"SyntaxHighlighter/styles/shThemeDjango.css",
+				"SyntaxHighlighter/styles/shThemeEmacs.css",
+				"SyntaxHighlighter/styles/shThemeFadeToGrey.css",
+				"SyntaxHighlighter/styles/shThemeMidnight.css",
+				"SyntaxHighlighter/styles/shThemeRDark.css",
+				"SyntaxHighlighter/styles/wrapping.png",
+		};
+		for (String each : resources) {
+			copyResource("resources/" + each, each);
+		}
+	}
+
+	private void copyResource(String sourcePath, String destPath) throws IOException {
+		getOutputFile(destPath).getParentFile().mkdirs();
+		InputStream input = null;
+		OutputStream output = null;
+		try {
+			input = getClass().getResourceAsStream(sourcePath);
+			output = openOutputStream(destPath);
+			IOUtils.copy(input, output);
+		} finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(output);
+		}
+	}
+
 	public StringTemplate getTemplate(String templateName) {
-		return templateGroup.getInstanceOf("source_html");
+		return templateGroup.getInstanceOf(templateName);
 	}
 
 	public void writeTemplate(StringTemplate template, String relativeOutputPath) throws IOException {
@@ -65,11 +106,15 @@ public class HtmlReport {
 		}
 	}
 	
+	public File getOutputFile(String path) {
+		return new File(outputDir, path);
+	}
+	
 	public OutputStream openOutputStream(String path) throws FileNotFoundException {
-		return new FileOutputStream(new File(outputDir, path));
+		return new FileOutputStream(getOutputFile(path));
 	}
 
-	public String relativeSourcePath(File file) {
+	public String getRelativeSourcePath(File file) {
 		return getRelativeSourcePath(sourcePaths, file);
 	}
 	

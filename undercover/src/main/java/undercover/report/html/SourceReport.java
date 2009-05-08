@@ -7,31 +7,36 @@ import java.util.List;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 public class SourceReport {
 	private HtmlReport parent;
 	private File file;
 	public String path;
 	public String name;
+	public String language;
+	public String text;
 	public List<SourceLine> lines;
 	
 	public SourceReport(HtmlReport htmlReport, File file) {
 		this.parent = htmlReport;
 		this.file = file;
-		path = sourceHtmlPath(htmlReport.relativeSourcePath(file));
-		name = file.getName();
 	}
 	
 	public void writeTo(File outputDir) throws IOException {
-		StringTemplate st = parent.getTemplate("source_html");
-
-		st.setAttribute("source", this);
+		path = sourceHtmlPath(parent.getRelativeSourcePath(file));
+		name = file.getName();
+		language = FilenameUtils.getExtension(name);
+		text = FileUtils.readFileToString(file, parent.sourceEncoding);
 		lines = new ArrayList<SourceLine>();
 		int lineNumber = 1;
 		for (String each : (List<String>) FileUtils.readLines(file, parent.sourceEncoding)) {
 			lines.add(new SourceLine(lineNumber++, each));
 		}
-		
+
+		StringTemplate st = parent.getTemplate("source_html");
+		st.setAttribute("source", this);
 		parent.writeTemplate(st, path);
 	}
 
