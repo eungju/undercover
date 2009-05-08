@@ -1,0 +1,34 @@
+group Html;
+
+header() ::= <<
+<?xml version="1.0" encoding="UTF-8">
+
+<html>
+<head>
+</head>
+<body>
+>>
+
+source_html(source) ::= <<
+$header()$
+
+Statistics for $source.name; format="html"$
+
+<table>
+<tbody>
+	$source.lines:{ each |
+	<tr>
+		<td>$each.number$</td>
+		<td>$each.text; format="html"$</td>
+	</tr>
+	}$
+</tbody>
+<table>
+
+$footer()$
+>>
+
+footer() ::= <<
+</body>
+</html>
+>>

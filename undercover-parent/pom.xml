@@ -64,6 +64,49 @@
 		</plugins>
 	</reporting>
 
+	<profiles>
+		<profile>
+			<id>clover</id>
+			<properties>
+				<clover.version>2.3.1</clover.version>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.atlassian.maven.plugins</groupId>
+						<artifactId>maven-clover2-plugin</artifactId>
+						<version>${clover.version}</version>
+						<configuration>
+							<licenseLocation>${clover.licenseLocation}</licenseLocation>
+							<jdk>${maven.compiler.source}</jdk>
+							<encoding>${maven.compiler.encoding}</encoding>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>pre-site</phase>
+								<goals>
+									<goal>instrument</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>com.atlassian.maven.plugins</groupId>
+						<artifactId>maven-clover2-plugin</artifactId>
+						<version>${clover.version}</version>
+						<configuration>
+							<licenseLocation>${clover.licenseLocation}</licenseLocation>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>	
+		</profile>
+	</profiles>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>sonatype.org</id>

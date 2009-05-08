@@ -3,7 +3,7 @@ package undercover.metric;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodMetric implements MetaData {
+public class MethodMetric {
 	private String name;
 	private String descriptor;
 	private List<FragmentMetric> fragments;

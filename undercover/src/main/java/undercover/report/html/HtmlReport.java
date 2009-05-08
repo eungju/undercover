@@ -1,0 +1,100 @@
+package undercover.report.html;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.antlr.stringtemplate.AutoIndentWriter;
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
+import org.antlr.stringtemplate.StringTemplateWriter;
+import org.antlr.stringtemplate.language.DefaultTemplateLexer;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
+public class HtmlReport {
+	private File[] sourcePaths;
+	private File outputDir;
+	String sourceEncoding = "UTF-8";
+	final String outputEncoding = "UTF-8";
+	final String templateEncoding = "UTF-8";
+	StringTemplateGroup templateGroup;
+	
+	public HtmlReport() throws IOException {
+		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
+		templateGroup.registerRenderer(String.class, new StringRenderer());
+	}
+	
+	public void setSourcePaths(File[] sourcePaths) {
+		this.sourcePaths = sourcePaths;
+	}
+	
+	public void setOutputDirectory(File outputDirectory) {
+		this.outputDir = outputDirectory;
+	}
+	
+	public void generate() throws IOException {
+		outputDir.mkdirs();
+		
+		for (File each : findAllSourceFiles()) {
+			new SourceReport(this, each).writeTo(outputDir);
+		}
+	}
+	
+	public StringTemplate getTemplate(String templateName) {
+		return templateGroup.getInstanceOf("source_html");
+	}
+
+	public void writeTemplate(StringTemplate template, String relativeOutputPath) throws IOException {
+		Writer out = new OutputStreamWriter(openOutputStream(relativeOutputPath), outputEncoding);
+		StringTemplateWriter writer = new AutoIndentWriter(out);
+		try {
+			template.write(writer);
+		} finally	{
+			IOUtils.closeQuietly(out);
+		}
+	}
+	
+	public OutputStream openOutputStream(String path) throws FileNotFoundException {
+		return new FileOutputStream(new File(outputDir, path));
+	}
+
+	public String relativeSourcePath(File file) {
+		return getRelativeSourcePath(sourcePaths, file);
+	}
+	
+	public String getRelativeSourcePath(File[] paths, File file) {
+		for (File each : paths) {
+			if (file.getAbsolutePath().startsWith(each.getAbsolutePath() + File.separator)) {
+				return file.getAbsolutePath().substring(each.getAbsolutePath().length() + 1);
+			}
+		}
+		throw new IllegalArgumentException("Cannot find " + file);
+	}
+
+	public List<File> findAllSourceFiles() {
+		List<File> result = new ArrayList<File>();
+		for (File each : sourcePaths) {
+			result.addAll(FileUtils.listFiles(each, new RegexFileFilter(".*\\.(java|scala)"), TrueFileFilter.TRUE));
+		}
+		return result;
+	}
+
+	public List<File> findSourceFiles(String fileName) {
+		List<File> result = new ArrayList<File>();
+		for (File each : sourcePaths) {
+			result.addAll(FileUtils.listFiles(each, new NameFileFilter(fileName), TrueFileFilter.TRUE));
+		}
+		return result;
+	}
+}

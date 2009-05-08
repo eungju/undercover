@@ -24,4 +24,22 @@ public class HelloWorld {
 	public boolean shortCircuitBranch() {
 		return a == 1;
 	}
+	
+	public void tryCatchBranch() {
+		try {
+			a++;
+		} catch (RuntimeException e) {
+			a--;
+		}
+	}
+
+	public void tryCatchCatchBranch() {
+		try {
+			a++;
+		} catch (RuntimeException e) {
+			a--;
+		} catch (Exception e) {
+			a--;
+		}
+	}
 }

@@ -69,7 +69,7 @@ public class InstrumentClass extends ClassAdapter {
 			IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE,
 			IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
 			IF_ACMPEQ, IF_ACMPNE,
-			IFNULL, IFNONNULL
+			IFNULL, IFNONNULL,
 		};
 		
 		static {

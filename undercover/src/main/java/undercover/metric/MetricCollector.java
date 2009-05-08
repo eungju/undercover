@@ -23,12 +23,8 @@ public class MetricCollector {
 		return fragments.size() - 1;
 	}
 	
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (ClassMetric each : classes) {
-			builder.append(each.toString()).append(',');
-		}
-		return builder.toString();
+	public MetaData getMetaData() {
+		return new MetaData(classes);
 	}
 
 	public void touchFragment(int fragmentId) {

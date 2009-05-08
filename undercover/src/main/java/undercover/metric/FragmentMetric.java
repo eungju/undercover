@@ -1,6 +1,6 @@
 package undercover.metric;
 
-public class FragmentMetric implements MetaData {
+public class FragmentMetric {
 	private int line;
 	private int branchCount;
 	private int touchCount;

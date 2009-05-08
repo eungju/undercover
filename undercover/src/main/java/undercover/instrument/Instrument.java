@@ -73,7 +73,7 @@ public class Instrument {
 		MetricCollector collector = new MetricCollector();
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
 		classReader.accept(new InstrumentClass(classWriter, collector), 0);
-		System.out.println(collector.toString());
+		System.out.println(collector.getMetaData().toString());
 		return classWriter;
 	}
 }

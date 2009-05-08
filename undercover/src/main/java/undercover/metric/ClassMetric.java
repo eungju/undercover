@@ -2,7 +2,7 @@ package undercover.metric;
 
 import java.util.ArrayList;
 
-public class ClassMetric implements MetaData {
+public class ClassMetric {
 	private String name;
 	private String source;
 	private ArrayList<MethodMetric> methods;
