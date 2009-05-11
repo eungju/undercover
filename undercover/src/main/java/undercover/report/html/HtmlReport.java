@@ -24,12 +24,14 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class HtmlReport {
-	private File[] sourcePaths;
-	private File outputDir;
-	String sourceEncoding = "UTF-8";
-	final String outputEncoding = "UTF-8";
 	final String templateEncoding = "UTF-8";
-	StringTemplateGroup templateGroup;
+	final String outputEncoding = "UTF-8";
+
+	private File[] sourcePaths;
+	private File outputDirectory;
+	String sourceEncoding = "UTF-8";
+	
+	private StringTemplateGroup templateGroup;
 	
 	public HtmlReport() throws IOException {
 		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
@@ -40,16 +42,20 @@ public class HtmlReport {
 		this.sourcePaths = sourcePaths;
 	}
 	
+	public void setSourceEncoding(String sourceEncoding) {
+		this.sourceEncoding = sourceEncoding;
+	}
+	
 	public void setOutputDirectory(File outputDirectory) {
-		this.outputDir = outputDirectory;
+		this.outputDirectory = outputDirectory;
 	}
 	
 	public void generate() throws IOException {
-		outputDir.mkdirs();
+		outputDirectory.mkdirs();
 		
 		copyResources();
 		for (File each : findAllSourceFiles()) {
-			new SourceReport(this, each).writeTo(outputDir);
+			new SourceReport(this, each).writeTo(outputDirectory);
 		}
 	}
 	
@@ -61,7 +67,7 @@ public class HtmlReport {
 		}
 	}
 
-	private void copyResource(String sourcePath, String destPath) throws IOException {
+	void copyResource(String sourcePath, String destPath) throws IOException {
 		getOutputFile(destPath).getParentFile().mkdirs();
 		InputStream input = null;
 		OutputStream output = null;
@@ -79,8 +85,8 @@ public class HtmlReport {
 		return templateGroup.getInstanceOf(templateName);
 	}
 
-	public void writeTemplate(StringTemplate template, String relativeOutputPath) throws IOException {
-		Writer out = new OutputStreamWriter(openOutputStream(relativeOutputPath), outputEncoding);
+	public void writeTemplate(StringTemplate template, String path) throws IOException {
+		Writer out = new OutputStreamWriter(openOutputStream(path), outputEncoding);
 		StringTemplateWriter writer = new AutoIndentWriter(out);
 		try {
 			template.write(writer);
@@ -90,7 +96,7 @@ public class HtmlReport {
 	}
 	
 	public File getOutputFile(String path) {
-		return new File(outputDir, path);
+		return new File(outputDirectory, path);
 	}
 	
 	public OutputStream openOutputStream(String path) throws FileNotFoundException {
