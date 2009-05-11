@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
-import undercover.metric.MetricCollector;
+import undercover.metric.MetaDataCollector;
 
 public class Instrument {
 	public void instrumentDirs(File[] inputDirs, File outputDir) {
@@ -70,7 +70,7 @@ public class Instrument {
 	}
 	
 	public ClassWriter instrument(ClassReader classReader) {
-		MetricCollector collector = new MetricCollector();
+		MetaDataCollector collector = new MetaDataCollector();
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
 		classReader.accept(new InstrumentClass(classWriter, collector), 0);
 		System.out.println(collector.getMetaData().toString());
