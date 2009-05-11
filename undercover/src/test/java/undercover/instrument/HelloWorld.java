@@ -42,4 +42,8 @@ public class HelloWorld {
 			a--;
 		}
 	}
+	
+	public boolean multipleBranchesOnLine() {
+		return a > 0 && a < 100;
+	}
 }
