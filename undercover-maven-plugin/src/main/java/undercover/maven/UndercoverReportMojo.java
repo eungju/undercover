@@ -2,6 +2,9 @@ package undercover.maven;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.maven.doxia.siterenderer.Renderer;
@@ -57,10 +60,18 @@ public class UndercoverReportMojo extends AbstractMavenReport {
      */
     protected void checkParameters() throws MavenReportException {
         if (sourcePaths == null) {
-			sourcePaths = new File[] { new File(project.getBuild().getSourceDirectory()) };
+        	List<File> paths = new ArrayList<File>();
+        	for (String each : Arrays.asList(project.getBuild().getSourceDirectory(), project.getBuild().getTestSourceDirectory())) {
+            	File file = new File(each);
+            	if (file.exists()) {
+            		paths.add(file);
+            	}
+        	}
+			getLog().info("Source paths: " + paths);
+			sourcePaths = paths.toArray(new File[paths.size()]);
 		}
     }
-
+    
 	protected void executeReport(Locale locale) throws MavenReportException {
 		checkParameters();
 		
