@@ -6,16 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
-import undercover.metric.MetaDataCollector;
+import undercover.metric.ClassMetric;
+import undercover.metric.MetaData;
 
 public class Instrument {
 	public void instrumentDirs(File[] inputDirs, File outputDir) {
+		outputDir.mkdirs();
 		for (File each : inputDirs) {
 			instrumentDir(each, outputDir);
 		}
@@ -70,10 +73,10 @@ public class Instrument {
 	}
 	
 	public ClassWriter instrument(ClassReader classReader) {
-		MetaDataCollector collector = new MetaDataCollector();
+		MetaData metaData = new MetaData(new ArrayList<ClassMetric>());
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
-		classReader.accept(new InstrumentClass(classWriter, collector), 0);
-		System.out.println(collector.getMetaData().toString());
+		classReader.accept(new InstrumentClass(classWriter, metaData), 0);
+		System.out.println(metaData.toString());
 		return classWriter;
 	}
 }

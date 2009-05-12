@@ -9,6 +9,11 @@ public class MetaData {
 		this.classes = classes;
 	}
 
+	public int addClass(ClassMetric classMetric) {
+		classes.add(classMetric);
+		return classes.size() - 1;
+	}
+
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		for (ClassMetric each : classes) {

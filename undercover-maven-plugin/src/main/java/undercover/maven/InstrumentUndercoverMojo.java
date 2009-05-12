@@ -49,7 +49,7 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 
 		if (instrumentationPaths == null) {
 			List<File> paths = new ArrayList<File>();
-        	for (String each : Arrays.asList(project.getBuild().getOutputDirectory(), project.getBuild().getTestOutputDirectory())) {
+        	for (String each : Arrays.asList(project.getBuild().getOutputDirectory())) {
             	File file = new File(each);
             	if (file.exists()) {
             		paths.add(file);
@@ -62,7 +62,7 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 
     protected void doExecute() throws MojoExecutionException {
     	Instrument instrument = new Instrument();
-    	instrument.instrumentDirs(instrumentationPaths, outputDirectory);
+    	instrument.instrumentDirs(instrumentationPaths, new File(outputDirectory, "classes"));
     	addUndercoverDependenciesToTestClasspath();
 	}
 

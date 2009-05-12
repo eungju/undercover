@@ -61,7 +61,7 @@ public class UndercoverReportMojo extends AbstractMavenReport {
     protected void checkParameters() throws MavenReportException {
         if (sourcePaths == null) {
         	List<File> paths = new ArrayList<File>();
-        	for (String each : Arrays.asList(project.getBuild().getSourceDirectory(), project.getBuild().getTestSourceDirectory())) {
+        	for (String each : Arrays.asList(project.getBuild().getSourceDirectory())) {
             	File file = new File(each);
             	if (file.exists()) {
             		paths.add(file);

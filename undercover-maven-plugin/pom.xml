@@ -53,13 +53,4 @@
 		</dependency>
 	</dependencies>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>undercover</groupId>
-				<artifactId>undercover-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
-
 </project>

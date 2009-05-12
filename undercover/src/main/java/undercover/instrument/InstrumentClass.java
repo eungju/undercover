@@ -10,19 +10,19 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 
-import undercover.metric.ClassMetric;
 import undercover.metric.BlockMetric;
-import undercover.metric.MetaDataCollector;
+import undercover.metric.ClassMetric;
+import undercover.metric.MetaData;
 import undercover.metric.MethodMetric;
 
 public class InstrumentClass extends ClassAdapter {
-	private MetaDataCollector collector;
+	private MetaData metaData;
 	private ClassMetric classMetric;
 	private String className;
 
-	public InstrumentClass(ClassWriter classWriter, MetaDataCollector metricCollector) {
+	public InstrumentClass(ClassWriter classWriter, MetaData metaData) {
 		super(classWriter);
-		this.collector = metricCollector;
+		this.metaData = metaData;
 	}
 	
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
@@ -33,7 +33,7 @@ public class InstrumentClass extends ClassAdapter {
 	public void visitSource(String source, String debug) {
 		super.visitSource(source, debug);
 		classMetric = new ClassMetric(className, source);
-		collector.defineClass(classMetric);
+		metaData.addClass(classMetric);
 	}
 	
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -41,24 +41,48 @@ public class InstrumentClass extends ClassAdapter {
 		if (mv != null) {
 			MethodMetric methodMetric = new MethodMetric(name, desc);
 			classMetric.addMethod(methodMetric);
-			mv = new InstrumentMethod(mv, collector, methodMetric);
+			mv = new InstrumentMethod(mv, methodMetric);
 		}
 		return mv;
 	}
 
 	public static class InstrumentMethod extends MethodAdapter {
-		private MetaDataCollector collector;
 		private MethodMetric methodMetric;
 		private BlockMetric blockMetric;
 
-		public InstrumentMethod(MethodVisitor methodWriter, MetaDataCollector metricCollector, MethodMetric methodMetric) {
+		public InstrumentMethod(MethodVisitor methodWriter, MethodMetric methodMetric) {
 			super(methodWriter);
-			this.collector = metricCollector;
 			this.methodMetric = methodMetric;
-			blockMetric = new BlockMetric();
-			methodMetric.addFragment(blockMetric);
 		}
 		
+		public void visitCode() {
+        	addBlock();
+		}
+
+		public void visitJumpInsn(int opcode, Label label) {
+	    	super.visitJumpInsn(opcode, label);
+	        if (isBranch(opcode)) {
+	        	addBlock();
+	        }
+	    }
+	    
+	    public void visitMaxs(int maxStack, int maxLocals) {
+	    	super.visitMaxs(maxStack + 1, maxLocals);
+	    }
+		
+	    void addBlock() {
+			blockMetric = new BlockMetric();
+			methodMetric.addFragment(blockMetric);
+			
+			//Install probe
+			mv.visitLdcInsn(new Integer(11));
+			mv.visitMethodInsn(INVOKESTATIC, "undercover/runtime/Probe", "touchBlock", "(I)V");
+		}
+	    
+	    boolean isBranch(int opcode) {
+	    	return Arrays.binarySearch(branchOpcodes, opcode) > -1;
+	    }
+	    
 		private static final int[] branchOpcodes = new int[] {
 			IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE,
 			IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
@@ -69,13 +93,5 @@ public class InstrumentClass extends ClassAdapter {
 		static {
 			Arrays.sort(branchOpcodes);
 		}
-		
-	    public void visitJumpInsn(int opcode, Label label) {
-	    	super.visitJumpInsn(opcode, label);
-	        if (Arrays.binarySearch(branchOpcodes, opcode) > -1) {
-				blockMetric = new BlockMetric();
-				methodMetric.addFragment(blockMetric);
-	        }
-	    }
 	}
 }
