@@ -40,7 +40,7 @@ public class CoverageData {
 			output = new ObjectInputStream(new FileInputStream(file));
 			return (CoverageData) output.readObject();
 		} catch (ClassNotFoundException e) {
-			throw new IOException("Class not found", e);
+			throw new IOException(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(output);
 		}
