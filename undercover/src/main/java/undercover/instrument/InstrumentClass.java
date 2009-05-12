@@ -67,16 +67,19 @@ public class InstrumentClass extends ClassAdapter {
 	    }
 	    
 	    public void visitMaxs(int maxStack, int maxLocals) {
-	    	super.visitMaxs(maxStack + 1, maxLocals);
+	    	super.visitMaxs(maxStack + 2, maxLocals);
 	    }
 		
 	    void addBlock() {
 			blockMetric = new BlockMetric();
-			methodMetric.addFragment(blockMetric);
+			methodMetric.addBlock(blockMetric);
 			
 			//Install probe
-			mv.visitLdcInsn(new Integer(11));
-			mv.visitMethodInsn(INVOKESTATIC, "undercover/runtime/Probe", "touchBlock", "(I)V");
+			//maxStack + 1
+			mv.visitFieldInsn(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;");
+			//maxStack + 1
+			mv.visitLdcInsn(blockMetric.id().toString());
+			mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/runtime/Probe", "touchBlock", "(Ljava/lang/String;)V");
 		}
 	    
 	    boolean isBranch(int opcode) {

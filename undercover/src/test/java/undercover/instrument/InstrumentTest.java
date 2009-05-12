@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
+import undercover.metric.MetaData;
+
 public class InstrumentTest {
 	private Instrument dut;
 
@@ -29,7 +31,7 @@ public class InstrumentTest {
 	@Test public void instrument() throws IOException {
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
 		//FIXME: How to test?
-		traceBytecode(dut.instrument(original));
+		traceBytecode(dut.instrument(new MetaData(), original));
 		//assertEquals(traceBytecode(original), );
 	}
 }

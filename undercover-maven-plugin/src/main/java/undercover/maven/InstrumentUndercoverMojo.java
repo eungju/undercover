@@ -14,6 +14,7 @@ import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import undercover.UndercoverSettings;
 import undercover.instrument.Instrument;
 
 /**
@@ -33,10 +34,17 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
     /**
      * Location to store class coverage metadata.
      *
-     * @parameter expression="${undercover.metadataFile}" default-value="${project.build.directory}/undercover.metadata"
+     * @parameter expression="${undercover.metaDataFile}" default-value="${project.build.directory}/undercover.md"
      */
-    protected File metadataFile;
+    protected File metaDataFile;
 
+    /**
+     * Location to store class coverage data.
+     *
+     * @parameter expression="${undercover.coverageDataFile}" default-value="${project.build.directory}/undercover.cd"
+     */
+    protected File coverageDataFile;
+    
     /**
      * Artifact factory.
      *
@@ -61,8 +69,16 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 	}
 
     protected void doExecute() throws MojoExecutionException {
-    	Instrument instrument = new Instrument();
-    	instrument.instrumentDirs(instrumentationPaths, new File(outputDirectory, "classes"));
+    	try {
+	    	Instrument instrument = new Instrument();
+	    	instrument.setInputPaths(instrumentationPaths);
+	    	instrument.setOutputDirectory(new File(outputDirectory, "classes"));
+	    	instrument.setMetaDataFile(metaDataFile);
+	    	instrument.setCoverageDataFile(coverageDataFile);
+	    	instrument.run();
+    	} catch (Exception e) {
+    		throw new MojoExecutionException("Failed to instrument", e);
+    	}
     	addUndercoverDependenciesToTestClasspath();
 	}
 

@@ -1,8 +1,13 @@
 package undercover.metric;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ClassMetric {
+import undercover.support.ObjectSupport;
+
+public class ClassMetric extends ObjectSupport implements Serializable {
+	private static final long serialVersionUID = -9154762635889065861L;
+
 	private String name;
 	private String source;
 	private ArrayList<MethodMetric> methods;
