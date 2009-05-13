@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,19 +19,23 @@ import undercover.support.ObjectSupport;
 public class CoverageData extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -2867261294970889507L;
 
-	private final Map<UUID, BlockCoverage> blockCoverages = new HashMap<UUID, BlockCoverage>();
+	private final Map<UUID, BlockCoverage> blocks = new HashMap<UUID, BlockCoverage>();
 	
 	public void touchBlock(UUID id) {
-		BlockCoverage coverage = blockCoverages.get(id);
+		BlockCoverage coverage = blocks.get(id);
 		if (coverage == null) {
 			coverage = new BlockCoverage(id);
-			blockCoverages.put(id, coverage);
+			blocks.put(id, coverage);
 		}
 		coverage.touch();
 	}
 
-	public void getBlockCoverage(UUID id) {
-		blockCoverages.get(id);
+	public void getBlock(UUID id) {
+		blocks.get(id);
+	}
+	
+	public Collection<BlockCoverage> getAllBlocks() {
+		return blocks.values();
 	}
 
 	public void save(File file) throws IOException {

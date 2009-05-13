@@ -9,6 +9,53 @@ header() ::= <<
 <body>
 >>
 
+footer() ::= <<
+</body>
+</html>
+>>
+
+allSummary(packages) ::= <<
+<table>
+	<thead>
+		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Coverage</th></tr>
+	</thead>
+	<tbody>
+		$packages:{ each |
+		<tr>
+			<td>$each.displayName$</td>
+			<td>$length(each.children)$</td>
+			<td>$each.complexity$</td>
+			<td>($each.coverageRate$)</td>
+		</tr>
+		}$
+	</tbody>
+</ul>
+>>
+
+allPackages(packages) ::= <<
+<h2>Packages</h2>
+<ul>
+	$packages:{ each |
+	<li>$each.displayName$ ($each.coverageRate$)</li>
+	}$
+</ul>
+>>
+
+allClasses(classes) ::= <<
+<table>
+	<thead>
+		<tr><th>Class</th><th>Coverage</th></tr>
+	</thead>
+	<tbody>
+		$classes:{ each |
+		<tr>
+		<td>$each.simpleName$</td><td>($each.coverageRate$)</td>
+		</tr>
+		}$
+	</tbody>
+</ul>
+>>
+
 source_html(source) ::= <<
 $header()$
 
@@ -26,9 +73,4 @@ Statistics for $source.name; format="html"$
 </table>
 
 $footer()$
->>
-
-footer() ::= <<
-</body>
-</html>
 >>

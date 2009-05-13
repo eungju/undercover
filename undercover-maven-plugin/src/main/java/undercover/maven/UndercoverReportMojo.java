@@ -12,6 +12,9 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
+import undercover.metric.CoverageData;
+import undercover.metric.MetaData;
+import undercover.report.ReportData;
 import undercover.report.html.HtmlReport;
 
 /**
@@ -22,6 +25,20 @@ import undercover.report.html.HtmlReport;
  * @requiresDependencyResolution test
  */
 public class UndercoverReportMojo extends AbstractMavenReport {
+    /**
+     * Location to store class coverage metadata.
+     *
+     * @parameter expression="${undercover.metaDataFile}" default-value="${project.build.directory}/undercover.md"
+     */
+    protected File metaDataFile;
+
+    /**
+     * Location to store class coverage data.
+     *
+     * @parameter expression="${undercover.coverageDataFile}" default-value="${project.build.directory}/undercover.cd"
+     */
+    protected File coverageDataFile;
+
     /**
      * Output directory for the report.
      *
@@ -76,9 +93,11 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 		checkParameters();
 		
 		try {
+			ReportData reportData = new ReportData(MetaData.load(metaDataFile), CoverageData.load(coverageDataFile));
 			HtmlReport report = new HtmlReport();
-			report.setSourcePaths(sourcePaths);
+			report.setReportData(reportData);
 			report.setOutputDirectory(outputDirectory);
+			report.setSourcePaths(sourcePaths);
 			report.generate();
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);

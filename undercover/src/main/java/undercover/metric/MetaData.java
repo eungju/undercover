@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -34,12 +35,15 @@ public class MetaData extends ObjectSupport implements Serializable {
 
 	public ClassMetric getClass(String name) {
 		for (ClassMetric each : classes) {
-			System.out.println(each.name() + "=" + name);
 			if (each.name().equals(name)) {
 				return each;
 			}
 		}
 		return null;
+	}
+	
+	public Collection<ClassMetric> getAllClasses() {
+		return classes;
 	}
 
 	public String toString() {

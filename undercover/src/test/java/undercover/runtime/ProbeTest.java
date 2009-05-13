@@ -19,6 +19,6 @@ public class ProbeTest {
 	@Test public void touchBlock() {
 		UUID blockId = UUID.randomUUID();
 		dut.touchBlock(blockId.toString());
-		dut.getCoverageData().getBlockCoverage(UUID.randomUUID());
+		dut.getCoverageData().getBlock(UUID.randomUUID());
 	}
 }

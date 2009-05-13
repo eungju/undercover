@@ -23,12 +23,15 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import undercover.report.ReportData;
+
 public class HtmlReport {
 	final String templateEncoding = "UTF-8";
 	final String outputEncoding = "UTF-8";
 
-	private File[] sourcePaths;
+	private ReportData reportData;
 	private File outputDirectory;
+	private File[] sourcePaths;
 	String sourceEncoding = "UTF-8";
 	
 	private StringTemplateGroup templateGroup;
@@ -36,6 +39,14 @@ public class HtmlReport {
 	public HtmlReport() throws IOException {
 		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
 		templateGroup.registerRenderer(String.class, new StringRenderer());
+	}
+
+	public void setReportData(ReportData reportData) {
+		this.reportData = reportData;
+	}
+
+	public void setOutputDirectory(File outputDirectory) {
+		this.outputDirectory = outputDirectory;
 	}
 	
 	public void setSourcePaths(File[] sourcePaths) {
@@ -46,14 +57,12 @@ public class HtmlReport {
 		this.sourceEncoding = sourceEncoding;
 	}
 	
-	public void setOutputDirectory(File outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-	
 	public void generate() throws IOException {
 		outputDirectory.mkdirs();
-		
 		copyResources();
+		generateAllSummary();
+		generateAllPackages();
+		generateAllClasses();
 		for (File each : findAllSourceFiles()) {
 			new SourceReport(this, each).writeTo(outputDirectory);
 		}
@@ -61,6 +70,7 @@ public class HtmlReport {
 	
 	void copyResources() throws IOException {
 		final String[] resources = {
+				"index.html",
 		};
 		for (String each : resources) {
 			copyResource("resources/" + each, each);
@@ -79,6 +89,24 @@ public class HtmlReport {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(output);
 		}
+	}
+	
+	void generateAllSummary() throws IOException {
+		StringTemplate template = getTemplate("allSummary");
+		template.setAttribute("packages", reportData.getAllPackages());
+		writeTemplate(template, "all-summary.html");
+	}
+
+	void generateAllPackages() throws IOException {
+		StringTemplate template = getTemplate("allPackages");
+		template.setAttribute("packages", reportData.getAllPackages());
+		writeTemplate(template, "all-packages.html");
+	}
+
+	void generateAllClasses() throws IOException {
+		StringTemplate template = getTemplate("allClasses");
+		template.setAttribute("classes", reportData.getAllClasses());
+		writeTemplate(template, "all-classes.html");
 	}
 
 	public StringTemplate getTemplate(String templateName) {
