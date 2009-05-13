@@ -21,13 +21,15 @@ public class UndercoverSettings {
 		InputStream input = null;
 		try {
 			input = UndercoverSettings.class.getResourceAsStream(LOCATION);
-			properties.load(input);
-			return new UndercoverSettings(properties);
+			if (input != null) {
+				properties.load(input);
+			}
 		} catch (IOException e) {
 			throw new IllegalStateException("Unable to load properties from " + LOCATION, e);
 		} finally {
 			IOUtils.closeQuietly(input);
 		}
+		return new UndercoverSettings(properties);
 	}
 	
 	public UndercoverSettings() {

@@ -32,6 +32,16 @@ public class MetaData extends ObjectSupport implements Serializable {
 		return classes.size() - 1;
 	}
 
+	public ClassMetric getClass(String name) {
+		for (ClassMetric each : classes) {
+			System.out.println(each.name() + "=" + name);
+			if (each.name().equals(name)) {
+				return each;
+			}
+		}
+		return null;
+	}
+
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		for (ClassMetric each : classes) {

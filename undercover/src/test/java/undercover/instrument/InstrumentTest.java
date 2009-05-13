@@ -1,5 +1,7 @@
 package undercover.instrument;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -30,8 +32,9 @@ public class InstrumentTest {
 	
 	@Test public void instrument() throws IOException {
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
-		//FIXME: How to test?
-		traceBytecode(dut.instrument(new MetaData(), original));
-		//assertEquals(traceBytecode(original), );
+		//FIXME: How to test instrumented bytecode?
+		MetaData metaData = new MetaData();
+		traceBytecode(dut.instrument(metaData, original));
+		assertNotNull(metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/")));
 	}
 }
