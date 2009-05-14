@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import undercover.metric.ClassMetric;
-
 public class PackageItemTest {
 	@Test public void normalPackage() {
 		PackageItem packageItem = new PackageItem("p/p");

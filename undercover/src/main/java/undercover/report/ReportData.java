@@ -13,6 +13,7 @@ public class ReportData {
 	private final MetaData metaData;
 	private final CoverageData coverageData;
 
+	private ProjectItem projectItem;
 	private Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	private Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
 	
@@ -26,10 +27,13 @@ public class ReportData {
 	}
 	
 	public void addClass(ClassMetric classMetric) {
+		projectItem = new ProjectItem();
+		
 		String packageName = classMetric.name().substring(0, classMetric.name().lastIndexOf("/"));
 		PackageItem packageItem = packageItems.get(packageName);
 		if (packageItem == null) {
 			packageItem = new PackageItem(packageName);
+			projectItem.addPackage(packageItem);
 			packageItems.put(packageItem.name, packageItem);
 		}
 		
@@ -41,6 +45,10 @@ public class ReportData {
 			MethodItem methodItem = new MethodItem(classItem, each, coverageData);
 			classItem.addMethod(methodItem);
 		}
+	}
+	
+	public ProjectItem getProject() {
+		return projectItem;
 	}
 
 	public Collection<PackageItem> getAllPackages() {

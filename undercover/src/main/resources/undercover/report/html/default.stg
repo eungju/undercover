@@ -19,8 +19,23 @@ coverageBar(item) ::= <<
 <div class="coverageBar">$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$) <div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div> </div>
 >>
 
-allSummary(packages) ::= <<
+allSummary(project, packages) ::= <<
 $header()$
+
+<table>
+	<thead>
+		<tr><th></th><th>Packages</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>$project.displayName$</td>
+			<td>$length(project.packages)$</td>
+			<td>$project.complexity$</td>
+			<td>$project.averageMethodComplexity$</td>
+			<td>$coverageBar(project)$</td>
+		</tr>
+	</tbody>
+</ul>
 
 <table>
 	<thead>

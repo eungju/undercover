@@ -95,6 +95,7 @@ public class HtmlReport {
 	
 	void generateAllSummary() throws IOException {
 		StringTemplate template = getTemplate("allSummary");
+		template.setAttribute("project", reportData.getProject());
 		template.setAttribute("packages", reportData.getAllPackages());
 		writeTemplate(template, "all-summary.html");
 	}

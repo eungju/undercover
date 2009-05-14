@@ -1,11 +1,12 @@
 package undercover.report;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import undercover.metric.ClassMetric;
 
-public class ClassItem extends AbstractItem {
+public class ClassItem extends CompositeItem {
 	public final PackageItem parent;
 	public final String simpleName;
 	public final List<MethodItem> methods;
@@ -24,23 +25,11 @@ public class ClassItem extends AbstractItem {
 	public void addMethod(MethodItem methodItem) {
 		methods.add(methodItem);
 	}
-
-	public int getBlockCount() {
-		int result = 0;
-		for (Item each : methods) {
-			result += each.getBlockCount();
-		}
-		return result;
+	
+	protected Collection<Item> getItems() {
+		return (Collection) methods;
 	}
-
-	public int getCoveredBlockCount() {
-		int result = 0;
-		for (Item each : methods) {
-			result += each.getCoveredBlockCount();
-		}
-		return result;
-	}
-
+	
 	public int getMethodCount() {
 		return methods.size();
 	}
