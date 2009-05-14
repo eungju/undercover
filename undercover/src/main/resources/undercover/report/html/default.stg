@@ -15,6 +15,10 @@ footer() ::= <<
 </html>
 >>
 
+coverageBar(item) ::= <<
+<div class="coverageBar">$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$) <div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div> </div>
+>>
+
 allSummary(packages) ::= <<
 $header()$
 
@@ -29,7 +33,7 @@ $header()$
 			<td>$length(each.classes)$</td>
 			<td>$each.complexity$</td>
 			<td>$each.averageMethodComplexity$</td>
-			<td>$each.coverageRate; format="percent"$</td>
+			<td>$coverageBar(each)$</td>
 		</tr>
 		}$
 	</tbody>

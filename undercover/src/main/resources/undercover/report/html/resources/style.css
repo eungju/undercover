@@ -1,4 +1,5 @@
 body {
+	font-family: Helvetica, Arial, sans-serif;
 	font-size: 10pt;
 }
 
@@ -7,13 +8,26 @@ table {
 }
 
 th, td {
-	border: 1px solid #CCCCCC;
+	border: 1px solid #ccc;
 }
 
 th {
-	background: #DDDDFF;
+	background: #ddf;
 }
 
 td {
 	text-align: right;
+}
+
+div.coverageBarNegative {
+	border: 1px solid #ccc; 
+	min-width: 100px; 
+	padding: 0px; 
+	background: #e00;
+	font-size: 9pt;
+}
+
+div.coverageBarPositive {
+	background: #0e0;
+	height: 18px;
 }
