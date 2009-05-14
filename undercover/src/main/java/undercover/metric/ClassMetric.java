@@ -34,6 +34,15 @@ public class ClassMetric extends ObjectSupport implements Serializable {
 	public List<MethodMetric> methods() {
 		return methods;
 	}
+
+	public MethodMetric getMethod(String name) {
+		for (MethodMetric each : methods) {
+			if (each.name().equals(name)) {
+				return each;
+			}
+		}
+		return null;
+	}
 	
 	public String toString() {
 		StringBuilder builder = new StringBuilder(name);

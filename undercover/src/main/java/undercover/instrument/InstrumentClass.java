@@ -53,10 +53,10 @@ public class InstrumentClass extends ClassAdapter {
 		public InstrumentMethod(MethodVisitor methodWriter, MethodMetric methodMetric) {
 			super(methodWriter);
 			this.methodMetric = methodMetric;
+        	addBlock();
 		}
 		
 		public void visitCode() {
-        	addBlock();
 		}
 
 		public void visitJumpInsn(int opcode, Label label) {

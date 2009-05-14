@@ -12,11 +12,14 @@ import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
+import undercover.metric.ClassMetric;
 import undercover.metric.MetaData;
 
+//FIXME: How to test instrumented bytecode?
 public class InstrumentTest {
 	private Instrument dut;
-
+	private ClassMetric classMetric;
+	
 	public String traceBytecode(byte[] bytecode) {
 		ClassReader cr = new ClassReader(bytecode);
 		StringWriter buffer = new StringWriter();
@@ -26,15 +29,31 @@ public class InstrumentTest {
 		return buffer.toString();
 	}
 	
-	@Before public void beforeEach() {
+	@Before public void beforeEach() throws IOException {
 		dut = new Instrument();
-	}
-	
-	@Test public void instrument() throws IOException {
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
-		//FIXME: How to test instrumented bytecode?
 		MetaData metaData = new MetaData();
 		traceBytecode(dut.instrument(metaData, original));
-		assertNotNull(metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/")));
+		classMetric = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
+	}
+	
+	@Test public void abstractMethod() throws IOException {
+		assertEquals(1, classMetric.getMethod("abstractMethod").blocks().size());
+	}
+
+	@Test public void emptyMethod() throws IOException {
+		assertEquals(1, classMetric.getMethod("empty").blocks().size());
+	}
+
+	@Test public void ifBranchMethod() throws IOException {
+		assertEquals(2, classMetric.getMethod("ifBranch").blocks().size());
+	}
+
+	@Test public void ifElseIfBranchesMethod() throws IOException {
+		assertEquals(3, classMetric.getMethod("ifElseIfBranches").blocks().size());
+	}
+	
+	@Test public void shortCircuitBranchMethod() throws IOException {
+		assertEquals(2, classMetric.getMethod("shortCircuitBranch").blocks().size());
 	}
 }

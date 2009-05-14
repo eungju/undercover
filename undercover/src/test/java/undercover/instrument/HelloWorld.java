@@ -1,11 +1,16 @@
 package undercover.instrument;
 
-public class HelloWorld {
+public abstract class HelloWorld {
 	public static void main(String[] args) {
 		System.out.println("Hello, World!");
 	}
 	
 	private int a = 0;
+	
+	public abstract void abstractMethod();
+	
+	public void empty() {
+	}
 	
 	public void ifBranch() {
 		if (a == 1) {
