@@ -1,0 +1,19 @@
+body {
+	font-size: 10pt;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid #CCCCCC;
+}
+
+th {
+	background: #DDDDFF;
+}
+
+td {
+	text-align: right;
+}

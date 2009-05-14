@@ -2,6 +2,7 @@ package undercover.metric;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import undercover.support.ObjectSupport;
 
@@ -28,6 +29,10 @@ public class ClassMetric extends ObjectSupport implements Serializable {
 
 	public void addMethod(MethodMetric methodMetric) {
 		methods.add(methodMetric);
+	}
+
+	public List<MethodMetric> methods() {
+		return methods;
 	}
 	
 	public String toString() {

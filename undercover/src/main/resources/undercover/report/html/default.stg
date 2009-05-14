@@ -5,6 +5,7 @@ header() ::= <<
 
 <html>
 <head>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 >>
@@ -15,33 +16,44 @@ footer() ::= <<
 >>
 
 allSummary(packages) ::= <<
+$header()$
+
 <table>
 	<thead>
-		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Coverage</th></tr>
+		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$packages:{ each |
 		<tr>
 			<td>$each.displayName$</td>
-			<td>$length(each.children)$</td>
+			<td>$length(each.classes)$</td>
 			<td>$each.complexity$</td>
-			<td>($each.coverageRate$)</td>
+			<td>$each.averageMethodComplexity$</td>
+			<td>$each.coverageRate; format="percent"$</td>
 		</tr>
 		}$
 	</tbody>
 </ul>
+
+$footer()$
 >>
 
 allPackages(packages) ::= <<
+$header()$
+
 <h2>Packages</h2>
 <ul>
 	$packages:{ each |
-	<li>$each.displayName$ ($each.coverageRate$)</li>
+	<li>$each.displayName$ ($each.coverageRate; format="percent"$)</li>
 	}$
 </ul>
+
+$footer()$
 >>
 
 allClasses(classes) ::= <<
+$header()$
+
 <table>
 	<thead>
 		<tr><th>Class</th><th>Coverage</th></tr>
@@ -49,11 +61,13 @@ allClasses(classes) ::= <<
 	<tbody>
 		$classes:{ each |
 		<tr>
-		<td>$each.simpleName$</td><td>($each.coverageRate$)</td>
+		<td>$each.simpleName$</td><td>$each.coverageRate; format="percent"$</td>
 		</tr>
 		}$
 	</tbody>
 </ul>
+
+$footer()$
 >>
 
 source_html(source) ::= <<

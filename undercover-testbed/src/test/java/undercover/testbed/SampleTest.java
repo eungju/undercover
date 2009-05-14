@@ -1,16 +1,16 @@
 package undercover.testbed;
 
-import static org.junit.Assert.*;
-
+import org.junit.Before;
 import org.junit.Test;
 
 public class SampleTest {
-	@Test public void hook() {
-		assertTrue(1 == 1);
-		assertNotNull(new Sample());
+	private Sample dut;
+
+	@Before public void beforeEach() {
+		dut = new Sample();
 	}
 	
-	@Test public void xxx() {
-		assertTrue(true);
+	@Test public void simple() {
+		dut.simple();
 	}
 }

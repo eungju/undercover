@@ -39,6 +39,7 @@ public class HtmlReport {
 	public HtmlReport() throws IOException {
 		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
 		templateGroup.registerRenderer(String.class, new StringRenderer());
+		templateGroup.registerRenderer(Double.class, new DoubleRenderer());
 	}
 
 	public void setReportData(ReportData reportData) {
@@ -70,6 +71,7 @@ public class HtmlReport {
 	
 	void copyResources() throws IOException {
 		final String[] resources = {
+				"style.css",
 				"index.html",
 		};
 		for (String each : resources) {

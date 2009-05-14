@@ -22,14 +22,21 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	public String name() {
 		return name;
 	}
+
+	public String descriptor() {
+		return descriptor;
+	}
 	
 	public void addBlock(BlockMetric blocksMetric) {
 		blocks.add(blocksMetric);
 	}
+	
+	public List<BlockMetric> blocks() {
+		return blocks;
+	}
 
 	public String toString() {
-		StringBuilder builder = new StringBuilder(name).append(',').append(descriptor).append(',');
-		builder.append('{');
+		StringBuilder builder = new StringBuilder(name).append('{').append(descriptor).append(',');
 		builder.append('[');
 		for (BlockMetric each : blocks) {
 			builder.append(each.toString()).append(',');

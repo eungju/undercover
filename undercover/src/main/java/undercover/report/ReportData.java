@@ -7,10 +7,11 @@ import java.util.Map;
 import undercover.metric.ClassMetric;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
+import undercover.metric.MethodMetric;
 
 public class ReportData {
-	private MetaData metaData;
-	private CoverageData coverageData;
+	private final MetaData metaData;
+	private final CoverageData coverageData;
 
 	private Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	private Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
@@ -18,7 +19,7 @@ public class ReportData {
 	public ReportData(MetaData metaData, CoverageData coverageData) {
 		this.metaData = metaData;
 		this.coverageData = coverageData;
-		
+
 		for (ClassMetric each : metaData.getAllClasses()) {
 			addClass(each);
 		}
@@ -31,9 +32,15 @@ public class ReportData {
 			packageItem = new PackageItem(packageName);
 			packageItems.put(packageItem.name, packageItem);
 		}
+		
 		ClassItem classItem = new ClassItem(packageItem, classMetric);
-		packageItem.addChild(classItem);
+		packageItem.addClass(classItem);
 		classItems.put(classItem.name, classItem);
+		
+		for (MethodMetric each : classMetric.methods()) {
+			MethodItem methodItem = new MethodItem(classItem, each, coverageData);
+			classItem.addMethod(methodItem);
+		}
 	}
 
 	public Collection<PackageItem> getAllPackages() {

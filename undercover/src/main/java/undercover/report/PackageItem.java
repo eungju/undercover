@@ -3,26 +3,39 @@ package undercover.report;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PackageItem {
-	public String name;
-	public String displayName;
-	public List<ClassItem> children;
+public class PackageItem extends AbstractItem {
+	public final List<ClassItem> classes;
 	
 	public PackageItem(String name) {
-		this.name = name;
-		this.displayName = name.replaceAll("\\/", ".");
-		this.children = new ArrayList<ClassItem>();
+		super(name, name.replaceAll("\\/", "."));
+		this.classes = new ArrayList<ClassItem>();
 	}
 	
-	public void addChild(ClassItem child) {
-		children.add(child);
+	public void addClass(ClassItem child) {
+		classes.add(child);
 	}
-	
-	public int getComplexity() {
-		return 0;
+
+	public int getBlockCount() {
+		int result = 0;
+		for (ClassItem each : classes) {
+			result += each.getBlockCount();
+		}
+		return result;
 	}
-	
-	public float getCoverageRate() {
-		return 0;
+
+	public int getCoveredBlockCount() {
+		int result = 0;
+		for (ClassItem each : classes) {
+			result += each.getCoveredBlockCount();
+		}
+		return result;
+	}
+
+	public int getMethodCount() {
+		int result = 0;
+		for (ClassItem each : classes) {
+			result += each.getMethodCount();
+		}
+		return result;
 	}
 }

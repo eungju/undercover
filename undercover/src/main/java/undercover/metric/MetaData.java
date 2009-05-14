@@ -18,7 +18,7 @@ import undercover.support.ObjectSupport;
 public class MetaData extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -1378920643147735683L;
 
-	private List<ClassMetric> classes;
+	private final List<ClassMetric> classes;
 
 	public MetaData() {
 		this(new ArrayList<ClassMetric>());

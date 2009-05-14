@@ -30,8 +30,8 @@ public class CoverageData extends ObjectSupport implements Serializable {
 		coverage.touch();
 	}
 
-	public void getBlock(UUID id) {
-		blocks.get(id);
+	public BlockCoverage getBlock(UUID id) {
+		return blocks.get(id);
 	}
 	
 	public Collection<BlockCoverage> getAllBlocks() {
