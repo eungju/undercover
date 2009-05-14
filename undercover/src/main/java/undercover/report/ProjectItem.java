@@ -7,8 +7,8 @@ import java.util.List;
 public class ProjectItem extends CompositeItem {
 	public final List<PackageItem> packages;
 	
-	public ProjectItem() {
-		super("project", "project");
+	public ProjectItem(String name) {
+		super(name, name);
 		packages = new ArrayList<PackageItem>();
 	}
 	

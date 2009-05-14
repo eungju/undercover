@@ -16,7 +16,10 @@ footer() ::= <<
 >>
 
 coverageBar(item) ::= <<
-<div class="coverageBar">$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$) <div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div> </div>
+<div class="coverageBar">
+	<span>$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$)</span>
+	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div>
+</div>
 >>
 
 allSummary(project, packages) ::= <<

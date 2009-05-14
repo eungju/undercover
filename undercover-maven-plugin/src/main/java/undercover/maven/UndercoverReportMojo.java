@@ -93,7 +93,7 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 		checkParameters();
 		
 		try {
-			ReportData reportData = new ReportData(MetaData.load(metaDataFile), CoverageData.load(coverageDataFile));
+			ReportData reportData = new ReportData(MetaData.load(metaDataFile), CoverageData.load(coverageDataFile), project.getName());
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
 			report.setOutputDirectory(outputDirectory);

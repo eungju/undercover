@@ -19,7 +19,7 @@ public class ReportDataTest {
 	@Before public void beforeEach() {
 		metaData = new MetaData();
 		coverageData = new CoverageData();
-		dut = new ReportData(metaData, coverageData);
+		dut = new ReportData(metaData, coverageData, "foo");
 	}
 	
 	@Test public void addClass() {

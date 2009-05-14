@@ -13,22 +13,21 @@ public class ReportData {
 	private final MetaData metaData;
 	private final CoverageData coverageData;
 
-	private ProjectItem projectItem;
-	private Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
-	private Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
+	private final ProjectItem projectItem;
+	private final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
+	private final Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
 	
-	public ReportData(MetaData metaData, CoverageData coverageData) {
+	public ReportData(MetaData metaData, CoverageData coverageData, String projectName) {
 		this.metaData = metaData;
 		this.coverageData = coverageData;
 
+		projectItem = new ProjectItem(projectName);
 		for (ClassMetric each : metaData.getAllClasses()) {
 			addClass(each);
 		}
 	}
 	
 	public void addClass(ClassMetric classMetric) {
-		projectItem = new ProjectItem();
-		
 		String packageName = classMetric.name().substring(0, classMetric.name().lastIndexOf("/"));
 		PackageItem packageItem = packageItems.get(packageName);
 		if (packageItem == null) {
