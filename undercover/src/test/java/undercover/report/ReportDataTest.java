@@ -30,7 +30,7 @@ public class ReportDataTest {
 	}
 	
 	@Test public void methodItem() {
-		MethodMetric methodMetric = new MethodMetric("foo", "()V");
+		MethodMetric methodMetric = new MethodMetric("foo()V");
 		BlockMetric b1 = new BlockMetric();
 		methodMetric.addBlock(b1);
 		methodMetric.addConditionalBranch();

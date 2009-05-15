@@ -107,7 +107,6 @@ public class Instrument {
 	public ClassWriter instrument(MetaData metaData, ClassReader classReader) {
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
 		classReader.accept(new InstrumentClass(classWriter, metaData), 0);
-		System.out.println(metaData.toString());
 		return classWriter;
 	}
 }

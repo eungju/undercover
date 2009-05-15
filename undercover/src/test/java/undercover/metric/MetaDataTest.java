@@ -12,7 +12,7 @@ public class MetaDataTest {
 		File file = File.createTempFile("undercover-", ".md");
 		MetaData expected = new MetaData();
 		ClassMetric classMetric = new ClassMetric("Foo", "Foo.java");
-		MethodMetric methodMetric = new MethodMetric("bar", "()V");
+		MethodMetric methodMetric = new MethodMetric("bar()V");
 		BlockMetric blockMetric = new BlockMetric();
 		methodMetric.addBlock(blockMetric);
 		classMetric.addMethod(methodMetric);

@@ -20,13 +20,13 @@ public class MethodItemTest {
 	}
 	
 	@Test public void normalMethod() {
-		MethodItem methodItem = new MethodItem(classItem, new MethodMetric("m", "()V"), coverageData);
-		assertEquals("m", methodItem.getName());
+		MethodItem methodItem = new MethodItem(classItem, new MethodMetric("m()V"), coverageData);
+		assertEquals("m()V", methodItem.getName());
 		assertEquals("p.c.m()V", methodItem.getDisplayName());
 	}
 	
 	@Test public void composition() {
-		MethodMetric methodMetric = new MethodMetric("m", "()V");
+		MethodMetric methodMetric = new MethodMetric("m()V");
 		BlockMetric b1 = new BlockMetric();
 		methodMetric.addBlock(b1);
 		methodMetric.addBlock(new BlockMetric());

@@ -11,7 +11,7 @@ public class MethodItem extends AbstractItem {
 	private int complexity;
 	
 	public MethodItem(ClassItem parent, MethodMetric metric, CoverageData coverageData) {
-		super(metric.name(), parent.getDisplayName() + "." + metric.name() + metric.descriptor());
+		super(metric.name(), parent.getDisplayName() + "." + metric.name());
 		this.parent = parent;
 		this.blockCount = metric.blocks().size();
 		this.complexity = 1 + metric.getConditionalBranches();

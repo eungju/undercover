@@ -10,23 +10,17 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = 4471359617355848867L;
 
 	private String name;
-	private String descriptor;
 	private List<BlockMetric> blocks;
 	private int conditionalBranches;
 
-	public MethodMetric(String name, String descriptor) {
+	public MethodMetric(String name) {
 		this.name = name;
-		this.descriptor = descriptor;
 		blocks = new ArrayList<BlockMetric>();
 		conditionalBranches = 0;
 	}
 	
 	public String name() {
 		return name;
-	}
-
-	public String descriptor() {
-		return descriptor;
 	}
 	
 	public void addBlock(BlockMetric blocksMetric) {
@@ -42,7 +36,7 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	}
 
 	public String toString() {
-		StringBuilder builder = new StringBuilder(name).append('{').append(descriptor).append(',');
+		StringBuilder builder = new StringBuilder(name).append('{');
 		builder.append('[');
 		for (BlockMetric each : blocks) {
 			builder.append(each.toString()).append(',');

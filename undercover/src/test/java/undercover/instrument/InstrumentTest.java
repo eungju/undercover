@@ -39,31 +39,31 @@ public class InstrumentTest {
 	}
 	
 	@Test public void abstractMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("abstractMethod");
+		MethodMetric methodMetric = classMetric.getMethod("abstractMethod()V");
 		assertEquals(0, methodMetric.blocks().size());
 		assertEquals(0, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void emptyMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("empty"); 
+		MethodMetric methodMetric = classMetric.getMethod("empty()V"); 
 		assertEquals(1, methodMetric.blocks().size());
 		assertEquals(0, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void ifBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("ifBranch"); 
+		MethodMetric methodMetric = classMetric.getMethod("ifBranch()V"); 
 		assertEquals(3, methodMetric.blocks().size());
 		assertEquals(1, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void ifElseIfBranchesMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("ifElseIfBranches"); 
+		MethodMetric methodMetric = classMetric.getMethod("ifElseIfBranches()V"); 
 		assertEquals(5, methodMetric.blocks().size());
 		assertEquals(2, methodMetric.getConditionalBranches());
 	}
 	
 	@Test public void shortCircuitBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch");
+		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch()Z");
 		//Optimizer can create extra block.
 		assertTrue(3 < methodMetric.blocks().size());
 		assertEquals(1, methodMetric.getConditionalBranches());

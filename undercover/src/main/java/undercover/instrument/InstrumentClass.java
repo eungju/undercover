@@ -41,7 +41,7 @@ public class InstrumentClass extends ClassAdapter {
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		MethodVisitor mv = super.visitMethod(access, name, desc, signature,	exceptions);
 		if (mv != null) {
-			MethodMetric methodMetric = new MethodMetric(name, desc);
+			MethodMetric methodMetric = new MethodMetric(name + desc);
 			classMetric.addMethod(methodMetric);
 			mv = new InstrumentMethod(mv, methodMetric);
 		}
