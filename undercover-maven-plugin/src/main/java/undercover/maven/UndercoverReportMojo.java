@@ -15,6 +15,7 @@ import org.apache.maven.reporting.MavenReportException;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.report.ReportData;
+import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 
 /**
@@ -92,8 +93,9 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 	protected void executeReport(Locale locale) throws MavenReportException {
 		checkParameters();
 		
+		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths));
 		try {
-			ReportData reportData = new ReportData(MetaData.load(metaDataFile), CoverageData.load(coverageDataFile), project.getName());
+			ReportData reportData = new ReportData(MetaData.load(metaDataFile), CoverageData.load(coverageDataFile), project.getName(), sourceFinder);
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
 			report.setOutputDirectory(outputDirectory);

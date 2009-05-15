@@ -24,7 +24,7 @@ public class CoverageData extends ObjectSupport implements Serializable {
 	public void touchBlock(UUID id) {
 		BlockCoverage coverage = blocks.get(id);
 		if (coverage == null) {
-			coverage = new BlockCoverage(id);
+			coverage = new BlockCoverage();
 			blocks.put(id, coverage);
 		}
 		coverage.touch();

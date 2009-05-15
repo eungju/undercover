@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import undercover.metric.BlockMetric;
-import undercover.metric.ClassMetric;
 import undercover.metric.CoverageData;
 import undercover.metric.MethodMetric;
 
@@ -15,7 +14,7 @@ public class MethodItemTest {
 	private CoverageData coverageData;
 	
 	@Before public void beforeEach() {
-		classItem = new ClassItem(null, new ClassMetric("p/c", "c.java"));
+		classItem = new ClassItem(null, "p/c", "p/c.java");
 		coverageData = new CoverageData();
 	}
 	

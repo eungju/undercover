@@ -83,7 +83,8 @@ $header()$
 	<tbody>
 		$classes:{ each |
 		<tr>
-		<td>$each.simpleName$</td><td>$each.coverageRate; format="percent"$</td>
+			<td><a href="$each.link$" target="classPane">$each.simpleName$</a></td>
+			<td>$each.coverageRate; format="percent"$</td>
 		</tr>
 		}$
 	</tbody>
@@ -102,7 +103,7 @@ Statistics for $source.name; format="html"$
 	$source.lines:{ each |
 		<tr>
 			<td>$each.number$</td>
-			<td>$each.text; format="html"$</td>
+			<td><pre>$each.text; format="html"$</pre></td>
 		</tr>
 	}$
 	</tbody>

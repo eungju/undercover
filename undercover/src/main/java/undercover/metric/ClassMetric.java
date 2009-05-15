@@ -26,6 +26,11 @@ public class ClassMetric extends ObjectSupport implements Serializable {
 	public String source() {
 		return source;
 	}
+	
+	public String getPackageName() {
+		int lastSeparator = name.lastIndexOf('/');
+		return lastSeparator == -1 ? name : name.substring(0, lastSeparator);
+	}
 
 	public void addMethod(MethodMetric methodMetric) {
 		methods.add(methodMetric);

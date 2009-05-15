@@ -4,18 +4,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import undercover.metric.ClassMetric;
-
 public class ClassItemTest {
 	@Test public void normalClass() {
-		ClassItem classItem = new ClassItem(null, new ClassMetric("p/c", "c.java"));
+		ClassItem classItem = new ClassItem(null, "p/c", "p/c.java");
 		assertEquals("p/c", classItem.getName());
 		assertEquals("p.c", classItem.getDisplayName());
 		assertEquals("c", classItem.simpleName);
 	}
 	
 	@Test public void composition() {
-		ClassItem classItem = new ClassItem(null, new ClassMetric("p/c", "c.java"));
+		ClassItem classItem = new ClassItem(null, "p/c", "p/c.java");
 		
 		classItem.addMethod(new MethodItem(null, null, null, 1, 1));
 		assertEquals(1, classItem.getBlockCount());

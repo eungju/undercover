@@ -5,6 +5,7 @@ body {
 
 table {
 	border-collapse: collapse;
+	width: 100%;
 }
 
 th, td {
@@ -13,10 +14,6 @@ th, td {
 
 th {
 	background: #ddf;
-}
-
-td {
-	text-align: right;
 }
 
 div.coverageBarNegative {

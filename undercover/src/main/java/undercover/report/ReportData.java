@@ -12,14 +12,16 @@ import undercover.metric.MethodMetric;
 public class ReportData {
 	private final MetaData metaData;
 	private final CoverageData coverageData;
+	private SourceFinder sourceFinder;
 
 	private final ProjectItem projectItem;
 	private final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	private final Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
 	
-	public ReportData(MetaData metaData, CoverageData coverageData, String projectName) {
+	public ReportData(MetaData metaData, CoverageData coverageData, String projectName, SourceFinder sourceFinder) {
 		this.metaData = metaData;
 		this.coverageData = coverageData;
+		this.sourceFinder = sourceFinder;
 
 		projectItem = new ProjectItem(projectName);
 		for (ClassMetric each : metaData.getAllClasses()) {
@@ -36,7 +38,7 @@ public class ReportData {
 			packageItems.put(packageItem.name, packageItem);
 		}
 		
-		ClassItem classItem = new ClassItem(packageItem, classMetric);
+		ClassItem classItem = new ClassItem(packageItem, classMetric.name(), sourceFinder.findSourcePath(classMetric));
 		packageItem.addClass(classItem);
 		classItems.put(classItem.name, classItem);
 		
