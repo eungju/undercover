@@ -23,6 +23,7 @@ import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import undercover.report.PackageItem;
 import undercover.report.ReportData;
 
 public class HtmlReport {
@@ -61,9 +62,13 @@ public class HtmlReport {
 	public void generate() throws IOException {
 		outputDirectory.mkdirs();
 		copyResources();
-		generateAllSummary();
-		generateAllPackages();
-		generateAllClasses();
+
+		generateProjectPackages();
+		generateProjectSummary();
+		generateProjectClasses();
+		
+		generatePackageReports();
+		
 		for (File each : findAllSourceFiles()) {
 			new SourceReport(this, each).writeTo(outputDirectory);
 		}
@@ -92,24 +97,35 @@ public class HtmlReport {
 			IOUtils.closeQuietly(output);
 		}
 	}
-	
-	void generateAllSummary() throws IOException {
-		StringTemplate template = getTemplate("allSummary");
+
+	void generateProjectPackages() throws IOException {
+		StringTemplate template = getTemplate("projectPackages");
 		template.setAttribute("project", reportData.getProject());
-		template.setAttribute("packages", reportData.getAllPackages());
-		writeTemplate(template, "all-summary.html");
+		writeTemplate(template, "project-packages.html");
+	}
+	
+	void generateProjectSummary() throws IOException {
+		StringTemplate template = getTemplate("projectSummary");
+		template.setAttribute("project", reportData.getProject());
+		writeTemplate(template, "project-summary.html");
 	}
 
-	void generateAllPackages() throws IOException {
-		StringTemplate template = getTemplate("allPackages");
-		template.setAttribute("packages", reportData.getAllPackages());
-		writeTemplate(template, "all-packages.html");
-	}
-
-	void generateAllClasses() throws IOException {
-		StringTemplate template = getTemplate("allClasses");
+	void generateProjectClasses() throws IOException {
+		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", reportData.getAllClasses());
-		writeTemplate(template, "all-classes.html");
+		writeTemplate(template, "project-classes.html");
+	}
+
+	void generatePackageReports() throws IOException {
+		for (PackageItem each : reportData.getAllPackages()) {
+			generatePackageReport(each);
+		}
+	}
+
+	private void generatePackageReport(PackageItem packageItem) throws IOException {
+		StringTemplate template = getTemplate("packageSummary");
+		template.setAttribute("package", packageItem);
+		writeTemplate(template, packageItem.getLink());
 	}
 
 	public StringTemplate getTemplate(String templateName) {
@@ -151,14 +167,6 @@ public class HtmlReport {
 		List<File> result = new ArrayList<File>();
 		for (File each : sourcePaths) {
 			result.addAll(FileUtils.listFiles(each, new RegexFileFilter(".*\\.(java|scala)"), TrueFileFilter.TRUE));
-		}
-		return result;
-	}
-
-	public List<File> findSourceFiles(String fileName) {
-		List<File> result = new ArrayList<File>();
-		for (File each : sourcePaths) {
-			result.addAll(FileUtils.listFiles(each, new NameFileFilter(fileName), TrueFileFilter.TRUE));
 		}
 		return result;
 	}

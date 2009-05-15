@@ -19,4 +19,8 @@ public class PackageItem extends CompositeItem {
 	protected Collection<Item> getItems() {
 		return (Collection) classes;
 	}
+
+	public String getLink() {
+		return "package-" + name.replaceAll("/", ".") + ".html";
+	}
 }

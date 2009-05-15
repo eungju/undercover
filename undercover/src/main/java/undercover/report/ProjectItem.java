@@ -12,6 +12,10 @@ public class ProjectItem extends CompositeItem {
 		packages = new ArrayList<PackageItem>();
 	}
 	
+	public String getLink() {
+		return "project-summary.html";
+	}
+	
 	public void addPackage(PackageItem packageItem) {
 		packages.add(packageItem);
 	}
