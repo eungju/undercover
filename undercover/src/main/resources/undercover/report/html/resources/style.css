@@ -1,15 +1,17 @@
 body {
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 10pt;
+	margin: 8px;
 }
 
 table {
 	border-collapse: collapse;
 	width: 100%;
+	margin: 4px;
 }
 
 th, td {
-	border: 1px solid #ccc;
+	border: 1px solid #bbb;
 }
 
 th {
@@ -20,16 +22,16 @@ div.coverageBarNegative {
 	border: 1px solid #ccc; 
 	min-width: 100px; 
 	padding: 0px; 
-	background: #e00;
+	background: #d00;
 }
 
 div.coverageBarPositive {
-	background: #0e0;
+	background: #0d0;
 	height: 10px;
 }
 
 div.coverageBarNotAvailable {
-	border: 1px solid #ccc; 
+	border: 1px solid #bbb; 
 	min-width: 100px; 
 	padding: 0px; 
 	background: #ddd;
