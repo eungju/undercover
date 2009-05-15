@@ -65,7 +65,7 @@ public class InstrumentTest {
 	@Test public void shortCircuitBranchMethod() throws IOException {
 		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch()Z");
 		//Optimizer can create extra block.
-		assertTrue(3 < methodMetric.blocks().size());
+		assertTrue(3 <= methodMetric.blocks().size());
 		assertEquals(1, methodMetric.getConditionalBranches());
 	}
 }
