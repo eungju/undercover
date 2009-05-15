@@ -17,10 +17,6 @@ public abstract class AbstractItem implements Item {
 		return displayName;
 	}
 
-	public int getComplexity() {
-		return getBlockCount();
-	}
-
 	public double getAverageMethodComplexity() {
 		return ((double) getBlockCount()) / getMethodCount();
 	}

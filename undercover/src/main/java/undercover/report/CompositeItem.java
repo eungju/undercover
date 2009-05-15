@@ -23,6 +23,14 @@ public abstract class CompositeItem extends AbstractItem {
 		return result;
 	}
 
+	public int getComplexity() {
+		int result = 0;
+		for (Item each : getItems()) {
+			result += each.getComplexity();
+		}
+		return result;
+	}
+
 	public int getMethodCount() {
 		int result = 0;
 		for (Item each : getItems()) {

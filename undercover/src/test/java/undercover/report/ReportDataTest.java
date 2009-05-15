@@ -33,6 +33,7 @@ public class ReportDataTest {
 		MethodMetric methodMetric = new MethodMetric("foo", "()V");
 		BlockMetric b1 = new BlockMetric();
 		methodMetric.addBlock(b1);
+		methodMetric.addConditionalBranch();
 		methodMetric.addBlock(new BlockMetric());
 		CoverageData coverageData = new CoverageData();
 		coverageData.touchBlock(b1.id());

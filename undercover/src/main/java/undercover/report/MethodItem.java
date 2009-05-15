@@ -8,11 +8,13 @@ public class MethodItem extends AbstractItem {
 	private final ClassItem parent;
 	private final int blockCount;
 	private final int coveredBlockCount;
+	private int complexity;
 	
 	public MethodItem(ClassItem parent, MethodMetric metric, CoverageData coverageData) {
 		super(metric.name(), parent.getDisplayName() + "." + metric.name() + metric.descriptor());
 		this.parent = parent;
 		this.blockCount = metric.blocks().size();
+		this.complexity = 1 + metric.getConditionalBranches();
 		int touched = 0;
 		for (BlockMetric each : metric.blocks()) {
 			if (coverageData.getBlock(each.id()) != null) {
@@ -33,11 +35,15 @@ public class MethodItem extends AbstractItem {
 		return blockCount;
 	}
 
-	public int getCoveredBlockCount() {
-		return coveredBlockCount;
+	public int getComplexity() {
+		return complexity;
 	}
 
 	public int getMethodCount() {
 		throw new UnsupportedOperationException();
+	}
+
+	public int getCoveredBlockCount() {
+		return coveredBlockCount;
 	}
 }

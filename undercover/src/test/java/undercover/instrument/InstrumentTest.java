@@ -14,6 +14,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 import undercover.metric.ClassMetric;
 import undercover.metric.MetaData;
+import undercover.metric.MethodMetric;
 
 //FIXME: How to test instrumented bytecode?
 public class InstrumentTest {
@@ -38,22 +39,33 @@ public class InstrumentTest {
 	}
 	
 	@Test public void abstractMethod() throws IOException {
-		assertEquals(1, classMetric.getMethod("abstractMethod").blocks().size());
+		MethodMetric methodMetric = classMetric.getMethod("abstractMethod");
+		assertEquals(0, methodMetric.blocks().size());
+		assertEquals(0, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void emptyMethod() throws IOException {
-		assertEquals(1, classMetric.getMethod("empty").blocks().size());
+		MethodMetric methodMetric = classMetric.getMethod("empty"); 
+		assertEquals(1, methodMetric.blocks().size());
+		assertEquals(0, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void ifBranchMethod() throws IOException {
-		assertEquals(2, classMetric.getMethod("ifBranch").blocks().size());
+		MethodMetric methodMetric = classMetric.getMethod("ifBranch"); 
+		assertEquals(3, methodMetric.blocks().size());
+		assertEquals(1, methodMetric.getConditionalBranches());
 	}
 
 	@Test public void ifElseIfBranchesMethod() throws IOException {
-		assertEquals(3, classMetric.getMethod("ifElseIfBranches").blocks().size());
+		MethodMetric methodMetric = classMetric.getMethod("ifElseIfBranches"); 
+		assertEquals(5, methodMetric.blocks().size());
+		assertEquals(2, methodMetric.getConditionalBranches());
 	}
 	
 	@Test public void shortCircuitBranchMethod() throws IOException {
-		assertEquals(2, classMetric.getMethod("shortCircuitBranch").blocks().size());
+		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch");
+		//Optimizer can create extra block.
+		assertTrue(3 < methodMetric.blocks().size());
+		assertEquals(1, methodMetric.getConditionalBranches());
 	}
 }

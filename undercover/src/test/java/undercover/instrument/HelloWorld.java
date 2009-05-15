@@ -38,6 +38,24 @@ public abstract class HelloWorld {
 		}
 	}
 
+	public void tryFinallyBranch() {
+		try {
+			a++;
+		} finally {
+			a++;
+		}
+	}
+
+	public void tryCatchFinallyBranch() {
+		try {
+			a++;
+		} catch (RuntimeException e) {
+			a--;
+		} finally {
+			a++;
+		}
+	}
+
 	public void tryCatchCatchBranch() {
 		try {
 			a++;
@@ -46,9 +64,5 @@ public abstract class HelloWorld {
 		} catch (Exception e) {
 			a--;
 		}
-	}
-	
-	public boolean multipleBranchesOnLine() {
-		return a > 0 && a < 100;
 	}
 }

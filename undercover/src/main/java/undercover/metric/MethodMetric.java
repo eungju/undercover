@@ -12,11 +12,13 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	private String name;
 	private String descriptor;
 	private List<BlockMetric> blocks;
+	private int conditionalBranches;
 
 	public MethodMetric(String name, String descriptor) {
 		this.name = name;
 		this.descriptor = descriptor;
 		blocks = new ArrayList<BlockMetric>();
+		conditionalBranches = 0;
 	}
 	
 	public String name() {
@@ -34,6 +36,10 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	public List<BlockMetric> blocks() {
 		return blocks;
 	}
+	
+	public void addConditionalBranch() {
+		conditionalBranches++;
+	}
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder(name).append('{').append(descriptor).append(',');
@@ -44,5 +50,9 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 		builder.append(']');
 		builder.append('}');
 		return builder.toString();
+	}
+
+	public int getConditionalBranches() {
+		return conditionalBranches;
 	}
 }

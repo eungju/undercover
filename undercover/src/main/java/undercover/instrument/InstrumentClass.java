@@ -3,6 +3,8 @@ package undercover.instrument;
 import static org.objectweb.asm.Opcodes.*;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassWriter;
@@ -49,22 +51,33 @@ public class InstrumentClass extends ClassAdapter {
 	public static class InstrumentMethod extends MethodAdapter {
 		private MethodMetric methodMetric;
 		private BlockMetric blockMetric;
-
+		
+		private Set<Label> blockLabels;
+		
 		public InstrumentMethod(MethodVisitor methodWriter, MethodMetric methodMetric) {
 			super(methodWriter);
+			blockLabels = new HashSet<Label>();
 			this.methodMetric = methodMetric;
-        	addBlock();
 		}
 		
 		public void visitCode() {
+    		addBlock();
 		}
-
+		
 		public void visitJumpInsn(int opcode, Label label) {
 	    	super.visitJumpInsn(opcode, label);
-	        if (isBranch(opcode)) {
-	        	addBlock();
-	        }
+	    	if (isConditionalBranch(opcode)) {
+				methodMetric.addConditionalBranch();
+				addBlock();
+	    	}
+			blockLabels.add(label);
 	    }
+		
+        public void visitLabel(Label label) {
+        	if (blockLabels.contains(label)) {
+        		addBlock();
+        	}
+        }
 	    
 	    public void visitMaxs(int maxStack, int maxLocals) {
 	    	super.visitMaxs(maxStack + 2, maxLocals);
@@ -82,7 +95,7 @@ public class InstrumentClass extends ClassAdapter {
 			mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/runtime/Probe", "touchBlock", "(Ljava/lang/String;)V");
 		}
 	    
-	    boolean isBranch(int opcode) {
+	    boolean isConditionalBranch(int opcode) {
 	    	return Arrays.binarySearch(branchOpcodes, opcode) > -1;
 	    }
 	    
