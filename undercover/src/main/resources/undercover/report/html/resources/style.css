@@ -21,10 +21,17 @@ div.coverageBarNegative {
 	min-width: 100px; 
 	padding: 0px; 
 	background: #e00;
-	font-size: 9pt;
 }
 
 div.coverageBarPositive {
 	background: #0e0;
-	height: 12px;
+	height: 10px;
+}
+
+div.coverageBarNotAvailable {
+	border: 1px solid #ccc; 
+	min-width: 100px; 
+	padding: 0px; 
+	background: #ddd;
+	height: 10px;
 }

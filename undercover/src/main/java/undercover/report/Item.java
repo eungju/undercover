@@ -5,8 +5,10 @@ public interface Item {
 	String getDisplayName();
 	int getComplexity();
 	int getBlockCount();
-	int getCoveredBlockCount();
 	int getMethodCount();
 	double getAverageMethodComplexity();
+
+	boolean isExecutable();
+	int getCoveredBlockCount();
 	double getCoverageRate();
 }

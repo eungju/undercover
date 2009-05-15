@@ -17,8 +17,13 @@ footer() ::= <<
 
 coverageBar(item) ::= <<
 <div class="coverageBar">
+$if(item.executable)$
 	<span>$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$)</span>
 	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div>
+$else$
+	<span>N/A</span>
+	<div class="coverageBarNotAvailable"></div>
+$endif$
 </div>
 >>
 

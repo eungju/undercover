@@ -20,6 +20,10 @@ public abstract class AbstractItem implements Item {
 	public double getAverageMethodComplexity() {
 		return ((double) getComplexity()) / getMethodCount();
 	}
+	
+	public boolean isExecutable() {
+		return getBlockCount() > 0;
+	}
 
 	public double getCoverageRate() {
 		return getBlockCount() == 0 ? 1 : ((double) getCoveredBlockCount()) / getBlockCount();
