@@ -18,7 +18,7 @@ public abstract class AbstractItem implements Item {
 	}
 
 	public double getAverageMethodComplexity() {
-		return ((double) getBlockCount()) / getMethodCount();
+		return ((double) getComplexity()) / getMethodCount();
 	}
 
 	public double getCoverageRate() {
