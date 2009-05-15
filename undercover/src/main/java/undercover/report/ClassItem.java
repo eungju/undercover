@@ -21,7 +21,7 @@ public class ClassItem extends CompositeItem {
 	}
 	
 	public String getLink() {
-		return sourcePath.replaceAll("/", ".") + ".html";
+		return "source-" + sourcePath.replaceAll("/", ".") + ".html";
 	}
 
 	public void addMethod(MethodItem methodItem) {

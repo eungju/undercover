@@ -38,6 +38,6 @@ public class SourceReport {
 	}
 
 	String sourceHtmlPath(String relativePath) {
-		return relativePath.replaceAll("\\/|\\\\", ".") + ".html";
+		return "source-" + relativePath.replaceAll("\\/|\\\\", ".") + ".html";
 	}
 }
