@@ -5,64 +5,88 @@ public abstract class HelloWorld {
 		System.out.println("Hello, World!");
 	}
 	
-	private int a = 0;
-	
 	public abstract void abstractMethod();
 	
-	public void empty() {
+	public boolean b1() {
+		return true;
+	}
+
+	public boolean b2() {
+		return false;
+	}
+
+	public boolean b3() {
+		return true;
+	}
+
+	public boolean b4() {
+		return false;
+	}
+
+	public boolean b5() {
+		return true;
+	}
+
+	public void simple() {
+		b1();
+	}
+	
+	public void sequential() {
+		b1();
+		b2();
 	}
 	
 	public void ifBranch() {
-		if (a == 1) {
-			a++;
+		if (b1()) {
+			b2();
 		}
 	}
 
 	public void ifElseIfBranches() {
-		if (a == 1) {
-			a++;
-		} else if (a == 2) {
-			a--;
+		if (b1()) {
+			b2();
+		} else if (b3()) {
+			b4();
 		}
 	}
 	
 	public boolean shortCircuitBranch() {
-		return a == 1;
+		return b1() && b2();
 	}
 	
 	public void tryCatchBranch() {
 		try {
-			a++;
+			b1();
 		} catch (RuntimeException e) {
-			a--;
+			b2();
 		}
 	}
 
 	public void tryFinallyBranch() {
 		try {
-			a++;
+			b1();
 		} finally {
-			a++;
+			b2();
 		}
 	}
 
 	public void tryCatchFinallyBranch() {
 		try {
-			a++;
+			b1();
 		} catch (RuntimeException e) {
-			a--;
+			b2();
 		} finally {
-			a++;
+			b3();
 		}
 	}
 
 	public void tryCatchCatchBranch() {
 		try {
-			a++;
+			b1();
 		} catch (RuntimeException e) {
-			a--;
+			b2();
 		} catch (Exception e) {
-			a--;
+			b3();
 		}
 	}
 }

@@ -44,8 +44,20 @@ public class InstrumentTest {
 		assertEquals(0, methodMetric.getConditionalBranches());
 	}
 
-	@Test public void emptyMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("empty()V"); 
+	@Test public void block() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("b1()Z"); 
+		assertEquals(1, methodMetric.blocks().size());
+		assertEquals(0, methodMetric.getConditionalBranches());
+	}
+
+	@Test public void simple() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("simple()V"); 
+		assertEquals(1, methodMetric.blocks().size());
+		assertEquals(0, methodMetric.getConditionalBranches());
+	}
+
+	@Test public void sequential() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("sequential()V"); 
 		assertEquals(1, methodMetric.blocks().size());
 		assertEquals(0, methodMetric.getConditionalBranches());
 	}
@@ -64,8 +76,27 @@ public class InstrumentTest {
 	
 	@Test public void shortCircuitBranchMethod() throws IOException {
 		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch()Z");
-		//Optimizer can create extra block.
-		assertTrue(3 <= methodMetric.blocks().size());
+		//FIXME: Optimizer can create extra block.
+		assertTrue(4 <= methodMetric.blocks().size());
+		assertEquals(2, methodMetric.getConditionalBranches());
+	}
+	
+	@Test public void tryCatchBranchMethod() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("tryCatchBranch()V");
+		assertEquals(3, methodMetric.blocks().size());
 		assertEquals(1, methodMetric.getConditionalBranches());
+	}
+
+	@Test public void tryFinallyBranchMethod() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("tryFinallyBranch()V");
+		assertEquals(3, methodMetric.blocks().size());
+		assertEquals(1, methodMetric.getConditionalBranches());
+	}
+
+	@Test public void tryCatchFinallyBranchMethod() throws IOException {
+		MethodMetric methodMetric = classMetric.getMethod("tryCatchFinallyBranch()V");
+		//FIXME: Optimizer can create extra block.
+		assertTrue(4 <= methodMetric.blocks().size());
+		assertEquals(2, methodMetric.getConditionalBranches());
 	}
 }

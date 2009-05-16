@@ -53,10 +53,12 @@ public class InstrumentClass extends ClassAdapter {
 		private BlockMetric blockMetric;
 		
 		private Set<Label> blockLabels;
+		private Set<Label> conditionalLabels;
 		
 		public InstrumentMethod(MethodVisitor methodWriter, MethodMetric methodMetric) {
 			super(methodWriter);
 			blockLabels = new HashSet<Label>();
+			conditionalLabels = new HashSet<Label>();
 			this.methodMetric = methodMetric;
 		}
 		
@@ -73,7 +75,15 @@ public class InstrumentClass extends ClassAdapter {
 			blockLabels.add(label);
 	    }
 		
+		public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+			conditionalLabels.add(handler);
+			blockLabels.add(handler);
+		}
+		
         public void visitLabel(Label label) {
+        	if (conditionalLabels.contains(label)) {
+        		methodMetric.addConditionalBranch();
+        	}
         	if (blockLabels.contains(label)) {
         		addBlock();
         	}
