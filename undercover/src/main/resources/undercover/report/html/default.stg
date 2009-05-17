@@ -134,7 +134,7 @@ $header()$
 
 <table>
 	<thead>
-		<tr><th>Classes</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th>Classe</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$package.classes:{ each |
