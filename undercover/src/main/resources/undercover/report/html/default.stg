@@ -68,7 +68,18 @@ $footer()$
 projectPackages(project) ::= <<
 $header()$
 
-<h2>$project.displayName$ Coverage Report</h2>
+<div class="rounded-box">
+	<div class="round4"></div>
+	<div class="round2"></div>
+	<div class="round1"></div>
+	<div class="box-inner">
+		<h2>$project.displayName$ Coverage Report</h2>
+	</div>
+	<div class="round1"></div>
+	<div class="round2"></div>
+	<div class="round4"></div>
+</div>
+
 <ul>
 	<li><a href="$project.link$" target="classPane">Summary</a></li>
 </ul>

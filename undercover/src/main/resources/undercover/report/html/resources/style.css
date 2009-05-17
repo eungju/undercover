@@ -37,3 +37,36 @@ div.coverageBarNotAvailable {
 	background: #ddd;
 	height: 10px;
 }
+
+/* Rounded-box */
+
+div.rounded-box {
+	background: #ddf;
+}
+
+div.round1, div.round2, div.round4 {
+	font-size: 0;
+	height: 1px;
+	margin: 0;
+	padding: 0;
+}
+
+div.round4 {
+	border-left: 4px solid #FFFFFF;
+	border-right: 4px solid #FFFFFF;
+}
+
+div.round2 {
+	border-left: 2px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF;
+}
+
+div.round1 {
+	border-left: 1px solid #FFFFFF;
+	border-right: 1px solid #FFFFFF;
+}
+
+div.box-inner {
+	margin: 0;
+	padding: 0 13px;
+}
