@@ -14,8 +14,7 @@ import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
-import undercover.UndercoverSettings;
-import undercover.instrument.Instrument;
+import undercover.instrument.OfflineInstrument;
 
 /**
  * Offline class instrumentor.
@@ -70,7 +69,7 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 
     protected void doExecute() throws MojoExecutionException {
     	try {
-	    	Instrument instrument = new Instrument();
+	    	OfflineInstrument instrument = new OfflineInstrument();
 	    	instrument.setInputPaths(instrumentationPaths);
 	    	instrument.setOutputDirectory(new File(outputDirectory, "classes"));
 	    	instrument.setMetaDataFile(metaDataFile);

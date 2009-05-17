@@ -33,8 +33,8 @@ public class InstrumentTest {
 	@Before public void beforeEach() throws IOException {
 		dut = new Instrument();
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
-		MetaData metaData = new MetaData();
-		traceBytecode(dut.instrument(metaData, original));
+		MetaData metaData = dut.getMetaData();
+		traceBytecode(dut.instrument(original));
 		classMetric = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
 	}
 	
