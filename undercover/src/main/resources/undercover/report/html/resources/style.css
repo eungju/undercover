@@ -7,19 +7,18 @@ body {
 table {
 	border-collapse: collapse;
 	width: 100%;
-	margin: 4px;
 }
 
 th, td {
-	border: 1px solid #bbb;
+	border: 1px solid #ddd;
 }
 
 th {
-	background: #ddf;
+	background: #bdb;
 }
 
 div.coverageBarNegative {
-	border: 1px solid #ccc; 
+	border: none; 
 	min-width: 100px; 
 	padding: 0px; 
 	background: #d00;
@@ -31,7 +30,7 @@ div.coverageBarPositive {
 }
 
 div.coverageBarNotAvailable {
-	border: 1px solid #bbb; 
+	border: none; 
 	min-width: 100px; 
 	padding: 0px; 
 	background: #ddd;
@@ -41,7 +40,7 @@ div.coverageBarNotAvailable {
 /* Rounded-box */
 
 div.rounded-box {
-	background: #ddf;
+	background: #bdb;
 }
 
 div.round1, div.round2, div.round4 {
