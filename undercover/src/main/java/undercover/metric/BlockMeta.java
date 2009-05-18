@@ -17,6 +17,10 @@ public class BlockMeta extends ObjectSupport implements Serializable {
 	public UUID id() {
 		return id;
 	}
+
+	public void accept(MetaDataVisitor visitor) {
+		visitor.visit(this);
+	}
 	
 	public String toString() {
 		return "{}";

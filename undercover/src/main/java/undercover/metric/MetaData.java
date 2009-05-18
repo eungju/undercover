@@ -54,6 +54,14 @@ public class MetaData extends ObjectSupport implements Serializable {
 		return builder.toString();
 	}
 	
+	public void accept(MetaDataVisitor visitor) {
+		visitor.visitEnter(this);
+		for (ClassMeta each : classes) {
+			each.accept(visitor);
+		}
+		visitor.visitLeave(this);
+	}
+	
 	public void save(File file) throws IOException {
 		ObjectOutputStream output = null;
 		try {

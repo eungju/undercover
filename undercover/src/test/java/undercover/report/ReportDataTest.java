@@ -2,9 +2,6 @@ package undercover.report;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,20 +10,20 @@ import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 
 public class ReportDataTest {
-	private MetaData metaData;
 	private CoverageData coverageData;
-	private ReportData dut;
+	private ReportDataBuilder dut;
 
 	@Before public void beforeEach() {
-		metaData = new MetaData();
 		coverageData = new CoverageData();
-		dut = new ReportData(metaData, coverageData, "foo", new SourceFinder(new ArrayList<File>()));
+		dut = new ReportDataBuilder(coverageData);
+		MetaData metaData = new MetaData();
+		dut.visitEnter(metaData);
 	}
 	
-	@Test public void addClass() {
+	@Test public void analyzeClass() {
 		ClassMeta classMeta = new ClassMeta("pkg/cls", "cls.java");
-		dut.addClass(classMeta);
-		assertNotNull(dut.getClass(classMeta.name()));
-		assertNotNull(dut.getPackage("pkg"));
+		classMeta.accept(dut);
+		assertNotNull(dut.classItems.get(classMeta.name()));
+		assertNotNull(dut.packageItems.get("pkg"));
 	}
 }

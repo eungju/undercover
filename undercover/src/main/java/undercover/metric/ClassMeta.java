@@ -49,6 +49,14 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 		return null;
 	}
 	
+	public void accept(MetaDataVisitor visitor) {
+		visitor.visitEnter(this);
+		for (MethodMeta each : methods) {
+			each.accept(visitor);
+		}
+		visitor.visitLeave(this);
+	}
+	
 	public String toString() {
 		StringBuilder builder = new StringBuilder(name);
 		builder.append('{').append(source).append(',');
