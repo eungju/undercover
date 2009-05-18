@@ -33,7 +33,7 @@ public class Instrument {
 	
 	public ClassWriter instrument(ClassReader classReader) {
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
-		classReader.accept(new InstrumentClass(classWriter, metaData), 0);
+		classReader.accept(new InstrumentClassVisitor(classWriter, metaData), 0);
 		return classWriter;
 	}
 }

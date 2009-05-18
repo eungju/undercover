@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 
 public class SourceFinderTest {
 	private SourceFinder dut;
@@ -30,14 +30,14 @@ public class SourceFinderTest {
 	}
 	
 	@Test public void notExist() throws IOException {
-		assertNull(dut.findSourceFile(new ClassMetric("p/c", "c.java")));
-		assertNull(dut.findSourcePath(new ClassMetric("p/c", "c.java")));
+		assertNull(dut.findSourceFile(new ClassMeta("p/c", "c.java")));
+		assertNull(dut.findSourcePath(new ClassMeta("p/c", "c.java")));
 	}
 
 	@Test public void existOnExpectedPath() throws IOException {
 		File file = new File(src, "p/c.java");
 		FileUtils.touch(file);
-		assertEquals(file, dut.findSourceFile(new ClassMetric("p/c", "c.java")));
-		assertEquals("p/c.java", dut.findSourcePath(new ClassMetric("p/c", "c.java")));
+		assertEquals(file, dut.findSourceFile(new ClassMeta("p/c", "c.java")));
+		assertEquals("p/c.java", dut.findSourcePath(new ClassMeta("p/c", "c.java")));
 	}
 }

@@ -18,23 +18,23 @@ import undercover.support.ObjectSupport;
 public class MetaData extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -1378920643147735683L;
 
-	private final List<ClassMetric> classes;
+	private final List<ClassMeta> classes;
 
 	public MetaData() {
-		this(new ArrayList<ClassMetric>());
+		this(new ArrayList<ClassMeta>());
 	}
 	
-	public MetaData(List<ClassMetric> classes) {
+	public MetaData(List<ClassMeta> classes) {
 		this.classes = classes;
 	}
 
-	public int addClass(ClassMetric classMetric) {
-		classes.add(classMetric);
+	public int addClass(ClassMeta classMeta) {
+		classes.add(classMeta);
 		return classes.size() - 1;
 	}
 
-	public ClassMetric getClass(String name) {
-		for (ClassMetric each : classes) {
+	public ClassMeta getClass(String name) {
+		for (ClassMeta each : classes) {
 			if (each.name().equals(name)) {
 				return each;
 			}
@@ -42,13 +42,13 @@ public class MetaData extends ObjectSupport implements Serializable {
 		return null;
 	}
 	
-	public Collection<ClassMetric> getAllClasses() {
+	public Collection<ClassMeta> getAllClasses() {
 		return classes;
 	}
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (ClassMetric each : classes) {
+		for (ClassMeta each : classes) {
 			builder.append(each.toString()).append(',');
 		}
 		return builder.toString();

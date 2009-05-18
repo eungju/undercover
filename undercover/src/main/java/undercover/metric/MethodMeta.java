@@ -6,16 +6,16 @@ import java.util.List;
 
 import undercover.support.ObjectSupport;
 
-public class MethodMetric extends ObjectSupport implements Serializable {
+public class MethodMeta extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = 4471359617355848867L;
 
 	private String name;
-	private List<BlockMetric> blocks;
+	private List<BlockMeta> blocks;
 	private int conditionalBranches;
 
-	public MethodMetric(String name) {
+	public MethodMeta(String name) {
 		this.name = name;
-		blocks = new ArrayList<BlockMetric>();
+		blocks = new ArrayList<BlockMeta>();
 		conditionalBranches = 0;
 	}
 	
@@ -23,11 +23,11 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 		return name;
 	}
 	
-	public void addBlock(BlockMetric blocksMetric) {
-		blocks.add(blocksMetric);
+	public void addBlock(BlockMeta blocksMeta) {
+		blocks.add(blocksMeta);
 	}
 	
-	public List<BlockMetric> blocks() {
+	public List<BlockMeta> blocks() {
 		return blocks;
 	}
 	
@@ -38,7 +38,7 @@ public class MethodMetric extends ObjectSupport implements Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder(name).append('{');
 		builder.append('[');
-		for (BlockMetric each : blocks) {
+		for (BlockMeta each : blocks) {
 			builder.append(each.toString()).append(',');
 		}
 		builder.append(']');

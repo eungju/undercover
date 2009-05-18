@@ -11,12 +11,12 @@ public class MetaDataTest {
 	@Test public void loadAndSave() throws IOException {
 		File file = File.createTempFile("undercover-", ".md");
 		MetaData expected = new MetaData();
-		ClassMetric classMetric = new ClassMetric("Foo", "Foo.java");
-		MethodMetric methodMetric = new MethodMetric("bar()V");
-		BlockMetric blockMetric = new BlockMetric();
-		methodMetric.addBlock(blockMetric);
-		classMetric.addMethod(methodMetric);
-		expected.addClass(classMetric);
+		ClassMeta classMeta = new ClassMeta("Foo", "Foo.java");
+		MethodMeta methodMeta = new MethodMeta("bar()V");
+		BlockMeta blockMeta = new BlockMeta();
+		methodMeta.addBlock(blockMeta);
+		classMeta.addMethod(methodMeta);
+		expected.addClass(classMeta);
 		expected.save(file);
 		MetaData actual = MetaData.load(file);
 		assertEquals(expected, actual);

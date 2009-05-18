@@ -6,17 +6,17 @@ import java.util.List;
 
 import undercover.support.ObjectSupport;
 
-public class ClassMetric extends ObjectSupport implements Serializable {
+public class ClassMeta extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -9154762635889065861L;
 
 	private String name;
 	private String source;
-	private ArrayList<MethodMetric> methods;
+	private ArrayList<MethodMeta> methods;
 
-	public ClassMetric(String name, String source) {
+	public ClassMeta(String name, String source) {
 		this.name = name;
 		this.source = source;
-		this.methods = new ArrayList<MethodMetric>();
+		this.methods = new ArrayList<MethodMeta>();
 	}
 	
 	public String name() {
@@ -32,16 +32,16 @@ public class ClassMetric extends ObjectSupport implements Serializable {
 		return lastSeparator == -1 ? name : name.substring(0, lastSeparator);
 	}
 
-	public void addMethod(MethodMetric methodMetric) {
-		methods.add(methodMetric);
+	public void addMethod(MethodMeta methodMeta) {
+		methods.add(methodMeta);
 	}
 
-	public List<MethodMetric> methods() {
+	public List<MethodMeta> methods() {
 		return methods;
 	}
 
-	public MethodMetric getMethod(String name) {
-		for (MethodMetric each : methods) {
+	public MethodMeta getMethod(String name) {
+		for (MethodMeta each : methods) {
 			if (each.name().equals(name)) {
 				return each;
 			}
@@ -53,7 +53,7 @@ public class ClassMetric extends ObjectSupport implements Serializable {
 		StringBuilder builder = new StringBuilder(name);
 		builder.append('{').append(source).append(',');
 		builder.append('[');
-		for (MethodMetric each : methods) {
+		for (MethodMeta each : methods) {
 			builder.append(each.toString()).append(',');
 		}
 		builder.append(']');

@@ -1,8 +1,8 @@
 package undercover.report;
 
-import undercover.metric.BlockMetric;
+import undercover.metric.BlockMeta;
 import undercover.metric.CoverageData;
-import undercover.metric.MethodMetric;
+import undercover.metric.MethodMeta;
 
 public class MethodItem extends AbstractItem {
 	private final ClassItem parent;
@@ -10,13 +10,13 @@ public class MethodItem extends AbstractItem {
 	private final int coveredBlockCount;
 	private int complexity;
 	
-	public MethodItem(ClassItem parent, MethodMetric metric, CoverageData coverageData) {
+	public MethodItem(ClassItem parent, MethodMeta metric, CoverageData coverageData) {
 		super(metric.name(), parent.getDisplayName() + "." + metric.name());
 		this.parent = parent;
 		this.blockCount = metric.blocks().size();
 		this.complexity = 1 + metric.getConditionalBranches();
 		int touched = 0;
-		for (BlockMetric each : metric.blocks()) {
+		for (BlockMeta each : metric.blocks()) {
 			if (coverageData.getBlock(each.id()) != null) {
 				touched++;
 			}

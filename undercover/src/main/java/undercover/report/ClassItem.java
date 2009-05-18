@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 
 public class ClassItem extends CompositeItem {
 	public final PackageItem parent;

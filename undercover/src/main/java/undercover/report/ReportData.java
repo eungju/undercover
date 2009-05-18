@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
-import undercover.metric.MethodMetric;
+import undercover.metric.MethodMeta;
 
 public class ReportData {
 	private final MetaData metaData;
@@ -24,13 +24,13 @@ public class ReportData {
 		this.sourceFinder = sourceFinder;
 
 		projectItem = new ProjectItem(projectName);
-		for (ClassMetric each : metaData.getAllClasses()) {
+		for (ClassMeta each : metaData.getAllClasses()) {
 			addClass(each);
 		}
 	}
 	
-	public void addClass(ClassMetric classMetric) {
-		String packageName = classMetric.name().substring(0, classMetric.name().lastIndexOf("/"));
+	public void addClass(ClassMeta classMeta) {
+		String packageName = classMeta.name().substring(0, classMeta.name().lastIndexOf("/"));
 		PackageItem packageItem = packageItems.get(packageName);
 		if (packageItem == null) {
 			packageItem = new PackageItem(packageName);
@@ -38,11 +38,11 @@ public class ReportData {
 			packageItems.put(packageItem.name, packageItem);
 		}
 		
-		ClassItem classItem = new ClassItem(packageItem, classMetric.name(), sourceFinder.findSourcePath(classMetric));
+		ClassItem classItem = new ClassItem(packageItem, classMeta.name(), sourceFinder.findSourcePath(classMeta));
 		packageItem.addClass(classItem);
 		classItems.put(classItem.name, classItem);
 		
-		for (MethodMetric each : classMetric.methods()) {
+		for (MethodMeta each : classMeta.methods()) {
 			MethodItem methodItem = new MethodItem(classItem, each, coverageData);
 			classItem.addMethod(methodItem);
 		}

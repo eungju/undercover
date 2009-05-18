@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 
@@ -24,9 +24,9 @@ public class ReportDataTest {
 	}
 	
 	@Test public void addClass() {
-		ClassMetric classMetric = new ClassMetric("pkg/cls", "cls.java");
-		dut.addClass(classMetric);
-		assertNotNull(dut.getClass(classMetric.name()));
+		ClassMeta classMeta = new ClassMeta("pkg/cls", "cls.java");
+		dut.addClass(classMeta);
+		assertNotNull(dut.getClass(classMeta.name()));
 		assertNotNull(dut.getPackage("pkg"));
 	}
 }

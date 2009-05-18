@@ -12,14 +12,14 @@ import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 import undercover.metric.MetaData;
-import undercover.metric.MethodMetric;
+import undercover.metric.MethodMeta;
 
 //FIXME: How to test instrumented bytecode?
 public class InstrumentTest {
 	private Instrument dut;
-	private ClassMetric classMetric;
+	private ClassMeta classMeta;
 	
 	public String traceBytecode(byte[] bytecode) {
 		ClassReader cr = new ClassReader(bytecode);
@@ -35,68 +35,68 @@ public class InstrumentTest {
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
 		MetaData metaData = dut.getMetaData();
 		traceBytecode(dut.instrument(original));
-		classMetric = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
+		classMeta = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
 	}
 	
 	@Test public void abstractMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("abstractMethod()V");
-		assertEquals(0, methodMetric.blocks().size());
-		assertEquals(0, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("abstractMethod()V");
+		assertEquals(0, methodMeta.blocks().size());
+		assertEquals(0, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void block() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("b1()Z"); 
-		assertEquals(1, methodMetric.blocks().size());
-		assertEquals(0, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("b1()Z"); 
+		assertEquals(1, methodMeta.blocks().size());
+		assertEquals(0, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void simple() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("simple()V"); 
-		assertEquals(1, methodMetric.blocks().size());
-		assertEquals(0, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("simple()V"); 
+		assertEquals(1, methodMeta.blocks().size());
+		assertEquals(0, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void sequential() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("sequential()V"); 
-		assertEquals(1, methodMetric.blocks().size());
-		assertEquals(0, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("sequential()V"); 
+		assertEquals(1, methodMeta.blocks().size());
+		assertEquals(0, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void ifBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("ifBranch()V"); 
-		assertEquals(3, methodMetric.blocks().size());
-		assertEquals(1, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("ifBranch()V"); 
+		assertEquals(3, methodMeta.blocks().size());
+		assertEquals(1, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void ifElseIfBranchesMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("ifElseIfBranches()V"); 
-		assertEquals(5, methodMetric.blocks().size());
-		assertEquals(2, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("ifElseIfBranches()V"); 
+		assertEquals(5, methodMeta.blocks().size());
+		assertEquals(2, methodMeta.getConditionalBranches());
 	}
 	
 	@Test public void shortCircuitBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("shortCircuitBranch()Z");
+		MethodMeta methodMeta = classMeta.getMethod("shortCircuitBranch()Z");
 		//FIXME: Optimizer can create extra block.
-		assertTrue(4 <= methodMetric.blocks().size());
-		assertEquals(2, methodMetric.getConditionalBranches());
+		assertTrue(4 <= methodMeta.blocks().size());
+		assertEquals(2, methodMeta.getConditionalBranches());
 	}
 	
 	@Test public void tryCatchBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("tryCatchBranch()V");
-		assertEquals(3, methodMetric.blocks().size());
-		assertEquals(1, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("tryCatchBranch()V");
+		assertEquals(3, methodMeta.blocks().size());
+		assertEquals(1, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void tryFinallyBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("tryFinallyBranch()V");
-		assertEquals(3, methodMetric.blocks().size());
-		assertEquals(1, methodMetric.getConditionalBranches());
+		MethodMeta methodMeta = classMeta.getMethod("tryFinallyBranch()V");
+		assertEquals(3, methodMeta.blocks().size());
+		assertEquals(1, methodMeta.getConditionalBranches());
 	}
 
 	@Test public void tryCatchFinallyBranchMethod() throws IOException {
-		MethodMetric methodMetric = classMetric.getMethod("tryCatchFinallyBranch()V");
+		MethodMeta methodMeta = classMeta.getMethod("tryCatchFinallyBranch()V");
 		//FIXME: Optimizer can create extra block.
-		assertTrue(4 <= methodMetric.blocks().size());
-		assertEquals(2, methodMetric.getConditionalBranches());
+		assertTrue(4 <= methodMeta.blocks().size());
+		assertEquals(2, methodMeta.getConditionalBranches());
 	}
 }

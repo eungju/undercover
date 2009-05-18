@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import undercover.support.ObjectSupport;
 
-public class BlockMetric extends ObjectSupport implements Serializable {
+public class BlockMeta extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -1085194971297677184L;
 
 	private UUID id;
 
-	public BlockMetric() {
+	public BlockMeta() {
 		id = UUID.randomUUID();
 	}
 	

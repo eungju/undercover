@@ -3,7 +3,7 @@ package undercover.report;
 import java.io.File;
 import java.util.List;
 
-import undercover.metric.ClassMetric;
+import undercover.metric.ClassMeta;
 
 public class SourceFinder {
 	private List<File> sourcePaths;
@@ -12,9 +12,9 @@ public class SourceFinder {
 		this.sourcePaths = sourcePaths;
 	}
 
-	public File findSourceFile(ClassMetric classMetric) {
+	public File findSourceFile(ClassMeta classMeta) {
 		for (File each : sourcePaths) {
-			File file = new File(each, classMetric.getPackageName() + "/" + classMetric.source());
+			File file = new File(each, classMeta.getPackageName() + "/" + classMeta.source());
 			if (file.exists() && file.isFile()) {
 				return file;
 			}
@@ -22,8 +22,8 @@ public class SourceFinder {
 		return null;
 	}
 
-	public String findSourcePath(ClassMetric classMetric) {
-		File file = findSourceFile(classMetric);
+	public String findSourcePath(ClassMeta classMeta) {
+		File file = findSourceFile(classMeta);
 		return file == null ? null : relativePath(file).replaceAll("/|\\\\", "/");
 	}
 
