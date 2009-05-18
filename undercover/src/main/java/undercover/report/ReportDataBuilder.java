@@ -21,11 +21,12 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	final Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
 
-	private ReportData reportData;
-	private ProjectItem projectItem;
-	private PackageItem packageItem;
-	private ClassItem classItem;
-	private MethodItem methodItem;
+	ReportData reportData;
+	ProjectItem projectItem;
+	PackageItem packageItem;
+	ClassItem classItem;
+	MethodItem methodItem;
+	int coveredBlockCount;
 	
 	public ReportDataBuilder(CoverageData coverageData) {
 		this.coverageData = coverageData;
@@ -72,13 +73,17 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(MethodMeta methodMeta) {
-		methodItem = new MethodItem(classItem, methodMeta, coverageData);
+		coveredBlockCount = 0;
 	}
 
-	public void visitLeave(MethodMeta methodLeave) {
+	public void visitLeave(MethodMeta methodMeta) {
+		methodItem = new MethodItem(classItem, methodMeta.name(), 1 + methodMeta.getConditionalBranches() + 1, methodMeta.blocks().size(), coveredBlockCount);
 		classItem.addMethod(methodItem);
 	}
 
 	public void visit(BlockMeta blockMeta) {
+		if (coverageData.getBlock(blockMeta.id()) != null) {
+			coveredBlockCount++;
+		}
 	}
 }
