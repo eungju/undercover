@@ -9,7 +9,7 @@ public class ClassItem extends CompositeItem {
 	public final String simpleName;
 	public final List<MethodItem> methods;
 	
-	public ClassItem(PackageItem parent, String name, String sourcePath) {
+	public ClassItem(String name, String sourcePath) {
 		super(name, name.replaceAll("\\/", "."));
 		this.sourcePath = sourcePath;
 		this.simpleName = name.substring(name.lastIndexOf('/') + 1);

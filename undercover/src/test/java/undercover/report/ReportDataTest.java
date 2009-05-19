@@ -40,7 +40,7 @@ public class ReportDataTest {
 		methodMeta.addBlock(new BlockMeta());
 		coverageData.touchBlock(b1.id());
 
-		dut.classItem = new ClassItem(null, "p/c", "c.java");
+		dut.classItem = new ClassItem("p/c", "c.java");
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockCount());
 		assertEquals(1, dut.methodItem.getCoveredBlockCount());

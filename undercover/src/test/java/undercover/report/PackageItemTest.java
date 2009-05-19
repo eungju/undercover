@@ -36,7 +36,7 @@ public class PackageItemTest {
 		private int methodCount;
 
 		public DummyClassItem(String name, int blockCount, int coveredBlockCount, int methodCount) {
-			super(null, name, null);
+			super(name, null);
 			this.blockCount = blockCount;
 			this.coveredBlockCount = coveredBlockCount;
 			this.methodCount = methodCount;

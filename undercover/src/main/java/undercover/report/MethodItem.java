@@ -1,12 +1,18 @@
 package undercover.report;
 
+import undercover.metric.MethodMeta;
+
 public class MethodItem extends AbstractItem {
 	private final int complexity;
 	private final int blockCount;
 	private final int coveredBlockCount;
 	
-	public MethodItem(ClassItem parent, String name, int complexity, int blockCount, int coveredBlockCount) {
-		super(name, parent.getDisplayName() + "." + name);
+	public MethodItem(ClassItem parent, MethodMeta methodMeta, int coveredBlockCount) {
+		this(parent.getName() + "." + methodMeta.name(), 1 + methodMeta.getConditionalBranches(), methodMeta.blocks().size(), coveredBlockCount);
+	}
+	
+	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
+		super(name, name.replaceAll("\\/", "."));
 		this.complexity = complexity;
 		this.blockCount = blockCount;
 		this.coveredBlockCount = coveredBlockCount;

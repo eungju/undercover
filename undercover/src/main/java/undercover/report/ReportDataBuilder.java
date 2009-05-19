@@ -59,7 +59,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			packageItem = new PackageItem(packageName);
 		}
 		
-		classItem = new ClassItem(packageItem, classMeta.name(), sourceFinder.findSourcePath(classMeta));
+		classItem = new ClassItem(classMeta.name(), sourceFinder.findSourcePath(classMeta));
 	}
 
 	public void visitLeave(ClassMeta classLeave) {
@@ -77,7 +77,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitLeave(MethodMeta methodMeta) {
-		methodItem = new MethodItem(classItem, methodMeta.name(), 1 + methodMeta.getConditionalBranches() + 1, methodMeta.blocks().size(), coveredBlockCount);
+		methodItem = new MethodItem(classItem, methodMeta, coveredBlockCount);
 		classItem.addMethod(methodItem);
 	}
 
