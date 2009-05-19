@@ -71,6 +71,18 @@ div.box-inner {
 }
 
 /* Source */
+tr.completely-covered {
+	background-color: #efe;
+}
+
+tr.partialy-covered {
+	background-color: #ff9;
+}
+
+tr.not-covered {
+	background-color: #fbb;
+}
+
 td.source-line-number {
 	text-align: right;
 }

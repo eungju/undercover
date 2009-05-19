@@ -13,4 +13,12 @@ public class SampleTest {
 	@Test public void simple() {
 		dut.simple();
 	}
+	
+	@Test public void ifBranch() {
+		dut.ifBranch(true);
+	}
+
+	@Test public void partialyCoveredIfBranch() {
+		dut.ifBranch(true, false);
+	}
 }

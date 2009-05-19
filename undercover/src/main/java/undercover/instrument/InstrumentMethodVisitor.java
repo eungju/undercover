@@ -16,6 +16,7 @@ import undercover.metric.MethodMeta;
 public class InstrumentMethodVisitor extends MethodAdapter {
 	private MethodMeta methodMeta;
 	private BlockMeta blockMeta;
+	private int lineNumber;
 	
 	private Set<Label> jumpTargetLabels;
 	private Set<Label> conditionalLabels;
@@ -25,14 +26,18 @@ public class InstrumentMethodVisitor extends MethodAdapter {
 		jumpTargetLabels = new HashSet<Label>();
 		conditionalLabels = new HashSet<Label>();
 		this.methodMeta = methodMeta;
+		this.lineNumber = 0;
 	}
 	
 	public void visitCode() {
+		super.visitCode();
+		
 		addBlock();
 	}
 	
 	public void visitJumpInsn(int opcode, Label label) {
     	super.visitJumpInsn(opcode, label);
+    	
     	if (isConditionalBranch(opcode)) {
 			methodMeta.addConditionalBranch();
 			addBlock();
@@ -41,11 +46,15 @@ public class InstrumentMethodVisitor extends MethodAdapter {
     }
 	
 	public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+		super.visitTryCatchBlock(start, end, handler, type);
+		
 		conditionalLabels.add(handler);
 		jumpTargetLabels.add(handler);
 	}
 	
     public void visitLabel(Label label) {
+    	super.visitLabel(label);
+    	
     	if (conditionalLabels.contains(label)) {
     		methodMeta.addConditionalBranch();
     	}
@@ -57,9 +66,19 @@ public class InstrumentMethodVisitor extends MethodAdapter {
     public void visitMaxs(int maxStack, int maxLocals) {
     	super.visitMaxs(maxStack + 2, maxLocals);
     }
+    
+    public void visitLineNumber(int line, Label start) {
+    	super.visitLineNumber(line, start);
+    	
+    	lineNumber = line;
+    	blockMeta.addLine(lineNumber);
+    }
 	
     void addBlock() {
 		blockMeta = new BlockMeta();
+		if (lineNumber > 0) {
+			blockMeta.addLine(lineNumber);
+		}
 		methodMeta.addBlock(blockMeta);
 		installProbePoint();
 	}

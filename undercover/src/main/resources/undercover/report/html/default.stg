@@ -177,8 +177,9 @@ Statistics for $source.name; format="html"$
 <table>
 	<tbody>
 	$source.lines:{ each |
-		<tr>
+		<tr$if(each.executable)$ class="$if(each.coverage.completelyCovered)$completely$elseif(each.coverage.partialyCovered)$partialy$else$not$endif$-covered"$endif$>
 			<td class="source-line-number">$each.number$</td>
+			<td>$if(each.executable)$$each.coverage.coveredBlockCount$/$each.coverage.blockCount$$endif$</td>
 			<td class="source-line-text">$each.text; format="html"$</td>
 		</tr>
 	}$

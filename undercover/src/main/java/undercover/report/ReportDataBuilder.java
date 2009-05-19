@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import undercover.metric.BlockCoverage;
 import undercover.metric.BlockMeta;
 import undercover.metric.ClassMeta;
 import undercover.metric.CoverageData;
@@ -97,8 +98,10 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visit(BlockMeta blockMeta) {
-		if (coverageData.getBlock(blockMeta.id()) != null) {
+		BlockCoverage blockCoverage = coverageData.getBlock(blockMeta.id());
+		if (blockCoverage != null) {
 			coveredBlockCount++;
 		}
+		sourceItem.addBlock(blockMeta, blockCoverage);
 	}
 }

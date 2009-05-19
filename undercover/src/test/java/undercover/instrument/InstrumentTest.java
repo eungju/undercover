@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.CheckClassAdapter;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 import undercover.metric.ClassMeta;
@@ -29,12 +30,20 @@ public class InstrumentTest {
 		cr.accept(trace, 0);
 		return buffer.toString();
 	}
-	
+
+	public String checkBytecode(byte[] bytecode) {
+		ClassReader cr = new ClassReader(bytecode);
+		StringWriter buffer = new StringWriter();
+		PrintWriter writer = new PrintWriter(buffer);
+		CheckClassAdapter.verify(cr, true, writer);
+		return buffer.toString();
+	}
+
 	@Before public void beforeEach() throws IOException {
 		dut = new Instrument();
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
 		MetaData metaData = dut.getMetaData();
-		traceBytecode(dut.instrument(original));
+		checkBytecode(dut.instrument(original));
 		classMeta = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
 	}
 	
