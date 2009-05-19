@@ -20,10 +20,12 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	
 	final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	final Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
-
+	final Map<String, SourceItem> sourceItems = new HashMap<String, SourceItem>();
+	
 	ReportData reportData;
 	ProjectItem projectItem;
 	PackageItem packageItem;
+	SourceItem sourceItem;
 	ClassItem classItem;
 	MethodItem methodItem;
 	int coveredBlockCount;
@@ -49,7 +51,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitLeave(MetaData metaData) {
-		reportData = new ReportData(projectItem, packageItems, classItems);
+		reportData = new ReportData(projectItem, packageItems, classItems, sourceItems);
 	}
 
 	public void visitEnter(ClassMeta classMeta) {
@@ -58,8 +60,17 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		if (packageItem == null) {
 			packageItem = new PackageItem(packageName);
 		}
+
+		String sourcePath = sourceFinder.findSourcePath(classMeta);
+		if (sourcePath == null) {
+			sourcePath = sourceFinder.getExpectedSourcePath(classMeta);
+		}
+		sourceItem = sourceItems.get(sourcePath);
+		if (sourceItem == null) {
+			sourceItem = new SourceItem(sourcePath, sourceFinder.findSourceFile(sourcePath));
+		}
 		
-		classItem = new ClassItem(classMeta.name(), sourceFinder.findSourcePath(classMeta));
+		classItem = new ClassItem(classMeta.name(), sourcePath);
 	}
 
 	public void visitLeave(ClassMeta classLeave) {
@@ -67,8 +78,12 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			projectItem.addPackage(packageItem);
 			packageItems.put(packageItem.getName(), packageItem);
 		}
+		if (!sourceItems.containsKey(sourceItem.getName())) {
+			sourceItems.put(sourceItem.getName(), sourceItem);
+		}
 		
 		packageItem.addClass(classItem);
+		sourceItem.addClass(classItem);
 		classItems.put(classItem.getName(), classItem);
 	}
 

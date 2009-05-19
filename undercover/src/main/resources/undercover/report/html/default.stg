@@ -43,7 +43,7 @@ $header()$
 			<td>$coverageBar(project)$</td>
 		</tr>
 	</tbody>
-</ul>
+</table>
 
 <table>
 	<thead>
@@ -60,7 +60,7 @@ $header()$
 		</tr>
 		}$
 	</tbody>
-</ul>
+</table>
 
 $footer()$
 >>
@@ -109,7 +109,7 @@ $header()$
 		</tr>
 		}$
 	</tbody>
-</ul>
+</table>
 
 $footer()$
 >>
@@ -130,11 +130,11 @@ $header()$
 			<td>$coverageBar(package)$</td>
 		</tr>
 	</tbody>
-</ul>
+</table>
 
 <table>
 	<thead>
-		<tr><th>Classe</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$package.classes:{ each |
@@ -147,22 +147,39 @@ $header()$
 		</tr>
 		}$
 	</tbody>
-</ul>
+</table>
 
 $footer()$
 >>
 
-source_html(source) ::= <<
+source_html(source, lines) ::= <<
 $header()$
 
 Statistics for $source.name; format="html"$
 
 <table>
+	<thead>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+	</thead>
+	<tbody>
+		$source.classes:{ each |
+		<tr>
+			<td><a href="$each.link$">$each.displayName$</a></td>
+			<td>$length(each.methods)$</td>
+			<td>$each.complexity$</td>
+			<td>$each.averageMethodComplexity$</td>
+			<td>$coverageBar(each)$</td>
+		</tr>
+		}$
+	</tbody>
+</table>
+
+<table>
 	<tbody>
 	$source.lines:{ each |
 		<tr>
-			<td>$each.number$</td>
-			<td><pre>$each.text; format="html"$</pre></td>
+			<td class="source-line-number">$each.number$</td>
+			<td class="source-line-text">$each.text; format="html"$</td>
 		</tr>
 	}$
 	</tbody>

@@ -10,7 +10,7 @@ public class ClassItem extends CompositeItem {
 	public final List<MethodItem> methods;
 	
 	public ClassItem(String name, String sourcePath) {
-		super(name, name.replaceAll("\\/", "."));
+		super(name, name.replaceAll("/", "."));
 		this.sourcePath = sourcePath;
 		this.simpleName = name.substring(name.lastIndexOf('/') + 1);
 		this.methods = new ArrayList<MethodItem>();

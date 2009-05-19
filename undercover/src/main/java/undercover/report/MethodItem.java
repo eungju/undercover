@@ -12,7 +12,7 @@ public class MethodItem extends AbstractItem {
 	}
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
-		super(name, name.replaceAll("\\/", "."));
+		super(name, name.replaceAll("/", "."));
 		this.complexity = complexity;
 		this.blockCount = blockCount;
 		this.coveredBlockCount = coveredBlockCount;

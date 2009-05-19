@@ -19,12 +19,12 @@ import org.antlr.stringtemplate.StringTemplateWriter;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
+import undercover.report.SourceItem;
 
 public class HtmlReport {
 	final String templateEncoding = "UTF-8";
@@ -69,7 +69,7 @@ public class HtmlReport {
 		
 		generatePackageReports();
 		
-		for (File each : findAllSourceFiles()) {
+		for (SourceItem each : reportData.getAllSources()) {
 			new SourceReport(this, each).writeTo(outputDirectory);
 		}
 	}

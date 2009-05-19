@@ -31,6 +31,7 @@ public class ReportDataTest {
 		classMeta.accept(dut);
 		assertNotNull(dut.classItems.get(classMeta.name()));
 		assertNotNull(dut.packageItems.get("pkg"));
+		assertNotNull(dut.sourceItems.get("pkg/cls.java"));
 	}
 	
 	@Test public void visitMethod() {

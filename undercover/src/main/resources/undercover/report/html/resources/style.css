@@ -69,3 +69,12 @@ div.box-inner {
 	margin: 0;
 	padding: 0 13px;
 }
+
+/* Source */
+td.source-line-number {
+	text-align: right;
+}
+
+td.source-line-text {
+	white-space: pre;
+}
