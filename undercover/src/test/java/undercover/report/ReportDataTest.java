@@ -18,18 +18,22 @@ public class ReportDataTest {
 	@Before public void beforeEach() {
 		coverageData = new CoverageData();
 		dut = new ReportDataBuilder(coverageData);
-		MetaData metaData = new MetaData();
-		dut.visitEnter(metaData);
 	}
 	
-	@Test public void analyzeClass() {
+	@Test public void visitMetaData() {
+		MetaData metaData = new MetaData();
+		metaData.accept(dut);
+	}
+	
+	@Test public void visitClass() {
+		dut.projectItem = new ProjectItem("prj");
 		ClassMeta classMeta = new ClassMeta("pkg/cls", "cls.java");
 		classMeta.accept(dut);
 		assertNotNull(dut.classItems.get(classMeta.name()));
 		assertNotNull(dut.packageItems.get("pkg"));
 	}
 	
-	@Test public void acceptBlock() {
+	@Test public void visitMethod() {
 		MethodMeta methodMeta = new MethodMeta("m()V");
 		BlockMeta b1 = new BlockMeta();
 		methodMeta.addBlock(b1);

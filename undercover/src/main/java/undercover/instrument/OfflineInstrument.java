@@ -46,14 +46,14 @@ public class OfflineInstrument {
 		settings.save(new File(outputDirectory, "undercover.properties"));
 	}
 	
-	public void instrumentDirs(File[] inputDirs, File outputDir) {
+	public void instrumentDirs(File[] inputDirs, File outputDir) throws IOException {
 		outputDir.mkdirs();
 		for (File each : inputDirs) {
 			instrumentDir(each, outputDir);
 		}
 	}
 	
-	public void instrumentDir(File inputDir, File outputDir) {
+	public void instrumentDir(File inputDir, File outputDir) throws IOException {
 		outputDir.mkdir();
 		for (File each : inputDir.listFiles()) {
 			if (each.isDirectory()) {
@@ -66,23 +66,17 @@ public class OfflineInstrument {
 		}
 	}
 
-	void copyFile(File inputFile, File outputFile) {
-		try {
-			FileUtils.copyFile(inputFile, outputFile);
-		} catch (IOException e) {
-			throw new InstrumentException("Cannot copy " + inputFile.getAbsolutePath() + " to " + outputFile.getAbsoluteFile(), e);
-		}
+	void copyFile(File inputFile, File outputFile) throws IOException {
+		FileUtils.copyFile(inputFile, outputFile);
 	}
 
-	public void instrumentFile(File inputFile, File outputFile) {
+	public void instrumentFile(File inputFile, File outputFile) throws IOException {
 		InputStream input = null;
 		OutputStream output = null;
 		try {
 			input = new FileInputStream(inputFile);
 			output = new FileOutputStream(outputFile);
 			output.write(instrument.instrument(input));
-		} catch (IOException e) {
-			throw new InstrumentException("Cannot instrument " + inputFile.getAbsolutePath() + " to " + outputFile.getAbsoluteFile(), e);
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(input);
