@@ -54,7 +54,6 @@ public class InstrumentMethodVisitor extends MethodAdapter {
 	
     public void visitLabel(Label label) {
     	super.visitLabel(label);
-    	
     	if (conditionalLabels.contains(label)) {
     		methodMeta.addConditionalBranch();
     	}
@@ -75,10 +74,10 @@ public class InstrumentMethodVisitor extends MethodAdapter {
     }
 	
     void addBlock() {
+    	if (blockMeta != null) {
+    		blockMeta.addLine(lineNumber);
+    	}
 		blockMeta = new BlockMeta();
-		if (lineNumber > 0) {
-			blockMeta.addLine(lineNumber);
-		}
 		methodMeta.addBlock(blockMeta);
 		installProbePoint();
 	}

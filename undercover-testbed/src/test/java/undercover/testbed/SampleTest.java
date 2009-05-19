@@ -21,4 +21,8 @@ public class SampleTest {
 	@Test public void partialyCoveredIfBranch() {
 		dut.ifBranch(true, false);
 	}
+	
+	@Test public void inlineIfBranch() {
+		dut.inlineIfBranch(true);
+	}
 }

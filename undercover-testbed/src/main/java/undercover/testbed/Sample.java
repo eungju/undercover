@@ -20,4 +20,8 @@ public class Sample {
 			System.out.println("one of them is true");
 		}
 	}
+	
+	public void inlineIfBranch(boolean a) {
+		if (a) { System.out.println("true"); } else { System.out.println("false"); }
+	}
 }
