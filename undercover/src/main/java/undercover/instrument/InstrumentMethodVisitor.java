@@ -80,7 +80,7 @@ public class InstrumentMethodVisitor implements MethodVisitor {
 
     public void visitInsn(final int opcode) {
 		if (isReturn(opcode) || opcode == ATHROW) {
-			addBlock();
+			addBlock(offset + 1);
 		}
 
 		mv.visitInsn(opcode);
@@ -123,7 +123,7 @@ public class InstrumentMethodVisitor implements MethodVisitor {
     }
 
     public void visitJumpInsn(final int opcode, final Label label) {
-   		addBlock();
+   		addBlock(offset + 1);
 		
 		jumpTargetLabels.add(label);
     	if (isConditionalBranch(opcode)) {
@@ -135,8 +135,8 @@ public class InstrumentMethodVisitor implements MethodVisitor {
     }
 
     public void visitLabel(final Label label) {
-    	if (jumpTargetLabels.contains(label)) {
-    		addBlock();
+    	if (jumpTargetLabels.contains(label) && !blockEnds.contains(offset)) {
+    		addBlock(offset);
     	}
     	if (conditionalLabels.contains(label)) {
     		methodMeta.addConditionalBranch();
@@ -217,18 +217,14 @@ public class InstrumentMethodVisitor implements MethodVisitor {
         mv.visitEnd();
     }
 
-    void addBlock() {
-    	if (blockEnds.contains(offset)) {
-    		return;
-    	}
-    	
+    void addBlock(int endOffset) {
     	if (blockLines.isEmpty()) {
     		blockLines.add(lineNumber);
     	}
 		blockMeta = new BlockMeta(blockLines);
 		blockLines = new HashSet<Integer>();
 		methodMeta.addBlock(blockMeta);
-		blockEnds.add(offset + 1);
+		blockEnds.add(endOffset);
 		
 		installProbePoint();
     }

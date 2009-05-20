@@ -98,6 +98,7 @@ public class InstrumentTest {
 
 	@Test public void tryFinallyBranchMethod() throws IOException {
 		MethodMeta methodMeta = classMeta.getMethod("tryFinallyBranch()V");
+		System.out.println(methodMeta.blocks());
 		assertEquals(3, methodMeta.blocks().size());
 		assertEquals(1, methodMeta.getConditionalBranches());
 	}
