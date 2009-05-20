@@ -10,6 +10,7 @@ table {
 }
 
 th, td {
+	font-size: 10pt;
 	border: 1px solid #ddd;
 }
 
