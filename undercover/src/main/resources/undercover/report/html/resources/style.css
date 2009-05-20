@@ -87,6 +87,10 @@ td.source-line-number {
 	text-align: right;
 }
 
+td.source-line-touch {
+	text-align: right;
+}
+
 td.source-line-text {
 	white-space: pre;
 }
