@@ -19,6 +19,10 @@ public class SourceItem extends CompositeItem {
 	public final List<ClassItem> classes;
 	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
 	
+	public SourceItem(SourceFile sourceFile) {
+		this(sourceFile.path, sourceFile.file);
+	}
+	
 	public SourceItem(String name, File file) {
 		super(name, name);
 		this.file = file;

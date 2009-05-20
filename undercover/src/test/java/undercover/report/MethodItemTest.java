@@ -2,6 +2,8 @@ package undercover.report;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +13,7 @@ public class MethodItemTest {
 	private ClassItem classItem;
 	
 	@Before public void beforeEach() {
-		classItem = new ClassItem("p/c", "p/c.java");
+		classItem = new ClassItem("p/c", new SourceFile("p/c.java"));
 	}
 	
 	@Test public void normalMethod() {

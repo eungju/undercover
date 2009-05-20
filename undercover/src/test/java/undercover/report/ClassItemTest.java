@@ -2,18 +2,20 @@ package undercover.report;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
 public class ClassItemTest {
 	@Test public void normalClass() {
-		ClassItem classItem = new ClassItem("p/c", "p/c.java");
+		ClassItem classItem = new ClassItem("p/c", new SourceFile("p/c.java"));
 		assertEquals("p/c", classItem.getName());
 		assertEquals("p.c", classItem.getDisplayName());
 		assertEquals("c", classItem.simpleName);
 	}
 	
 	@Test public void composition() {
-		ClassItem classItem = new ClassItem("p/c", "p/c.java");
+		ClassItem classItem = new ClassItem("p/c", new SourceFile("p/c.java"));
 		
 		classItem.addMethod(new MethodItem("p/c.m1()V", 1, 1, 1));
 		assertEquals(1, classItem.getBlockCount());

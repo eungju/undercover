@@ -62,29 +62,27 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			packageItem = new PackageItem(packageName);
 		}
 
-		String sourcePath = sourceFinder.findSourcePath(classMeta);
-		if (sourcePath == null) {
-			sourcePath = sourceFinder.getExpectedSourcePath(classMeta);
-		}
-		sourceItem = sourceItems.get(sourcePath);
+		SourceFile sourceFile = sourceFinder.findSourceFile(classMeta); 
+		sourceItem = sourceItems.get(sourceFile.path);
 		if (sourceItem == null) {
-			sourceItem = new SourceItem(sourcePath, sourceFinder.findSourceFile(sourcePath));
+			sourceItem = new SourceItem(sourceFile);
 		}
 		
-		classItem = new ClassItem(classMeta.name(), sourcePath);
+		classItem = new ClassItem(classMeta.name(), sourceFile);
 	}
 
 	public void visitLeave(ClassMeta classLeave) {
+		packageItem.addClass(classItem);
 		if (!packageItems.containsKey(packageItem.getName())) {
-			projectItem.addPackage(packageItem);
 			packageItems.put(packageItem.getName(), packageItem);
+			projectItem.addPackage(packageItem);
 		}
+
+		sourceItem.addClass(classItem);
 		if (!sourceItems.containsKey(sourceItem.getName())) {
 			sourceItems.put(sourceItem.getName(), sourceItem);
 		}
 		
-		packageItem.addClass(classItem);
-		sourceItem.addClass(classItem);
 		classItems.put(classItem.getName(), classItem);
 	}
 

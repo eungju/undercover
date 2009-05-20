@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,14 +29,12 @@ public class SourceFinderTest {
 	}
 	
 	@Test public void notExist() throws IOException {
-		assertNull(dut.findSourceFile(new ClassMeta("p/c", "c.java")));
-		assertNull(dut.findSourcePath(new ClassMeta("p/c", "c.java")));
+		assertFalse(dut.findSourceFile(new ClassMeta("p/c", "c.java")).isExist());
 	}
 
 	@Test public void existOnExpectedPath() throws IOException {
 		File file = new File(src, "p/c.java");
 		FileUtils.touch(file);
-		assertEquals(file, dut.findSourceFile(new ClassMeta("p/c", "c.java")));
-		assertEquals("p/c.java", dut.findSourcePath(new ClassMeta("p/c", "c.java")));
+		assertEquals(file, dut.findSourceFile(new ClassMeta("p/c", "c.java")).file);
 	}
 }

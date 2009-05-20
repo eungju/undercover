@@ -2,6 +2,8 @@ package undercover.report;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +43,7 @@ public class ReportDataTest {
 		methodMeta.addBlock(new BlockMeta());
 		coverageData.touchBlock(b1.id());
 
-		dut.classItem = new ClassItem("p/c", "c.java");
+		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));
 		dut.sourceItem = new SourceItem("c.java", null);
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockCount());
