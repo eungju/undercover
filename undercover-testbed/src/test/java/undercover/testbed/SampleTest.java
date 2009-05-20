@@ -25,4 +25,18 @@ public class SampleTest {
 	@Test public void inlineIfBranch() {
 		dut.inlineIfBranch(true);
 	}
+	
+	@Test(expected=Exception.class)
+	public void throwingMedhot() {
+		dut.throwingMethod(true);
+	}
+
+	@Test(expected=Exception.class)
+	public void partiallyCoveredBlock() {
+		dut.tryFinally(true);
+	}
+
+	@Test public void completelyCoveredBlock() {
+		dut.tryFinally(false);
+	}
 }

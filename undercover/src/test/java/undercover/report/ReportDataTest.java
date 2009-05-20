@@ -3,6 +3,7 @@ package undercover.report;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,9 +39,9 @@ public class ReportDataTest {
 	
 	@Test public void visitMethod() {
 		MethodMeta methodMeta = new MethodMeta("m()V");
-		BlockMeta b1 = new BlockMeta();
+		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
 		methodMeta.addBlock(b1);
-		methodMeta.addBlock(new BlockMeta());
+		methodMeta.addBlock(new BlockMeta(new ArrayList<Integer>()));
 		coverageData.touchBlock(b1.id());
 
 		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));

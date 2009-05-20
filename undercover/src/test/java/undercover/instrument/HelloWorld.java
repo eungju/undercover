@@ -89,4 +89,8 @@ public abstract class HelloWorld {
 			b3();
 		}
 	}
+	
+	public void throwingMethod() {
+		throw new UnsupportedOperationException();
+	}
 }

@@ -1,8 +1,7 @@
 package undercover.metric;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
 
 import undercover.support.ObjectSupport;
@@ -11,22 +10,18 @@ public class BlockMeta extends ObjectSupport implements Serializable {
 	private static final long serialVersionUID = -1085194971297677184L;
 
 	private final UUID id;
-	private final Set<Integer> lines;
+	private final Collection<Integer> lines;
 	
-	public BlockMeta() {
+	public BlockMeta(Collection<Integer> lines) {
 		id = UUID.randomUUID();
-		lines = new HashSet<Integer>();
+		this.lines = lines;
 	}
 	
 	public UUID id() {
 		return id;
 	}
 	
-	public void addLine(int lineNumber) {
-		lines.add(lineNumber);
-	}
-	
-	public Set<Integer> lines() {
+	public Collection<Integer> lines() {
 		return lines;
 	}
 
