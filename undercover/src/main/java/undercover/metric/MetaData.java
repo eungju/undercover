@@ -46,14 +46,6 @@ public class MetaData extends ObjectSupport implements Serializable {
 		return classes;
 	}
 
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (ClassMeta each : classes) {
-			builder.append(each.toString()).append(',');
-		}
-		return builder.toString();
-	}
-	
 	public void accept(MetaDataVisitor visitor) {
 		visitor.visitEnter(this);
 		for (ClassMeta each : classes) {

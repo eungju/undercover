@@ -99,7 +99,10 @@ public class ReportDataBuilder implements MetaDataVisitor {
 
 	public void visit(BlockMeta blockMeta) {
 		BlockCoverage blockCoverage = coverageData.getBlock(blockMeta.id());
-		if (blockCoverage != null) {
+		if (blockCoverage == null) {
+			blockCoverage = new BlockCoverage();
+		}
+		if (blockCoverage.isTouched()) {
 			coveredBlockCount++;
 		}
 		sourceItem.addBlock(blockMeta, blockCoverage);

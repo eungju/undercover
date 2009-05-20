@@ -43,17 +43,6 @@ public class MethodMeta extends ObjectSupport implements Serializable {
 		visitor.visitLeave(this);
 	}
 
-	public String toString() {
-		StringBuilder builder = new StringBuilder(name).append('{');
-		builder.append('[');
-		for (BlockMeta each : blocks) {
-			builder.append(each.toString()).append(',');
-		}
-		builder.append(']');
-		builder.append('}');
-		return builder.toString();
-	}
-
 	public int getConditionalBranches() {
 		return conditionalBranches;
 	}

@@ -34,7 +34,6 @@ public class Probe {
 	}
 	
 	public synchronized void touchBlock(String blockId) {
-		System.out.println("Touch block " + blockId);
 		coverageData.touchBlock(UUID.fromString(blockId));
 	}
 	

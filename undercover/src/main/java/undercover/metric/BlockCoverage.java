@@ -23,4 +23,8 @@ public class BlockCoverage extends ObjectSupport implements Serializable {
 	public int touchCount() {
 		return touchCount;
 	}
+	
+	public boolean isTouched() {
+		return touchCount > 0;
+	}
 }

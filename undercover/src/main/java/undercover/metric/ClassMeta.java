@@ -56,16 +56,4 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 		}
 		visitor.visitLeave(this);
 	}
-	
-	public String toString() {
-		StringBuilder builder = new StringBuilder(name);
-		builder.append('{').append(source).append(',');
-		builder.append('[');
-		for (MethodMeta each : methods) {
-			builder.append(each.toString()).append(',');
-		}
-		builder.append(']');
-		builder.append('}');
-		return builder.toString();
-	}
 }

@@ -33,8 +33,4 @@ public class BlockMeta extends ObjectSupport implements Serializable {
 	public void accept(MetaDataVisitor visitor) {
 		visitor.visit(this);
 	}
-	
-	public String toString() {
-		return "{}";
-	}
 }

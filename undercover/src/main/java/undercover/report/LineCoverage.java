@@ -8,7 +8,7 @@ public class LineCoverage {
 
 	public void addBlock(BlockCoverage blockCoverage) {
 		blockCount++;
-		if (blockCoverage != null && blockCoverage.touchCount() > 0) {
+		if (blockCoverage.isTouched()) {
 			coveredBlockCount++;
 		}
 	}
