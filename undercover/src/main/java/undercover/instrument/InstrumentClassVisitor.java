@@ -34,7 +34,7 @@ public class InstrumentClassVisitor extends ClassAdapter {
 		if (mv != null) {
 			MethodMeta methodMeta = new MethodMeta(name + desc);
 			classMeta.addMethod(methodMeta);
-			mv = new InstrumentMethodVisitor(mv, methodMeta);
+			mv = new InstrumentMethodVisitor(access, name, desc, signature, exceptions, methodMeta, mv);
 		}
 		return mv;
 	}

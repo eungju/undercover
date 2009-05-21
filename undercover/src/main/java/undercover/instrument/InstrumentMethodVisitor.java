@@ -4,220 +4,92 @@ import static org.objectweb.asm.Opcodes.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import undercover.metric.BlockMeta;
 import undercover.metric.MethodMeta;
 
-public class InstrumentMethodVisitor implements MethodVisitor {
-    protected MethodVisitor mv;
+public class InstrumentMethodVisitor extends MethodNode {
+	protected MethodVisitor methodVisitor;
+	private MethodMeta methodMeta;
 
-    private MethodMeta methodMeta;
-	private BlockMeta blockMeta;
-
-	private int offset;
-	private Set<Integer> blockEnds;
-	private Set<Label> jumpTargetLabels;
-	private Set<Label> conditionalLabels;
-
-	private Set<Integer> blockLines;
-	private int lineNumber;
-	
-	public InstrumentMethodVisitor(MethodVisitor methodWriter, MethodMeta methodMeta) {
-		this.mv = methodWriter;
+	public InstrumentMethodVisitor(int access, String name, String desc, String signature, String[] exceptions, MethodMeta methodMeta, MethodVisitor methodVisitor) {
+		super(access, name, desc, signature, exceptions);
 		this.methodMeta = methodMeta;
-		
-		this.offset = 0;
-		this.blockEnds = new HashSet<Integer>();
-		jumpTargetLabels = new HashSet<Label>();
-		conditionalLabels = new HashSet<Label>();
-
-		this.lineNumber = 0;
-		blockLines = new HashSet<Integer>();
+		this.methodVisitor = methodVisitor;
 	}
 
-    public AnnotationVisitor visitAnnotationDefault() {
-        return mv.visitAnnotationDefault();
-    }
+	int offset = 0;
+	BlockMeta blockMeta = null;
+	Set<Integer> blockEnds = new HashSet<Integer>();
+	Set<Label> jumpTargetLabels = new HashSet<Label>();
+	Set<Label> conditionalLabels = new HashSet<Label>();
+	
+	Set<Integer> blockLines = new HashSet<Integer>();
+	int lineNumber = 0;
 
-    public AnnotationVisitor visitAnnotation(
-        final String desc,
-        final boolean visible)
-    {
-        return mv.visitAnnotation(desc, visible);
-    }
-
-    public AnnotationVisitor visitParameterAnnotation(
-        final int parameter,
-        final String desc,
-        final boolean visible)
-    {
-        return mv.visitParameterAnnotation(parameter, desc, visible);
-    }
-
-    public void visitAttribute(final Attribute attr) {
-        mv.visitAttribute(attr);
-    }
-
-    public void visitCode() {
-        mv.visitCode();
-    }
-
-    public void visitFrame(
-        final int type,
-        final int nLocal,
-        final Object[] local,
-        final int nStack,
-        final Object[] stack)
-    {
-        mv.visitFrame(type, nLocal, local, nStack, stack);
-    }
-
-    public void visitInsn(final int opcode) {
-		if (isReturn(opcode) || opcode == ATHROW) {
-			addBlock(offset + 1);
+	public void visitEnd() {
+		for (TryCatchBlockNode each : (List<TryCatchBlockNode>) tryCatchBlocks) {
+			conditionalLabels.add(each.handler.getLabel());
+			jumpTargetLabels.add(each.handler.getLabel());
 		}
-
-		mv.visitInsn(opcode);
-		offset++;
-    }
-
-    public void visitIntInsn(final int opcode, final int operand) {
-        mv.visitIntInsn(opcode, operand);
-		offset++;
-    }
-
-    public void visitVarInsn(final int opcode, final int var) {
-        mv.visitVarInsn(opcode, var);
-		offset++;
-    }
-
-    public void visitTypeInsn(final int opcode, final String type) {
-        mv.visitTypeInsn(opcode, type);
-		offset++;
-    }
-
-    public void visitFieldInsn(
-        final int opcode,
-        final String owner,
-        final String name,
-        final String desc)
-    {
-        mv.visitFieldInsn(opcode, owner, name, desc);
-		offset++;
-    }
-
-    public void visitMethodInsn(
-        final int opcode,
-        final String owner,
-        final String name,
-        final String desc)
-    {
-        mv.visitMethodInsn(opcode, owner, name, desc);
-		offset++;
-    }
-
-    public void visitJumpInsn(final int opcode, final Label label) {
-   		addBlock(offset + 1);
 		
-		jumpTargetLabels.add(label);
-    	if (isConditionalBranch(opcode)) {
-			methodMeta.addConditionalBranch();
-    	}
-
-		mv.visitJumpInsn(opcode, label);
-		offset++;
-    }
-
-    public void visitLabel(final Label label) {
-    	if (jumpTargetLabels.contains(label) && !blockEnds.contains(offset)) {
-    		addBlock(offset);
-    	}
-    	if (conditionalLabels.contains(label)) {
-    		methodMeta.addConditionalBranch();
-    	}
-
-    	mv.visitLabel(label);
-    }
-
-    public void visitLdcInsn(final Object cst) {
-        mv.visitLdcInsn(cst);
-		offset++;
-    }
-
-    public void visitIincInsn(final int var, final int increment) {
-        mv.visitIincInsn(var, increment);
-		offset++;
-    }
-
-    public void visitTableSwitchInsn(
-        final int min,
-        final int max,
-        final Label dflt,
-        final Label[] labels)
-    {
-        mv.visitTableSwitchInsn(min, max, dflt, labels);
-		offset++;
-    }
-
-    public void visitLookupSwitchInsn(
-        final Label dflt,
-        final int[] keys,
-        final Label[] labels)
-    {
-        mv.visitLookupSwitchInsn(dflt, keys, labels);
-		offset++;
-    }
-
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
-        mv.visitMultiANewArrayInsn(desc, dims);
-		offset++;
-    }
-
-    public void visitTryCatchBlock(
-        final Label start,
-        final Label end,
-        final Label handler,
-        final String type)
-    {
-        mv.visitTryCatchBlock(start, end, handler, type);
-		
-		conditionalLabels.add(handler);
-		jumpTargetLabels.add(handler);
-    }
-
-    public void visitLocalVariable(
-        final String name,
-        final String desc,
-        final String signature,
-        final Label start,
-        final Label end,
-        final int index)
-    {
-        mv.visitLocalVariable(name, desc, signature, start, end, index);
-    }
-
-    public void visitLineNumber(final int line, final Label start) {
-        mv.visitLineNumber(line, start);
-    	
-    	lineNumber = line;
-    	blockLines.add(lineNumber);
-    }
-
-    public void visitMaxs(final int maxStack, final int maxLocals) {
-    	mv.visitMaxs(maxStack + 2, maxLocals);
-    }
-
-    public void visitEnd() {
-        mv.visitEnd();
-    }
-
-    void addBlock(int endOffset) {
+		InsnList instructions = this.instructions;
+		for (Iterator<AbstractInsnNode> i = instructions.iterator(); i.hasNext(); ) {
+			AbstractInsnNode each = i.next();
+			System.out.println(each);
+			if (each.getType() == AbstractInsnNode.INSN) {
+				InsnNode node = (InsnNode) each;
+				if (isReturn(node.getOpcode()) || node.getOpcode() == ATHROW) {
+					addBlock(instructions, each, offset + 1);
+				}
+			} else if (each.getType() == AbstractInsnNode.JUMP_INSN) {
+				JumpInsnNode node = (JumpInsnNode) each; 
+				addBlock(instructions, each, offset + 1);
+				
+				jumpTargetLabels.add(node.label.getLabel());
+		    	if (isConditionalBranch(node.getOpcode())) {
+					methodMeta.addConditionalBranch();
+		    	}
+			} else if (each.getType() == AbstractInsnNode.LABEL) {
+				LabelNode node = (LabelNode) each; 
+		    	if (jumpTargetLabels.contains(node.getLabel()) && !blockEnds.contains(offset)) {
+					addBlock(instructions, each, offset);
+				}
+				if (conditionalLabels.contains(node.getLabel())) {
+					methodMeta.addConditionalBranch();
+				}
+			} else if (each.getType() == AbstractInsnNode.LINE) {
+				LineNumberNode node = (LineNumberNode) each; 
+		    	lineNumber = node.line;
+		    	blockLines.add(lineNumber);
+			}
+			
+			if (each.getOpcode() >= 0) {
+				offset++;
+			}
+		}
+    	maxStack += 2;
+		accept(methodVisitor);
+	}
+	
+    void addBlock(InsnList instructions, AbstractInsnNode location, int endOffset) {
     	if (blockLines.isEmpty()) {
     		blockLines.add(lineNumber);
     	}
@@ -226,16 +98,18 @@ public class InstrumentMethodVisitor implements MethodVisitor {
 		methodMeta.addBlock(blockMeta);
 		blockEnds.add(endOffset);
 		
-		installProbePoint();
+		installProbePoint(instructions, location);
     }
     
-    void installProbePoint() {
+    void installProbePoint(InsnList instructions, AbstractInsnNode location) {
 		//Install probe
+    	InsnList code = new InsnList();
 		//maxStack + 1
-		mv.visitFieldInsn(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;");
+    	code.add(new FieldInsnNode(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;"));
 		//maxStack + 1
-		mv.visitLdcInsn(blockMeta.id().toString());
-		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/runtime/Probe", "touchBlock", "(Ljava/lang/String;)V");
+    	code.add(new LdcInsnNode(blockMeta.id().toString()));
+    	code.add(new MethodInsnNode(INVOKEVIRTUAL, "undercover/runtime/Probe", "touchBlock", "(Ljava/lang/String;)V"));
+    	instructions.insertBefore(location, code);
     }
     
     boolean isConditionalBranch(int opcode) {
