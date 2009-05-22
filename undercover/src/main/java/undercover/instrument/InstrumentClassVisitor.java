@@ -6,7 +6,6 @@ import org.objectweb.asm.MethodVisitor;
 
 import undercover.metric.ClassMeta;
 import undercover.metric.MetaData;
-import undercover.metric.MethodMeta;
 
 public class InstrumentClassVisitor extends ClassAdapter {
 	private MetaData metaData;
