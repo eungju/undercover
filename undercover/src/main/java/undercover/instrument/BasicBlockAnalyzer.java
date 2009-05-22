@@ -36,39 +36,40 @@ public class BasicBlockAnalyzer {
 	private int lineNumber = 0;
 	
 	public void analyze(MethodNode methodNode) {
-		InsnList instructions = methodNode.instructions;
-		
 		scanJumpTargets(methodNode);
-		
+		scanBlocks(methodNode);
+	}
+	
+	void scanBlocks(MethodNode methodNode) {
 		int offset = 0;
 		basicBlock = new BasicBlock(offset);
-		for (Iterator<AbstractInsnNode> i = instructions.iterator(); i.hasNext(); ) {
+		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();
 			if (each.getType() == AbstractInsnNode.INSN) {
 				if (isReturn(each.getOpcode()) || each.getOpcode() == ATHROW) {
-					addBlock(offset + 1);
+					addBasicBlock(offset + 1);
 				}
 			} else if (each.getType() == AbstractInsnNode.VAR_INSN) {
 				if (each.getOpcode() == RET) {
-					addBlock(offset + 1);
+					addBasicBlock(offset + 1);
 				}
 			} else if (each.getType() == AbstractInsnNode.JUMP_INSN) {
-				addBlock(offset + 1);
+				addBasicBlock(offset + 1);
 				if (isConditionalBranch(each.getOpcode())) {
 					complexity++;
 				}
 			} else if (each.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
 				TableSwitchInsnNode node = (TableSwitchInsnNode) each;
-				addBlock(offset + 1);
+				addBasicBlock(offset + 1);
 				complexity += node.labels.size();
 			} else if (each.getType() == AbstractInsnNode.LOOKUPSWITCH_INSN) {
 				LookupSwitchInsnNode node = (LookupSwitchInsnNode) each;
-				addBlock(offset + 1);
+				addBasicBlock(offset + 1);
 				complexity += node.labels.size();
 			} else if (each.getType() == AbstractInsnNode.LABEL) {
 				LabelNode node = (LabelNode) each;
 				if (targetLabels.contains(node.getLabel()) && basicBlock.start < offset) {
-					addBlock(offset);
+					addBasicBlock(offset);
 				}
 			} else if (each.getType() == AbstractInsnNode.LINE) {
 				LineNumberNode node = (LineNumberNode) each;
@@ -79,10 +80,10 @@ public class BasicBlockAnalyzer {
 			if (each.getOpcode() != -1) {
 				offset++;
 			}
-		}
+		}	
 	}
 	
-	void addBlock(int nextOffset) {
+	void addBasicBlock(int nextOffset) {
 		basicBlock.end = nextOffset;
 		if (basicBlock.lines.isEmpty()) {
 			basicBlock.lines.add(lineNumber);
