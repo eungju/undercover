@@ -48,6 +48,10 @@ public class BasicBlockAnalyzer {
 				if (isReturn(each.getOpcode()) || each.getOpcode() == ATHROW) {
 					addBlock(offset + 1);
 				}
+			} else if (each.getType() == AbstractInsnNode.VAR_INSN) {
+				if (each.getOpcode() == RET) {
+					addBlock(offset + 1);
+				}
 			} else if (each.getType() == AbstractInsnNode.JUMP_INSN) {
 				addBlock(offset + 1);
 				if (isConditionalBranch(each.getOpcode())) {
@@ -95,7 +99,8 @@ public class BasicBlockAnalyzer {
 		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();
 			if (each.getType() == AbstractInsnNode.JUMP_INSN) {
-				targetLabels.add(((JumpInsnNode) each).label.getLabel());
+				JumpInsnNode node = (JumpInsnNode) each;
+				targetLabels.add(node.label.getLabel());
 			} else if (each.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
 				TableSwitchInsnNode node = (TableSwitchInsnNode) each;
 				targetLabels.add(node.dflt.getLabel());

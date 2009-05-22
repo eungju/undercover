@@ -316,4 +316,93 @@ public class BasicBlockTest implements Opcodes {
 				dut.blocks);
 		assertEquals(3, dut.complexity);
 	}
+	
+	@Test public void retInstructionsAreEdges() {
+		MethodNode mv = new MethodNode(ACC_PUBLIC, "tryCatchFinallyBranch", "()V", null, null);
+		mv.visitCode();
+		//0
+		Label l0 = new Label();
+		Label l1 = new Label();
+		Label l2 = new Label();
+		mv.visitTryCatchBlock(l0, l1, l2, "java/lang/RuntimeException");
+		Label l3 = new Label();
+		Label l4 = new Label();
+		mv.visitTryCatchBlock(l0, l3, l4, null);
+		Label l5 = new Label();
+		mv.visitTryCatchBlock(l2, l5, l4, null);
+		Label l6 = new Label();
+		mv.visitTryCatchBlock(l4, l6, l4, null);
+		mv.visitLabel(l0);
+		mv.visitLineNumber(78, l0);
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b1", "()Z");
+		mv.visitInsn(POP);
+		mv.visitLabel(l1);
+		mv.visitLineNumber(79, l1);
+		Label l7 = new Label();
+		mv.visitJumpInsn(JSR, l7);
+		//4
+		mv.visitLabel(l3);
+		mv.visitLineNumber(83, l3);
+		Label l8 = new Label();
+		mv.visitJumpInsn(GOTO, l8);
+		//5
+		mv.visitLabel(l2);
+		mv.visitLineNumber(79, l2);
+		mv.visitVarInsn(ASTORE, 1);
+		Label l9 = new Label();
+		mv.visitLabel(l9);
+		mv.visitLineNumber(80, l9);
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b2", "()Z");
+		mv.visitInsn(POP);
+		Label l10 = new Label();
+		mv.visitLabel(l10);
+		mv.visitLineNumber(81, l10);
+		mv.visitJumpInsn(JSR, l7);
+		//10
+		mv.visitLabel(l5);
+		mv.visitLineNumber(83, l5);
+		mv.visitJumpInsn(GOTO, l8);
+		//11
+		mv.visitLabel(l4);
+		mv.visitLineNumber(82, l4);
+		mv.visitVarInsn(ASTORE, 2);
+		mv.visitJumpInsn(JSR, l7);
+		//13
+		mv.visitLabel(l6);
+		mv.visitVarInsn(ALOAD, 2);
+		mv.visitInsn(ATHROW);
+		//15
+		mv.visitLabel(l7);
+		mv.visitVarInsn(ASTORE, 3);
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b3", "()Z");
+		mv.visitInsn(POP);
+		mv.visitVarInsn(RET, 3);
+		//20
+		mv.visitLabel(l8);
+		mv.visitLineNumber(84, l8);
+		mv.visitInsn(RETURN);
+		//21
+		Label l11 = new Label();
+		mv.visitLabel(l11);
+		mv.visitLocalVariable("e", "Ljava/lang/RuntimeException;", null, l9, l10, 1);
+		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l11, 0);
+		mv.visitMaxs(1, 4);
+		mv.visitEnd();
+
+		dut.analyze(mv);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 4, set(78, 79)),
+						new BasicBlock(4, 5, set(83)),
+						new BasicBlock(5, 10, set(79, 80, 81)),
+						new BasicBlock(10, 11, set(83)),
+						new BasicBlock(11, 13, set(82)),
+						new BasicBlock(13, 15, set(82)),
+						new BasicBlock(15, 20, set(82)),
+						new BasicBlock(20, 21, set(84))),
+				dut.blocks);
+		assertEquals(1, dut.complexity);
+	}
 }
