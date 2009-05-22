@@ -39,4 +39,13 @@ public class SampleTest {
 	@Test public void completelyCoveredBlock() {
 		dut.tryFinally(false);
 	}
+	
+	@Test public void tableSwitchBranches() {
+		dut.tableSwitchBranches(1);
+	}
+
+	@Test public void lookupSwitchBranches() {
+		dut.lookupSwitchBranches(3);
+	}
+	
 }

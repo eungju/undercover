@@ -18,8 +18,10 @@ import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import undercover.metric.BlockMeta;
@@ -51,6 +53,14 @@ public class BasicBlockAnalyzer {
 				if (isConditionalBranch(each.getOpcode())) {
 					complexity++;
 				}
+			} else if (each.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
+				TableSwitchInsnNode node = (TableSwitchInsnNode) each;
+				addBlock(offset + 1);
+				complexity += node.labels.size();
+			} else if (each.getType() == AbstractInsnNode.LOOKUPSWITCH_INSN) {
+				LookupSwitchInsnNode node = (LookupSwitchInsnNode) each;
+				addBlock(offset + 1);
+				complexity += node.labels.size();
 			} else if (each.getType() == AbstractInsnNode.LABEL) {
 				LabelNode node = (LabelNode) each;
 				if (targetLabels.contains(node.getLabel()) && basicBlock.start < offset) {
@@ -86,6 +96,18 @@ public class BasicBlockAnalyzer {
 			AbstractInsnNode each = i.next();
 			if (each.getType() == AbstractInsnNode.JUMP_INSN) {
 				targetLabels.add(((JumpInsnNode) each).label.getLabel());
+			} else if (each.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
+				TableSwitchInsnNode node = (TableSwitchInsnNode) each;
+				targetLabels.add(node.dflt.getLabel());
+				for (LabelNode labelNode : (List<LabelNode>) node.labels) {
+					targetLabels.add(labelNode.getLabel());
+				}
+			} else if (each.getType() == AbstractInsnNode.LOOKUPSWITCH_INSN) {
+				LookupSwitchInsnNode node = (LookupSwitchInsnNode) each;
+				targetLabels.add(node.dflt.getLabel());
+				for (LabelNode labelNode : (List<LabelNode>) node.labels) {
+					targetLabels.add(labelNode.getLabel());
+				}
 			}
 			
 			if (each.getOpcode() != -1) {

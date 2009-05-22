@@ -102,4 +102,24 @@ public abstract class HelloWorld {
 			b1();
 		}
 	}
+	
+	public void tableSwitchBranches(int i) {
+		switch (i) {
+		case 1:
+			System.out.println("1");
+			break;
+		case 2:
+			System.out.println("2");
+		}
+	}
+
+	public void lookupSwitchBranches(int i) {
+		switch (i) {
+		case 1:
+			System.out.println("1");
+			break;
+		case Integer.MAX_VALUE:
+			System.out.println("max");
+		}
+	}
 }

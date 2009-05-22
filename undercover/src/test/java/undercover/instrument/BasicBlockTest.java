@@ -216,4 +216,104 @@ public class BasicBlockTest implements Opcodes {
 				dut.blocks);
 		assertEquals(2, dut.complexity);
 	}
+	
+	@Test public void tableSwitchTargetsAreEdges() {
+		MethodNode mv = new MethodNode(ACC_PUBLIC, "tableSwitchBranches", "(I)V", null, null);
+		mv.visitCode();
+		//0
+		Label l0 = new Label();
+		mv.visitLabel(l0);
+		mv.visitLineNumber(107, l0);
+		mv.visitVarInsn(ILOAD, 1);
+		Label l1 = new Label();
+		Label l2 = new Label();
+		Label l3 = new Label();
+		mv.visitTableSwitchInsn(1, 2, l3, new Label[] { l1, l2 });
+		//2
+		mv.visitLabel(l1);
+		mv.visitLineNumber(109, l1);
+		mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+		mv.visitLdcInsn("1");
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+		Label l4 = new Label();
+		mv.visitLabel(l4);
+		mv.visitLineNumber(110, l4);
+		mv.visitJumpInsn(GOTO, l3);
+		//6
+		mv.visitLabel(l2);
+		mv.visitLineNumber(112, l2);
+		mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+		mv.visitLdcInsn("2");
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+		//9
+		mv.visitLabel(l3);
+		mv.visitLineNumber(114, l3);
+		mv.visitInsn(RETURN);
+		//10
+		Label l5 = new Label();
+		mv.visitLabel(l5);
+		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l5, 0);
+		mv.visitLocalVariable("i", "I", null, l0, l5, 1);
+		mv.visitMaxs(2, 2);
+		mv.visitEnd();
+		
+		dut.analyze(mv);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 2, set(107)),
+						new BasicBlock(2, 6, set(109, 110)),
+						new BasicBlock(6, 9, set(112)),
+						new BasicBlock(9, 10, set(114))),
+				dut.blocks);
+		assertEquals(3, dut.complexity);
+	}
+	
+	@Test public void lookupSwitchTargetsAreEdges() {
+		MethodNode mv = new MethodNode(ACC_PUBLIC, "lookupSwitchBranches", "(I)V", null, null);
+		mv.visitCode();
+		//0
+		Label l0 = new Label();
+		mv.visitLabel(l0);
+		mv.visitLineNumber(117, l0);
+		mv.visitVarInsn(ILOAD, 1);
+		Label l1 = new Label();
+		Label l2 = new Label();
+		Label l3 = new Label();
+		mv.visitLookupSwitchInsn(l3, new int[] { 1, 2147483647 }, new Label[] { l1, l2 });
+		//2
+		mv.visitLabel(l1);
+		mv.visitLineNumber(119, l1);
+		mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+		mv.visitLdcInsn("1");
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+		Label l4 = new Label();
+		mv.visitLabel(l4);
+		mv.visitLineNumber(120, l4);
+		mv.visitJumpInsn(GOTO, l3);
+		//6
+		mv.visitLabel(l2);
+		mv.visitLineNumber(122, l2);
+		mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+		mv.visitLdcInsn("max");
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
+		//9
+		mv.visitLabel(l3);
+		mv.visitLineNumber(124, l3);
+		mv.visitInsn(RETURN);
+		//10
+		Label l5 = new Label();
+		mv.visitLabel(l5);
+		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l5, 0);
+		mv.visitLocalVariable("i", "I", null, l0, l5, 1);
+		mv.visitMaxs(2, 2);
+		mv.visitEnd();
+		
+		dut.analyze(mv);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 2, set(117)),
+						new BasicBlock(2, 6, set(119, 120)),
+						new BasicBlock(6, 9, set(122)),
+						new BasicBlock(9, 10, set(124))),
+				dut.blocks);
+		assertEquals(3, dut.complexity);
+	}
 }
