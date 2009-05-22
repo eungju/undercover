@@ -4,6 +4,7 @@ import static org.objectweb.asm.Opcodes.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 public class BasicBlockAnalyzer {
 	public List<BasicBlock> blocks = new ArrayList<BasicBlock>();
@@ -25,12 +27,8 @@ public class BasicBlockAnalyzer {
 
 	public void analyze(MethodNode methodNode) {
 		InsnList instructions = methodNode.instructions;
-		for (Iterator<AbstractInsnNode> i = instructions.iterator(); i.hasNext(); ) {
-			AbstractInsnNode each = i.next();
-			if (each.getType() == AbstractInsnNode.JUMP_INSN) {
-				targetLabels.add(((JumpInsnNode) each).label.getLabel());
-			}
-		}
+		
+		scanJumpTargets(methodNode, instructions);
 		
 		basicBlock = new BasicBlock(offset);
 		for (Iterator<AbstractInsnNode> i = instructions.iterator(); i.hasNext(); ) {
@@ -47,7 +45,7 @@ public class BasicBlockAnalyzer {
 				basicBlock = new BasicBlock(offset + 1);
 			} else if (each.getType() == AbstractInsnNode.LABEL) {
 				LabelNode node = (LabelNode) each;
-				if (targetLabels.contains(node.getLabel())) {
+				if (targetLabels.contains(node.getLabel()) && basicBlock.startOffset < offset) {
 					basicBlock.endOffset = offset;
 					blocks.add(basicBlock);
 					basicBlock = new BasicBlock(offset + 1);
@@ -57,6 +55,18 @@ public class BasicBlockAnalyzer {
 		}
 	}
 
+	void scanJumpTargets(MethodNode methodNode, InsnList instructions) {
+		for (Iterator<AbstractInsnNode> i = instructions.iterator(); i.hasNext(); ) {
+			AbstractInsnNode each = i.next();
+			if (each.getType() == AbstractInsnNode.JUMP_INSN) {
+				targetLabels.add(((JumpInsnNode) each).label.getLabel());
+			}
+		}
+		for (TryCatchBlockNode each : (Collection<TryCatchBlockNode>) methodNode.tryCatchBlocks) {
+			targetLabels.add(each.handler.getLabel());
+		}
+	}
+	
     boolean isConditionalBranch(int opcode) {
     	return Arrays.binarySearch(branchOpcodes, opcode) > -1;
     }

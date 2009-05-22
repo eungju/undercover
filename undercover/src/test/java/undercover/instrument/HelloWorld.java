@@ -96,4 +96,10 @@ public abstract class HelloWorld {
 	public void throwingMethod() {
 		throw new UnsupportedOperationException();
 	}
+	
+	public void forLoop(int end) {
+		for (int i = 0; i < end; i++) {
+			b1();
+		}
+	}
 }
