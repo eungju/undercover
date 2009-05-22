@@ -3,6 +3,9 @@ package undercover.instrument;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,45 +20,80 @@ public class BasicBlockTest implements Opcodes {
 		dut = new BasicBlockAnalyzer();
 	}
 	
+	<T> Set<T> set(T... elements) {
+		Set<T> result = new HashSet<T>(elements.length);
+		for (T each : elements) {
+			result.add(each);
+		}
+		return result;
+	}
+	
 	@Test public void returnInstructionsAreEdges() {
-		MethodNode methodNode = new MethodNode(ACC_PUBLIC, "empty", "()V", null, null);
-		methodNode.visitCode();
+		MethodNode mv = new MethodNode(ACC_PUBLIC, "empty", "()V", null, null);
+		mv.visitCode();
+		//0
 		Label l0 = new Label();
-		methodNode.visitLabel(l0);
-		methodNode.visitLineNumber(11, l0);
-		methodNode.visitInsn(RETURN);
+		mv.visitLabel(l0);
+		mv.visitLineNumber(11, l0);
+		mv.visitInsn(RETURN);
+		//1
 		Label l1 = new Label();
-		methodNode.visitLabel(l1);
-		methodNode.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l1, 0);
-		methodNode.visitMaxs(0, 1);
-		methodNode.visitEnd();
+		mv.visitLabel(l1);
+		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l1, 0);
+		mv.visitMaxs(0, 1);
+		mv.visitEnd();
 		
-		dut.analyze(methodNode);
-		assertEquals(Arrays.asList(new BasicBlock(0, 2)), dut.blocks);
+		dut.analyze(mv);
+		assertEquals(Arrays.asList(new BasicBlock(0, 1, Collections.<Integer>emptySet())), dut.blocks);
+		assertEquals(1, dut.calculateComplexity());
+	}
+	
+	@Test public void throwInstructionsAreEdges() {
+		MethodNode mv = new MethodNode(ACC_PUBLIC, "throwingMethod", "()V", null, null);
+		mv.visitCode();
+		//0
+		Label l0 = new Label();
+		mv.visitLabel(l0);
+		mv.visitLineNumber(97, l0);
+		mv.visitTypeInsn(NEW, "java/lang/UnsupportedOperationException");
+		mv.visitInsn(DUP);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/UnsupportedOperationException", "<init>", "()V");
+		mv.visitInsn(ATHROW);
+		//4
+		Label l1 = new Label();
+		mv.visitLabel(l1);
+		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l1, 0);
+		mv.visitMaxs(2, 1);
+		mv.visitEnd();
+		
+		dut.analyze(mv);
+		assertEquals(Arrays.asList(new BasicBlock(0, 4, Collections.<Integer>emptySet())), dut.blocks);
+		assertEquals(1, dut.calculateComplexity());
 	}
 	
 	@Test public void jumpInstructionsAndTargetLabelsAreEdges() {
 		MethodNode mv = new MethodNode(ACC_PUBLIC, "ifBranch", "()V", null, null);
 		mv.visitCode();
-		Label l0 = new Label();
 		//0
+		Label l0 = new Label();
 		mv.visitLabel(l0);
 		mv.visitLineNumber(43, l0);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b1", "()Z");
 		Label l1 = new Label();
 		mv.visitJumpInsn(IFEQ, l1);
-		//5
+		//3
 		Label l2 = new Label();
 		mv.visitLabel(l2);
 		mv.visitLineNumber(44, l2);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b2", "()Z");
 		mv.visitInsn(POP);
+		//6
 		mv.visitLabel(l1);
-		//11
 		mv.visitLineNumber(46, l1);
 		mv.visitInsn(RETURN);
+		//7
 		Label l3 = new Label();
 		mv.visitLabel(l3);
 		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l3, 0);
@@ -63,17 +101,22 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 4), new BasicBlock(5, 10), new BasicBlock(11, 12)), dut.blocks);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 3, set(3, 6)),
+						new BasicBlock(3, 6, set(6)),
+						new BasicBlock(6, 7, Collections.<Integer>emptySet())),
+				dut.blocks);
+		assertEquals(2, dut.calculateComplexity());
 	}
 	
 	@Test public void tryCatchBlockHandlersAreEdges() {
 		MethodNode mv = new MethodNode(ACC_PUBLIC, "tryCatchBranch", "()V", null, null);
 		mv.visitCode();
+		//0
 		Label l0 = new Label();
 		Label l1 = new Label();
 		Label l2 = new Label();
 		mv.visitTryCatchBlock(l0, l1, l2, "java/lang/RuntimeException");
-		//0
 		mv.visitLabel(l0);
 		mv.visitLineNumber(62, l0);
 		mv.visitVarInsn(ALOAD, 0);
@@ -82,7 +125,7 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitLabel(l1);
 		Label l3 = new Label();
 		mv.visitJumpInsn(GOTO, l3);
-		//7
+		//4
 		mv.visitLabel(l2);
 		mv.visitLineNumber(63, l2);
 		mv.visitVarInsn(ASTORE, 1);
@@ -92,10 +135,11 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/instrument/HelloWorld", "b2", "()Z");
 		mv.visitInsn(POP);
+		//8
 		mv.visitLabel(l3);
-		//16
 		mv.visitLineNumber(66, l3);
 		mv.visitInsn(RETURN);
+		//9
 		Label l5 = new Label();
 		mv.visitLabel(l5);
 		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l5, 0);
@@ -104,14 +148,19 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 6), new BasicBlock(7, 15), new BasicBlock(16, 17)), dut.blocks);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 4, set(8)),
+						new BasicBlock(4, 8, set(8)),
+						new BasicBlock(8, 9, Collections.<Integer>emptySet())),
+				dut.blocks);
+		assertEquals(1, dut.calculateComplexity());
 	}
 	
 	@Test public void backwardJumpTargetsAreEdges() {
 		MethodNode mv = new MethodNode(ACC_PUBLIC, "forLoop", "(I)V", null, null);
 		mv.visitCode();
-		Label l0 = new Label();
 		//0
+		Label l0 = new Label();
 		mv.visitLabel(l0);
 		mv.visitLineNumber(101, l0);
 		mv.visitInsn(ICONST_0);
@@ -120,7 +169,7 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitLabel(l1);
 		Label l2 = new Label();
 		mv.visitJumpInsn(GOTO, l2);
-		//6
+		//3
 		Label l3 = new Label();
 		mv.visitLabel(l3);
 		mv.visitLineNumber(102, l3);
@@ -131,16 +180,17 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitLabel(l4);
 		mv.visitLineNumber(101, l4);
 		mv.visitIincInsn(2, 1);
+		//7
 		mv.visitLabel(l2);
-		//15
 		mv.visitVarInsn(ILOAD, 2);
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitJumpInsn(IF_ICMPLT, l3);
-		//18
+		//10
 		Label l5 = new Label();
 		mv.visitLabel(l5);
 		mv.visitLineNumber(104, l5);
 		mv.visitInsn(RETURN);
+		//11
 		Label l6 = new Label();
 		mv.visitLabel(l6);
 		mv.visitLocalVariable("this", "Lundercover/instrument/HelloWorld;", null, l0, l6, 0);
@@ -150,6 +200,12 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 5), new BasicBlock(6, 14), new BasicBlock(15, 17), new BasicBlock(18, 20)), dut.blocks);
+		assertEquals(
+				Arrays.asList(new BasicBlock(0, 3, set(7)),
+						new BasicBlock(3, 7, set(7)),
+						new BasicBlock(7, 10, set(3, 10)),
+						new BasicBlock(10, 11, Collections.<Integer>emptySet())),
+				dut.blocks);
+		assertEquals(2, dut.calculateComplexity());
 	}
 }
