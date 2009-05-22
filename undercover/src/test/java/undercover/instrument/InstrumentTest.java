@@ -108,4 +108,10 @@ public class InstrumentTest {
 		assertTrue(4 <= methodMeta.blocks().size());
 		assertEquals(1, methodMeta.getComplexity());
 	}
+
+	@Test public void forLoop() throws IOException {
+		MethodMeta methodMeta = classMeta.getMethod("forLoop(I)V");
+		assertEquals(4, methodMeta.blocks().size());
+		assertEquals(2, methodMeta.getComplexity());
+	}
 }
