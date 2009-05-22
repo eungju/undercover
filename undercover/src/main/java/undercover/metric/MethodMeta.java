@@ -11,12 +11,12 @@ public class MethodMeta extends ObjectSupport implements Serializable {
 
 	private String name;
 	private List<BlockMeta> blocks;
-	private int conditionalBranches;
-
-	public MethodMeta(String name) {
+	private int complexity;
+	
+	public MethodMeta(String name, int complexity) {
 		this.name = name;
 		blocks = new ArrayList<BlockMeta>();
-		conditionalBranches = 0;
+		this.complexity = complexity;
 	}
 	
 	public String name() {
@@ -30,10 +30,6 @@ public class MethodMeta extends ObjectSupport implements Serializable {
 	public List<BlockMeta> blocks() {
 		return blocks;
 	}
-	
-	public void addConditionalBranch() {
-		conditionalBranches++;
-	}
 
 	public void accept(MetaDataVisitor visitor) {
 		visitor.visitEnter(this);
@@ -43,7 +39,7 @@ public class MethodMeta extends ObjectSupport implements Serializable {
 		visitor.visitLeave(this);
 	}
 
-	public int getConditionalBranches() {
-		return conditionalBranches;
+	public int getComplexity() {
+		return complexity;
 	}
 }

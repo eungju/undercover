@@ -13,7 +13,7 @@ public class MetaDataTest {
 		File file = File.createTempFile("undercover-", ".md");
 		MetaData expected = new MetaData();
 		ClassMeta classMeta = new ClassMeta("Foo", "Foo.java");
-		MethodMeta methodMeta = new MethodMeta("bar()V");
+		MethodMeta methodMeta = new MethodMeta("bar()V", 0);
 		BlockMeta blockMeta = new BlockMeta(new ArrayList<Integer>());
 		methodMeta.addBlock(blockMeta);
 		classMeta.addMethod(methodMeta);

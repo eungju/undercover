@@ -38,7 +38,7 @@ public class ReportDataTest {
 	}
 	
 	@Test public void visitMethod() {
-		MethodMeta methodMeta = new MethodMeta("m()V");
+		MethodMeta methodMeta = new MethodMeta("m()V", 1);
 		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
 		methodMeta.addBlock(b1);
 		methodMeta.addBlock(new BlockMeta(new ArrayList<Integer>()));

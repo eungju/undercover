@@ -10,19 +10,15 @@ public class BasicBlock extends ObjectSupport {
 	public int start;
 	/** Exclusive */
 	public int end;
-	public Set<Integer> successors;
+	public Set<Integer> lines;
 	
 	public BasicBlock(int startOffset) {
 		this(startOffset, 0, new HashSet<Integer>());
 	}
 	
-	public BasicBlock(int startOffset, int endOffset, Set<Integer> successors) {
+	public BasicBlock(int startOffset, int endOffset, Set<Integer> lines) {
 		this.start = startOffset;
 		this.end = endOffset;
-		this.successors = successors;
-	}
-
-	public void addSuccessor(int successor) {
-		successors.add(successor);
+		this.lines = lines;
 	}
 }

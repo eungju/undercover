@@ -3,7 +3,6 @@ package undercover.instrument;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +27,15 @@ public class BasicBlockTest implements Opcodes {
 		return result;
 	}
 	
+	@Test public void abstractMethodsHaveNoEdges() {
+		MethodNode mv = new MethodNode(ACC_PUBLIC + ACC_ABSTRACT, "abstractMethod", "()V", null, null);
+		mv.visitEnd();
+		
+		dut.analyze(mv);
+		assertEquals(Arrays.<BasicBlock>asList(), dut.blocks);
+		assertEquals(1, dut.complexity);
+	}
+	
 	@Test public void returnInstructionsAreEdges() {
 		MethodNode mv = new MethodNode(ACC_PUBLIC, "empty", "()V", null, null);
 		mv.visitCode();
@@ -44,8 +52,8 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 		
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 1, Collections.<Integer>emptySet())), dut.blocks);
-		assertEquals(1, dut.calculateComplexity());
+		assertEquals(Arrays.asList(new BasicBlock(0, 1, set(11))), dut.blocks);
+		assertEquals(1, dut.complexity);
 	}
 	
 	@Test public void throwInstructionsAreEdges() {
@@ -67,8 +75,8 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 		
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 4, Collections.<Integer>emptySet())), dut.blocks);
-		assertEquals(1, dut.calculateComplexity());
+		assertEquals(Arrays.asList(new BasicBlock(0, 4, set(97))), dut.blocks);
+		assertEquals(1, dut.complexity);
 	}
 	
 	@Test public void jumpInstructionsAndTargetLabelsAreEdges() {
@@ -102,11 +110,11 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 3, set(3, 6)),
-						new BasicBlock(3, 6, set(6)),
-						new BasicBlock(6, 7, Collections.<Integer>emptySet())),
+				Arrays.asList(new BasicBlock(0, 3, set(43)),
+						new BasicBlock(3, 6, set(44)),
+						new BasicBlock(6, 7, set(46))),
 				dut.blocks);
-		assertEquals(2, dut.calculateComplexity());
+		assertEquals(2, dut.complexity);
 	}
 	
 	@Test public void tryCatchBlockHandlersAreEdges() {
@@ -149,11 +157,11 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 4, set(8)),
-						new BasicBlock(4, 8, set(8)),
-						new BasicBlock(8, 9, Collections.<Integer>emptySet())),
+				Arrays.asList(new BasicBlock(0, 4, set(62)),
+						new BasicBlock(4, 8, set(63, 64)),
+						new BasicBlock(8, 9, set(66))),
 				dut.blocks);
-		assertEquals(1, dut.calculateComplexity());
+		assertEquals(1, dut.complexity);
 	}
 	
 	@Test public void backwardJumpTargetsAreEdges() {
@@ -201,11 +209,11 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 3, set(7)),
-						new BasicBlock(3, 7, set(7)),
-						new BasicBlock(7, 10, set(3, 10)),
-						new BasicBlock(10, 11, Collections.<Integer>emptySet())),
+				Arrays.asList(new BasicBlock(0, 3, set(101)),
+						new BasicBlock(3, 7, set(102, 101)),
+						new BasicBlock(7, 10, set(101)),
+						new BasicBlock(10, 11, set(104))),
 				dut.blocks);
-		assertEquals(2, dut.calculateComplexity());
+		assertEquals(2, dut.complexity);
 	}
 }

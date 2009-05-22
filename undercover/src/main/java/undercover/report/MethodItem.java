@@ -8,7 +8,7 @@ public class MethodItem extends AbstractItem {
 	private final int coveredBlockCount;
 	
 	public MethodItem(ClassItem parent, MethodMeta methodMeta, int coveredBlockCount) {
-		this(parent.getName() + "." + methodMeta.name(), 1 + methodMeta.getConditionalBranches(), methodMeta.blocks().size(), coveredBlockCount);
+		this(parent.getName() + "." + methodMeta.name(), methodMeta.getComplexity(), methodMeta.blocks().size(), coveredBlockCount);
 	}
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
