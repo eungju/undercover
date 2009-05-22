@@ -7,6 +7,9 @@ public abstract class HelloWorld {
 	
 	public abstract void abstractMethod();
 	
+	public void empty() {
+	}
+	
 	public boolean b1() {
 		return true;
 	}
