@@ -14,6 +14,8 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -122,7 +124,7 @@ public class BasicBlockAnalyzer {
 		}
 	}
 	
-	public MethodMeta instrument(MethodNode methodNode) {
+	public MethodMeta instrument(MethodNode methodNode, String className, int methodIndex) {
 		MethodMeta methodMeta = new MethodMeta(methodNode.name + methodNode.desc, complexity);
 		Iterator<BasicBlock> cursor = blocks.iterator();
 		if (!cursor.hasNext()) {
@@ -130,6 +132,7 @@ public class BasicBlockAnalyzer {
 		}
 		
 		BasicBlock block = cursor.next();
+		int blockIndex = 0;
 		int offset = 0;
 		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();
@@ -140,21 +143,38 @@ public class BasicBlockAnalyzer {
 			if (block.end - 1 == offset) {
 				BlockMeta blockMeta = new BlockMeta(block.lines);
 				methodMeta.addBlock(blockMeta);
-				installProbePoint(methodNode.instructions, each, blockMeta);
+				installProbePoint(methodNode.instructions, each, blockMeta, className, methodIndex, blockIndex);
 				if (cursor.hasNext()) {
 					block = cursor.next();
+					blockIndex++;
 				}
 			}
 			
 			offset++;
 		}
-		methodNode.maxStack += 2;
 		
+		if (methodNode.name.equals("<clinit>")) {
+			methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, className, InstrumentClassVisitor.PRE_CLINIT_METHOD_NAME, "()V"));
+		}
+		
+		methodNode.maxStack += 4;
 		return methodMeta;
 	}
 
-    void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta) {
-		//Install probe
+    void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
+       	InsnList ecode = new InsnList();
+       	ecode.add(new FieldInsnNode(GETSTATIC, className, InstrumentClassVisitor.COVERAGE_FIELD_NAME, "[[I"));
+       	ecode.add(new IntInsnNode(SIPUSH, methodIndex));
+       	ecode.add(new InsnNode(AALOAD));
+       	ecode.add(new IntInsnNode(SIPUSH, blockIndex));
+       	ecode.add(new InsnNode(DUP2));
+       	ecode.add(new InsnNode(IALOAD));
+       	ecode.add(new InsnNode(ICONST_1));
+       	ecode.add(new InsnNode(IADD));
+       	ecode.add(new InsnNode(IASTORE));
+    	instructions.insertBefore(location, ecode);
+       	
+    	//Install probe
     	InsnList code = new InsnList();
 		//maxStack + 1
     	code.add(new FieldInsnNode(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;"));

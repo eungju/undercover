@@ -4,6 +4,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.MethodNode;
 
 import undercover.metric.ClassMeta;
+import undercover.metric.MethodMeta;
 
 public class InstrumentMethodVisitor extends MethodNode {
 	private MethodVisitor methodVisitor;
@@ -18,7 +19,8 @@ public class InstrumentMethodVisitor extends MethodNode {
 	public void visitEnd() {
 		BasicBlockAnalyzer analyzer = new BasicBlockAnalyzer();
 		analyzer.analyze(this);
-		classMeta.addMethod(analyzer.instrument(this));
+		MethodMeta methodMeta = analyzer.instrument(this, classMeta.name(), classMeta.methods().size());
+		classMeta.addMethod(methodMeta);
 		accept(methodVisitor);
 	}
 }

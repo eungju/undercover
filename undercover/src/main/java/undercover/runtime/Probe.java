@@ -40,4 +40,7 @@ public class Probe {
 	public synchronized CoverageData getCoverageData() {
 		return coverageData;
 	}
+
+	public void register(String className, int[][] coverage) {
+	}
 }
