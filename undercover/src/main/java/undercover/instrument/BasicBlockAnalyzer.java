@@ -86,7 +86,7 @@ public class BasicBlockAnalyzer {
 	
 	void addBasicBlock(int nextOffset) {
 		basicBlock.end = nextOffset;
-		if (basicBlock.lines.isEmpty()) {
+		if (basicBlock.lines.isEmpty() && lineNumber > 0) {
 			basicBlock.lines.add(lineNumber);
 		}
 		blocks.add(basicBlock);
