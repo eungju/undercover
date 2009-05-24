@@ -41,7 +41,7 @@ public class ReportDataTest {
 		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
 		methodMeta.addBlock(b1);
 		methodMeta.addBlock(new BlockMeta(new ArrayList<Integer>()));
-		coverageData.touchBlock(b1.id());
+		coverageData.register("p/c", new int[][] { {1, 0} });
 
 		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));
 		dut.sourceItem = new SourceItem("c.java", null);

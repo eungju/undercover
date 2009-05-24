@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import undercover.metric.BlockCoverage;
 import undercover.metric.BlockMeta;
 import undercover.metric.ClassMeta;
+import undercover.metric.Coverage;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.metric.MetaDataVisitor;
@@ -29,6 +29,8 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	SourceItem sourceItem;
 	ClassItem classItem;
 	MethodItem methodItem;
+	int methodIndex;
+	int blockIndex;
 	int coveredBlockCount;
 	
 	public ReportDataBuilder(CoverageData coverageData) {
@@ -69,9 +71,10 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		}
 		
 		classItem = new ClassItem(classMeta.name(), sourceFile);
+		methodIndex = 0;
 	}
 
-	public void visitLeave(ClassMeta classLeave) {
+	public void visitLeave(ClassMeta classMeta) {
 		packageItem.addClass(classItem);
 		if (!packageItems.containsKey(packageItem.getName())) {
 			packageItems.put(packageItem.getName(), packageItem);
@@ -87,22 +90,22 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(MethodMeta methodMeta) {
+		blockIndex = 0;
 		coveredBlockCount = 0;
 	}
 
 	public void visitLeave(MethodMeta methodMeta) {
 		methodItem = new MethodItem(classItem, methodMeta, coveredBlockCount);
 		classItem.addMethod(methodItem);
+		methodIndex++;
 	}
 
 	public void visit(BlockMeta blockMeta) {
-		BlockCoverage blockCoverage = coverageData.getBlock(blockMeta.id());
-		if (blockCoverage == null) {
-			blockCoverage = new BlockCoverage();
-		}
-		if (blockCoverage.isTouched()) {
+		Coverage coverage = coverageData.getCoverage(classItem.name);
+		if (coverage.blocks[methodIndex][blockIndex] > 0) {
 			coveredBlockCount++;
 		}
-		sourceItem.addBlock(blockMeta, blockCoverage);
+		sourceItem.addBlock(blockMeta, coverage.blocks[methodIndex][blockIndex]);
+		blockIndex++;
 	}
 }

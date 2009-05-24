@@ -18,7 +18,6 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -173,15 +172,6 @@ public class BasicBlockAnalyzer {
        	ecode.add(new InsnNode(IADD));
        	ecode.add(new InsnNode(IASTORE));
     	instructions.insertBefore(location, ecode);
-       	
-    	//Install probe
-    	InsnList code = new InsnList();
-		//maxStack + 1
-    	code.add(new FieldInsnNode(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;"));
-		//maxStack + 1
-    	code.add(new LdcInsnNode(blockMeta.id().toString()));
-    	code.add(new MethodInsnNode(INVOKEVIRTUAL, "undercover/runtime/Probe", "touchBlock", "(Ljava/lang/String;)V"));
-    	instructions.insertBefore(location, code);
     }
 
     boolean isConditionalBranch(int opcode) {

@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-import undercover.metric.BlockCoverage;
 import undercover.metric.BlockMeta;
 import undercover.report.html.SourceLine;
 
@@ -38,7 +37,7 @@ public class SourceItem extends CompositeItem {
 		classes.add(classItem);
 	}
 	
-	public void addBlock(BlockMeta blockMeta, BlockCoverage blockCoverage) {
+	public void addBlock(BlockMeta blockMeta, int blockCoverage) {
 		lineCoverageAnalysis.analyze(blockMeta, blockCoverage);
 	}
 	

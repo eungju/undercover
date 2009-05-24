@@ -1,17 +1,15 @@
 package undercover.report;
 
-import undercover.metric.BlockCoverage;
-
 public class LineCoverage {
 	public int blockCount = 0;
 	public int coveredBlockCount = 0;
 	public int touchCount = 0;
 
-	public void addBlock(BlockCoverage blockCoverage) {
+	public void addBlock(int blockCoverage) {
 		blockCount++;
-		if (blockCoverage.isTouched()) {
+		if (blockCoverage > 0) {
 			coveredBlockCount++;
-			touchCount  = Math.max(touchCount, blockCoverage.touchCount());
+			touchCount  = Math.max(touchCount, blockCoverage);
 		}
 	}
 	

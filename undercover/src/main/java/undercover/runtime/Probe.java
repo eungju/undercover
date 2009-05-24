@@ -1,7 +1,5 @@
 package undercover.runtime;
 
-import java.util.UUID;
-
 import undercover.UndercoverSettings;
 import undercover.metric.CoverageData;
 
@@ -33,14 +31,11 @@ public class Probe {
 		}
 	}
 	
-	public synchronized void touchBlock(String blockId) {
-		coverageData.touchBlock(UUID.fromString(blockId));
-	}
-	
 	public synchronized CoverageData getCoverageData() {
 		return coverageData;
 	}
 
 	public void register(String className, int[][] coverage) {
+		coverageData.register(className, coverage);
 	}
 }
