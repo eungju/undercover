@@ -19,11 +19,11 @@ public class CoverageData extends ObjectSupport implements Serializable {
 
 	private final Map<String, Coverage> coverages = new HashMap<String, Coverage>();
 
-	public void register(String className, int[][] coverage) {
+	public synchronized void register(String className, int[][] coverage) {
 		coverages.put(className, new Coverage(className, coverage));
 	}
 	
-	public Coverage getCoverage(String className) {
+	public synchronized Coverage getCoverage(String className) {
 		return coverages.get(className);
 	}
 		

@@ -31,7 +31,7 @@ public class Probe {
 		}
 	}
 	
-	public synchronized CoverageData getCoverageData() {
+	public CoverageData getCoverageData() {
 		return coverageData;
 	}
 

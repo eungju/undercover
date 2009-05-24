@@ -1,7 +1,6 @@
 package undercover.metric;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class Coverage implements Serializable {
 	private static final long serialVersionUID = -6522224503868018324L;
