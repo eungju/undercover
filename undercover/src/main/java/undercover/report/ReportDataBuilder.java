@@ -28,10 +28,10 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	PackageItem packageItem;
 	SourceItem sourceItem;
 	ClassItem classItem;
+	Coverage classCoverage;
 	MethodItem methodItem;
 	int methodIndex;
 	int blockIndex;
-	int coveredBlockCount;
 	
 	public ReportDataBuilder(CoverageData coverageData) {
 		this.coverageData = coverageData;
@@ -71,6 +71,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		}
 		
 		classItem = new ClassItem(classMeta.name(), sourceFile);
+		classCoverage = coverageData.getCoverage(classMeta.name());
 		methodIndex = 0;
 	}
 
@@ -91,21 +92,26 @@ public class ReportDataBuilder implements MetaDataVisitor {
 
 	public void visitEnter(MethodMeta methodMeta) {
 		blockIndex = 0;
-		coveredBlockCount = 0;
 	}
 
 	public void visitLeave(MethodMeta methodMeta) {
+		int coveredBlockCount = 0;
+		if (classCoverage != null) {
+			for (int each : classCoverage.blocks[methodIndex]) {
+				if (each > 0) {
+					coveredBlockCount++;
+				}
+			}
+		}
 		methodItem = new MethodItem(classItem, methodMeta, coveredBlockCount);
 		classItem.addMethod(methodItem);
 		methodIndex++;
 	}
 
 	public void visit(BlockMeta blockMeta) {
-		Coverage coverage = coverageData.getCoverage(classItem.name);
-		if (coverage.blocks[methodIndex][blockIndex] > 0) {
-			coveredBlockCount++;
+		if (classCoverage != null) {
+			sourceItem.addBlock(blockMeta, classCoverage.blocks[methodIndex][blockIndex]);
 		}
-		sourceItem.addBlock(blockMeta, coverage.blocks[methodIndex][blockIndex]);
 		blockIndex++;
 	}
 }

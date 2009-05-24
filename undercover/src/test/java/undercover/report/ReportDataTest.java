@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import undercover.metric.BlockMeta;
 import undercover.metric.ClassMeta;
+import undercover.metric.Coverage;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
@@ -41,7 +42,7 @@ public class ReportDataTest {
 		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
 		methodMeta.addBlock(b1);
 		methodMeta.addBlock(new BlockMeta(new ArrayList<Integer>()));
-		coverageData.register("p/c", new int[][] { {1, 0} });
+		dut.classCoverage = new Coverage("p/c", new int[][] { {1, 0} });
 
 		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));
 		dut.sourceItem = new SourceItem("c.java", null);
