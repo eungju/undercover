@@ -153,7 +153,7 @@ public class BasicBlockAnalyzer {
 		}
 		
 		if (methodNode.name.equals("<clinit>")) {
-			methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, className, InstrumentClassVisitor.PRE_CLINIT_METHOD_NAME, "()V"));
+			methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, className, Instrument.PRE_CLINIT_METHOD_NAME, "()V"));
 		}
 		
 		methodNode.maxStack += 4;
@@ -162,7 +162,7 @@ public class BasicBlockAnalyzer {
 
     void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
        	InsnList ecode = new InsnList();
-       	ecode.add(new FieldInsnNode(GETSTATIC, className, InstrumentClassVisitor.COVERAGE_FIELD_NAME, "[[I"));
+       	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
        	ecode.add(new IntInsnNode(SIPUSH, methodIndex));
        	ecode.add(new InsnNode(AALOAD));
        	ecode.add(new IntInsnNode(SIPUSH, blockIndex));

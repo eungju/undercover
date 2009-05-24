@@ -17,9 +17,6 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	private String className;
 	boolean clinitIsInstrumented = false;
 	
-	static final String COVERAGE_FIELD_NAME = "__$coverage$__";
-	static final String PRE_CLINIT_METHOD_NAME = "__$preclinit$__";
-	
 	public InstrumentClassVisitor(ClassWriter classWriter, MetaData metaData) {
 		super(classWriter);
 		this.metaData = metaData;
@@ -41,21 +38,21 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	void addClinitMethod() {
 		MethodVisitor mv = super.visitMethod(ACC_SYNTHETIC + ACC_STATIC, "<clinit>", "()V", null, null);
 		mv.visitCode();
-		mv.visitMethodInsn(INVOKESTATIC, className, PRE_CLINIT_METHOD_NAME, "()V");
+		mv.visitMethodInsn(INVOKESTATIC, className, Instrument.PRE_CLINIT_METHOD_NAME, "()V");
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(0, 0);
 		mv.visitEnd();
 	}
 
-	private void addPreClinitMethod() {
-		MethodVisitor mv = super.visitMethod(ACC_SYNTHETIC + ACC_PRIVATE + ACC_STATIC, PRE_CLINIT_METHOD_NAME, "()V", null, null);
+	void addPreClinitMethod() {
+		MethodVisitor mv = super.visitMethod(ACC_SYNTHETIC + ACC_PRIVATE + ACC_STATIC, Instrument.PRE_CLINIT_METHOD_NAME, "()V", null, null);
 		mv.visitCode();
 		mv.visitIntInsn(SIPUSH, classMeta.methods().size());
 		mv.visitTypeInsn(ANEWARRAY, "[I");
-		mv.visitFieldInsn(PUTSTATIC, className, COVERAGE_FIELD_NAME, "[[I");
+		mv.visitFieldInsn(PUTSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I");
 		int methodIndex = 0;
 		for (MethodMeta each : classMeta.methods()) {
-			mv.visitFieldInsn(GETSTATIC, className, COVERAGE_FIELD_NAME, "[[I");
+			mv.visitFieldInsn(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I");
 			mv.visitIntInsn(SIPUSH, methodIndex);
 			mv.visitIntInsn(SIPUSH, each.blocks().size());
 			mv.visitIntInsn(NEWARRAY, T_INT);
@@ -64,7 +61,7 @@ public class InstrumentClassVisitor extends ClassAdapter {
 		}
 		mv.visitFieldInsn(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;");
 		mv.visitLdcInsn(className);
-		mv.visitFieldInsn(GETSTATIC, className, COVERAGE_FIELD_NAME, "[[I");
+		mv.visitFieldInsn(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I");
 		mv.visitMethodInsn(INVOKEVIRTUAL, "undercover/runtime/Probe", "register", "(Ljava/lang/String;[[I)V");
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(3, 0);
@@ -72,7 +69,7 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	}
 
 	void addCoverageField() {
-		FieldVisitor fv = super.visitField(ACC_SYNTHETIC + ACC_PUBLIC + ACC_STATIC, COVERAGE_FIELD_NAME, "[[I", null, null);
+		FieldVisitor fv = super.visitField(ACC_SYNTHETIC + ACC_PUBLIC + ACC_STATIC, Instrument.COVERAGE_FIELD_NAME, "[[I", null, null);
 		fv.visitEnd();
 	}
 	

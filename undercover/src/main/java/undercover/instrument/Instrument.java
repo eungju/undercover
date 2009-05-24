@@ -9,6 +9,8 @@ import org.objectweb.asm.ClassWriter;
 import undercover.metric.MetaData;
 
 public class Instrument {
+	static final String COVERAGE_FIELD_NAME = "$undercover$coverage";
+	static final String PRE_CLINIT_METHOD_NAME = "$undercover$preClinit";
 	private final MetaData metaData;
 	
 	public Instrument() {
