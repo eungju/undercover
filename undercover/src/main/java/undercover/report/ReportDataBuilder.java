@@ -58,7 +58,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(ClassMeta classMeta) {
-		String packageName = classMeta.name().substring(0, classMeta.name().lastIndexOf("/"));
+		String packageName = classMeta.getPackageName();
 		packageItem = packageItems.get(packageName);
 		if (packageItem == null) {
 			packageItem = new PackageItem(packageName);
@@ -70,8 +70,8 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			sourceItem = new SourceItem(sourceFile);
 		}
 		
-		classItem = new ClassItem(classMeta.name(), sourceFile);
-		classCoverage = coverageData.getCoverage(classMeta.name());
+		classItem = new ClassItem(classMeta.name, sourceFile);
+		classCoverage = coverageData.getCoverage(classMeta.name);
 		methodIndex = 0;
 	}
 

@@ -9,7 +9,7 @@ public class LineCoverageAnalysis {
 	private final Map<Integer, LineCoverage> lines = new HashMap<Integer, LineCoverage>();
 	
 	public void analyze(BlockMeta blockMeta, int blockCoverage) {
-		for (Integer each : blockMeta.lines()) {
+		for (Integer each : blockMeta.lines) {
 			LineCoverage lineCoverage = lines.get(each);
 			if (lineCoverage == null) {
 				lineCoverage = new LineCoverage();

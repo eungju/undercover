@@ -35,7 +35,7 @@ public class MetaData extends ObjectSupport implements Serializable {
 
 	public ClassMeta getClass(String name) {
 		for (ClassMeta each : classes) {
-			if (each.name().equals(name)) {
+			if (each.name.equals(name)) {
 				return each;
 			}
 		}

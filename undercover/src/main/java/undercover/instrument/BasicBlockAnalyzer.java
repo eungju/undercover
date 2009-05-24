@@ -124,32 +124,30 @@ public class BasicBlockAnalyzer {
 	}
 	
 	public MethodMeta instrument(MethodNode methodNode, String className, int methodIndex) {
-		MethodMeta methodMeta = new MethodMeta(methodNode.name + methodNode.desc, complexity);
+		List<BlockMeta> blockMetas = new ArrayList<BlockMeta>();
 		Iterator<BasicBlock> cursor = blocks.iterator();
-		if (!cursor.hasNext()) {
-			return methodMeta;
-		}
-		
-		BasicBlock block = cursor.next();
-		int blockIndex = 0;
-		int offset = 0;
-		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
-			AbstractInsnNode each = i.next();
-			if (each.getOpcode() == -1) {
-				continue;
-			}
-			
-			if (block.end - 1 == offset) {
-				BlockMeta blockMeta = new BlockMeta(block.lines);
-				methodMeta.addBlock(blockMeta);
-				installProbePoint(methodNode.instructions, each, blockMeta, className, methodIndex, blockIndex);
-				if (cursor.hasNext()) {
-					block = cursor.next();
-					blockIndex++;
+		if (cursor.hasNext()) {		
+			BasicBlock block = cursor.next();
+			int blockIndex = 0;
+			int offset = 0;
+			for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
+				AbstractInsnNode each = i.next();
+				if (each.getOpcode() == -1) {
+					continue;
 				}
+				
+				if (block.end - 1 == offset) {
+					BlockMeta blockMeta = new BlockMeta(block.lines);
+					blockMetas.add(blockMeta);
+					installProbePoint(methodNode.instructions, each, blockMeta, className, methodIndex, blockIndex);
+					if (cursor.hasNext()) {
+						block = cursor.next();
+						blockIndex++;
+					}
+				}
+				
+				offset++;
 			}
-			
-			offset++;
 		}
 		
 		if (methodNode.name.equals("<clinit>")) {
@@ -157,7 +155,8 @@ public class BasicBlockAnalyzer {
 		}
 		
 		methodNode.maxStack += 4;
-		return methodMeta;
+		
+		return new MethodMeta(methodNode.name + methodNode.desc, complexity, blockMetas);
 	}
 
     void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {

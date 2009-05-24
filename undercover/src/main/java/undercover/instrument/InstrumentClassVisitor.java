@@ -2,6 +2,9 @@ package undercover.instrument;
 
 import static org.objectweb.asm.Opcodes.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
@@ -12,14 +15,16 @@ import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
 
 public class InstrumentClassVisitor extends ClassAdapter {
-	private MetaData metaData;
-	private ClassMeta classMeta;
+	private final MetaData metaData;
 	private String className;
+	private String source;
+	private List<MethodMeta> methodMetas;
 	boolean clinitIsInstrumented = false;
 	
 	public InstrumentClassVisitor(ClassWriter classWriter, MetaData metaData) {
 		super(classWriter);
 		this.metaData = metaData;
+		this.methodMetas = new ArrayList<MethodMeta>();
 	}
 	
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
@@ -28,6 +33,8 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	}
 	
 	public void visitEnd() {
+		metaData.addClass(new ClassMeta(className, source, methodMetas));
+
 		addCoverageField();
 		addPreClinitMethod();		
 		if (!clinitIsInstrumented) {
@@ -47,14 +54,14 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	void addPreClinitMethod() {
 		MethodVisitor mv = super.visitMethod(ACC_SYNTHETIC + ACC_PRIVATE + ACC_STATIC, Instrument.PRE_CLINIT_METHOD_NAME, "()V", null, null);
 		mv.visitCode();
-		mv.visitIntInsn(SIPUSH, classMeta.methods().size());
+		mv.visitIntInsn(SIPUSH, methodMetas.size());
 		mv.visitTypeInsn(ANEWARRAY, "[I");
 		mv.visitFieldInsn(PUTSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I");
 		int methodIndex = 0;
-		for (MethodMeta each : classMeta.methods()) {
+		for (MethodMeta each : methodMetas) {
 			mv.visitFieldInsn(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I");
 			mv.visitIntInsn(SIPUSH, methodIndex);
-			mv.visitIntInsn(SIPUSH, each.blocks().size());
+			mv.visitIntInsn(SIPUSH, each.blocks.size());
 			mv.visitIntInsn(NEWARRAY, T_INT);
 			mv.visitInsn(AASTORE);
 			methodIndex++;
@@ -75,14 +82,13 @@ public class InstrumentClassVisitor extends ClassAdapter {
 	
 	public void visitSource(String source, String debug) {
 		super.visitSource(source, debug);
-		classMeta = new ClassMeta(className, source);
-		metaData.addClass(classMeta);
+		this.source = source;
 	}
 
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		MethodVisitor mv = super.visitMethod(access, name, desc, signature,	exceptions);
 		if (mv != null) {
-			mv = new InstrumentMethodVisitor(access, name, desc, signature, exceptions, classMeta, mv);
+			mv = new InstrumentMethodVisitor(access, name, desc, signature, exceptions, mv, className, methodMetas);
 			if (name.equals("<clinit>")) {
 				clinitIsInstrumented = true;
 			}

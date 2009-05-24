@@ -3,6 +3,7 @@ package undercover.report;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,16 +33,14 @@ public class ReportDataTest {
 		dut.projectItem = new ProjectItem("prj");
 		ClassMeta classMeta = new ClassMeta("pkg/cls", "cls.java");
 		classMeta.accept(dut);
-		assertNotNull(dut.classItems.get(classMeta.name()));
+		assertNotNull(dut.classItems.get(classMeta.name));
 		assertNotNull(dut.packageItems.get("pkg"));
 		assertNotNull(dut.sourceItems.get("pkg/cls.java"));
 	}
 	
 	@Test public void visitMethod() {
-		MethodMeta methodMeta = new MethodMeta("m()V", 1);
 		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
-		methodMeta.addBlock(b1);
-		methodMeta.addBlock(new BlockMeta(new ArrayList<Integer>()));
+		MethodMeta methodMeta = new MethodMeta("m()V", 1, Arrays.asList(b1, new BlockMeta(new ArrayList<Integer>())));
 		dut.classCoverage = new Coverage("p/c", new int[][] { {1, 0} });
 
 		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));

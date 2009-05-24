@@ -24,6 +24,6 @@ public class SourceFinder {
 	}
 
 	public String getExpectedSourcePath(ClassMeta classMeta) {
-		return classMeta.getPackageName() + "/" + classMeta.source();
+		return classMeta.getPackageName() + "/" + classMeta.source;
 	}
 }
