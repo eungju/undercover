@@ -31,16 +31,23 @@ public class InstrumentClassVisitor extends ClassNode {
 	public void visitEnd() {
 		super.visitEnd();
 		
+		if ((access & ACC_SYNTHETIC) != 0) {
+			return;
+		}
+		
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
 		for (MethodNode each : (List<MethodNode>) methods) {
+			if (each.name.equals("<clinit>")) {
+				clinitMethod = each;
+			}
+			if ((each.access & ACC_SYNTHETIC) != 0) {
+				continue;
+			}
 			BasicBlockAnalyzer analyzer = new BasicBlockAnalyzer();
 			analyzer.analyze(each);
 			MethodMeta methodMeta = analyzer.instrument(each, name, methodMetas.size());
 			methodMetas.add(methodMeta);
-			if (each.name.equals("<clinit>")) {
-				clinitMethod = each;
-			}
 		}
 		
 		ClassMeta classMeta = new ClassMeta(name, sourceFile, methodMetas);
