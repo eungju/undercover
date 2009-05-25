@@ -152,7 +152,7 @@ $header()$
 $footer()$
 >>
 
-source_html(source, lines) ::= <<
+sourceSummary(source, lines) ::= <<
 $header()$
 
 Statistics for $source.name; format="html"$

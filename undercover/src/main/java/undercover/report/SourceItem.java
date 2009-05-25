@@ -10,7 +10,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import undercover.metric.BlockMeta;
-import undercover.report.html.SourceLine;
 
 public class SourceItem extends CompositeItem {
 	public final String language;

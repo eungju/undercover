@@ -1,6 +1,5 @@
-package undercover.report.html;
+package undercover.report;
 
-import undercover.report.LineCoverage;
 
 public class SourceLine {
 	public final int number;
