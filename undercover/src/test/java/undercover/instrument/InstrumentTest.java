@@ -3,15 +3,10 @@ package undercover.instrument;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.CheckClassAdapter;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 import undercover.metric.ClassMeta;
 import undercover.metric.MetaData;
@@ -22,28 +17,11 @@ public class InstrumentTest {
 	private Instrument dut;
 	private ClassMeta classMeta;
 	
-	public String traceBytecode(byte[] bytecode) {
-		ClassReader cr = new ClassReader(bytecode);
-		StringWriter buffer = new StringWriter();
-		PrintWriter writer = new PrintWriter(buffer);
-		TraceClassVisitor trace = new TraceClassVisitor(writer);
-		cr.accept(trace, 0);
-		return buffer.toString();
-	}
-
-	public String checkBytecode(byte[] bytecode) {
-		ClassReader cr = new ClassReader(bytecode);
-		StringWriter buffer = new StringWriter();
-		PrintWriter writer = new PrintWriter(buffer);
-		CheckClassAdapter.verify(cr, true, writer);
-		return buffer.toString();
-	}
-
 	@Before public void beforeEach() throws IOException {
 		dut = new Instrument();
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
 		MetaData metaData = dut.getMetaData();
-		checkBytecode(dut.instrument(original));
+		dut.instrument(original);
 		classMeta = metaData.getClass(HelloWorld.class.getName().replaceAll("\\.", "/"));
 	}
 	

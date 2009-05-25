@@ -1,8 +1,8 @@
 package undercover.instrument;
 
-public abstract class HelloWorld {
+public abstract class HelloWorld implements HelloWorldInterface {
 	public static void main(String[] args) {
-		System.out.println("Hello, World!");
+		System.out.println(MESSAGE);
 	}
 	
 	public abstract void abstractMethod();

@@ -35,7 +35,9 @@ public class Instrument {
 	
 	public ClassWriter instrument(ClassReader classReader) {
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
-		classReader.accept(new InstrumentClassVisitor(classWriter, metaData), 0);
+		InstrumentClassVisitor classNode = new InstrumentClassVisitor(metaData);
+		classReader.accept(classNode, 0);
+		classNode.accept(classWriter);
 		return classWriter;
 	}
 }

@@ -1,6 +1,6 @@
 package undercover.testbed;
 
-public class Sample {
+public class Sample implements ISample {
 	public void notCovered() {
 	}
 	
@@ -9,9 +9,9 @@ public class Sample {
 
 	public void ifBranch(boolean a) {
 		if (a) {
-			System.out.println("true");
+			System.out.println(VALUES[1]);
 		} else {
-			System.out.println("false");
+			System.out.println(VALUES[0]);
 		}
 	}
 

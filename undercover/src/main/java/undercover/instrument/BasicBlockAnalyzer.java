@@ -20,7 +20,6 @@ import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
@@ -150,16 +149,12 @@ public class BasicBlockAnalyzer {
 			}
 		}
 		
-		if (methodNode.name.equals("<clinit>")) {
-			methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, className, Instrument.PRE_CLINIT_METHOD_NAME, "()V"));
-		}
-		
 		methodNode.maxStack += 4;
 		
 		return new MethodMeta(methodNode.name + methodNode.desc, complexity, blockMetas);
 	}
 
-    void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
+    static void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
        	InsnList ecode = new InsnList();
        	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
        	ecode.add(new IntInsnNode(SIPUSH, methodIndex));
