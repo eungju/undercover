@@ -21,8 +21,12 @@ public class PackageItem extends CompositeItem {
 		return (Collection) classes;
 	}
 
+	public String getLinkName() {
+		return name.replaceAll("/", ".");
+	}
+
 	public String getLink() {
-		return "package-" + name.replaceAll("/", ".") + ".html";
+		return "package-" + getLinkName() + ".html";
 	}
 
 	public static final Comparator<PackageItem> DISPLAY_ORDER = new Comparator<PackageItem>() {

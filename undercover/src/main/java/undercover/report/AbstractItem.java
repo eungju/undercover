@@ -16,7 +16,7 @@ public abstract class AbstractItem implements Item {
 	public String getDisplayName() {
 		return displayName;
 	}
-
+	
 	public double getAverageMethodComplexity() {
 		return ((double) getComplexity()) / getMethodCount();
 	}

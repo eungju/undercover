@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.antlr.stringtemplate.AutoIndentWriter;
@@ -22,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import undercover.report.ClassItem;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.SourceItem;
@@ -77,6 +79,7 @@ public class HtmlReport {
 	void copyResources() throws IOException {
 		final String[] resources = {
 				"style.css",
+				"jquery-1.3.2.min.js",
 				"index.html",
 		};
 		for (String each : resources) {
@@ -118,14 +121,21 @@ public class HtmlReport {
 
 	void generatePackageReports() throws IOException {
 		for (PackageItem each : reportData.getProject().packages) {
-			generatePackageReport(each);
+			generatePackageSummary(each);
+			generatePackageClasses(each);
 		}
 	}
 
-	private void generatePackageReport(PackageItem packageItem) throws IOException {
+	private void generatePackageSummary(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("packageSummary");
 		template.setAttribute("package", packageItem);
 		writeTemplate(template, packageItem.getLink());
+	}
+
+	void generatePackageClasses(PackageItem packageItem) throws IOException {
+		StringTemplate template = getTemplate("projectClasses");
+		template.setAttribute("classes", packageItem.classes);
+		writeTemplate(template, "package-" + packageItem.getDisplayName() + "-classes.html");
 	}
 
 	public StringTemplate getTemplate(String templateName) {
