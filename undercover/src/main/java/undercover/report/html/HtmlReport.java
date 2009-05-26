@@ -117,7 +117,7 @@ public class HtmlReport {
 	}
 
 	void generatePackageReports() throws IOException {
-		for (PackageItem each : reportData.getAllPackages()) {
+		for (PackageItem each : reportData.getProject().packages) {
 			generatePackageReport(each);
 		}
 	}

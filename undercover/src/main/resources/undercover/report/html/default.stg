@@ -155,8 +155,9 @@ $footer()$
 sourceSummary(source, lines) ::= <<
 $header()$
 
-Statistics for $source.name; format="html"$
+<h2>$source.name; format="html"$</h2>
 
+<h3>Statistics</h3>
 <table>
 	<thead>
 		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
@@ -174,6 +175,7 @@ Statistics for $source.name; format="html"$
 	</tbody>
 </table>
 
+<h3>Source</h3>
 <table>
 	<tbody>
 	$source.lines:{ each |

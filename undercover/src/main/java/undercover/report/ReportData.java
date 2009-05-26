@@ -2,32 +2,25 @@ package undercover.report;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class ReportData {
 	private final ProjectItem projectItem;
-	private final Map<String, PackageItem> packageItems;
-	private final Map<String, ClassItem> classItems;
-	private final Map<String, SourceItem> sourceItems;
+	private final SortedMap<String, ClassItem> classItems;
+	private final SortedMap<String, SourceItem> sourceItems;
 	
-	public ReportData(ProjectItem projectItem, Map<String, PackageItem> packageItems, Map<String, ClassItem> classItems, Map<String, SourceItem> sourceItems) {
+	public ReportData(ProjectItem projectItem, Map<String, ClassItem> classItems, Map<String, SourceItem> sourceItems) {
 		this.projectItem = projectItem;
-		this.packageItems = packageItems;
-		this.classItems = classItems;
-		this.sourceItems = sourceItems;
+		this.classItems = new TreeMap<String, ClassItem>(ClassItem.NAME_ORDER_BY_SIMPLE_NAME);
+		this.classItems.putAll(classItems);
+		this.sourceItems = new TreeMap<String, SourceItem>(sourceItems);
 	}
 	
 	public ProjectItem getProject() {
 		return projectItem;
 	}
 
-	public Collection<PackageItem> getAllPackages() {
-		return packageItems.values();
-	}
-	
-	public PackageItem getPackage(String name) {
-		return packageItems.get(name);
-	}
-	
 	public Collection<ClassItem> getAllClasses() {
 		return classItems.values();
 	}

@@ -1,15 +1,15 @@
 package undercover.report;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class ProjectItem extends CompositeItem {
-	public final List<PackageItem> packages;
+	public final SortedSet<PackageItem> packages;
 	
 	public ProjectItem(String name) {
 		super(name, name);
-		packages = new ArrayList<PackageItem>();
+		packages = new TreeSet<PackageItem>(PackageItem.DISPLAY_ORDER);
 	}
 	
 	public String getLink() {

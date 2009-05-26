@@ -54,7 +54,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitLeave(MetaData metaData) {
-		reportData = new ReportData(projectItem, packageItems, classItems, sourceItems);
+		reportData = new ReportData(projectItem, classItems, sourceItems);
 	}
 
 	public void visitEnter(ClassMeta classMeta) {

@@ -30,4 +30,9 @@ public class ClassItemTest {
 		assertEquals(2, classItem.getCoveredBlockCount());
 		assertEquals(3, classItem.getMethodCount());
 	}
+	
+	@Test public void simpleName() {
+		assertEquals("c", ClassItem.getSimpleName("p/c"));
+		assertEquals("c", ClassItem.getSimpleName("c"));
+	}
 }
