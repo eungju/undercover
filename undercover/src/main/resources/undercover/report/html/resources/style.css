@@ -38,6 +38,19 @@ div.coverageBarNotAvailable {
 	height: 10px;
 }
 
+td.coverage {
+	text-align: right;
+}
+
+td.complexity {
+	text-align: right;
+}
+
+td.number {
+	text-align: right;
+}
+
+
 /* Rounded-box */
 
 div.rounded-box {

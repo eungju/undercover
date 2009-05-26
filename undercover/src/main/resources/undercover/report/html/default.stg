@@ -36,6 +36,9 @@ $header()$
 });
 </script>
 
+<h2>$project.displayName; format="html"$</h2>
+
+<h3>Statistics</h3>
 <table>
 	<thead>
 		<tr><th></th><th>Packages</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
@@ -43,14 +46,15 @@ $header()$
 	<tbody>
 		<tr>
 			<td>$project.displayName$</td>
-			<td>$length(project.packages)$</td>
-			<td>$project.complexity$</td>
-			<td>$project.averageMethodComplexity$</td>
-			<td>$coverageBar(project)$</td>
+			<td class="number">$length(project.packages)$</td>
+			<td class="complexity">$project.complexity$</td>
+			<td class="complexity">$project.averageMethodComplexity$</td>
+			<td class="coverage">$coverageBar(project)$</td>
 		</tr>
 	</tbody>
 </table>
 
+<h3>Packages</h3>
 <table>
 	<thead>
 		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
@@ -59,10 +63,10 @@ $header()$
 		$project.packages:{ each |
 		<tr>
 			<td><a href="$each.link$">$each.displayName$</a></td>
-			<td>$length(each.classes)$</td>
-			<td>$each.complexity$</td>
-			<td>$each.averageMethodComplexity$</td>
-			<td>$coverageBar(each)$</td>
+			<td class="number">$length(each.classes)$</td>
+			<td class="complexity">$each.complexity$</td>
+			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$
 	</tbody>
@@ -111,7 +115,7 @@ $header()$
 		$classes:{ each |
 		<tr>
 			<td><a href="$each.link$" target="classPane">$each.simpleName$</a></td>
-			<td>$each.coverageRate; format="percent"$</td>
+			<td class="coverage">$each.coverageRate; format="percent"$</td>
 		</tr>
 		}$
 	</tbody>
@@ -128,6 +132,9 @@ $header()$
 });
 </script>
 
+<h2>$package.displayName; format="html"$</h2>
+
+<h3>Statistics</h3>
 <table>
 	<thead>
 		<tr><th></th><th>Classes</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
@@ -135,14 +142,15 @@ $header()$
 	<tbody>
 		<tr>
 			<td>$package.displayName$</td>
-			<td>$length(package.classes)$</td>
-			<td>$package.complexity$</td>
-			<td>$package.averageMethodComplexity$</td>
-			<td>$coverageBar(package)$</td>
+			<td class="number">$length(package.classes)$</td>
+			<td class="complexity">$package.complexity$</td>
+			<td class="complexity">$package.averageMethodComplexity$</td>
+			<td class="coverage">$coverageBar(package)$</td>
 		</tr>
 	</tbody>
 </table>
 
+<h3>Classes</h3>
 <table>
 	<thead>
 		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
@@ -150,11 +158,11 @@ $header()$
 	<tbody>
 		$package.classes:{ each |
 		<tr>
-			<td><a href="$each.link$">$each.displayName$</a></td>
-			<td>$length(each.methods)$</td>
-			<td>$each.complexity$</td>
-			<td>$each.averageMethodComplexity$</td>
-			<td>$coverageBar(each)$</td>
+			<td><a href="$each.link$">$each.simpleName$</a></td>
+			<td class="number">$length(each.methods)$</td>
+			<td class="complexity">$each.complexity$</td>
+			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$
 	</tbody>
@@ -177,10 +185,10 @@ $header()$
 		$source.classes:{ each |
 		<tr>
 			<td><a href="$each.link$">$each.displayName$</a></td>
-			<td>$length(each.methods)$</td>
-			<td>$each.complexity$</td>
-			<td>$each.averageMethodComplexity$</td>
-			<td>$coverageBar(each)$</td>
+			<td class="number">$length(each.methods)$</td>
+			<td class="complexity">$each.complexity$</td>
+			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$
 	</tbody>
