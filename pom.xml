@@ -13,7 +13,6 @@
 		<module>undercover-parent</module>
 		<module>undercover</module>
 		<module>undercover-maven-plugin</module>
-		<module>undercover-testbed</module>
 	</modules>
 
 	<scm>
