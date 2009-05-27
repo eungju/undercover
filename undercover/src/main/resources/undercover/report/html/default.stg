@@ -40,8 +40,15 @@ $header()$
 
 <h3>Statistics</h3>
 <table>
+	<colgroup>
+		<col width="260" />
+		<col width="80" />
+		<col width="80" />
+		<col width="120" />
+		<col width="*" />
+	</colgroup>
 	<thead>
-		<tr><th></th><th>Packages</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th></th><th>Packages</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -56,8 +63,15 @@ $header()$
 
 <h3>Packages</h3>
 <table>
+	<colgroup>
+		<col width="260" />
+		<col width="80" />
+		<col width="80" />
+		<col width="120" />
+		<col width="*" />
+	</colgroup>
 	<thead>
-		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$project.packages:{ each |
@@ -90,16 +104,20 @@ $header()$
 	<div class="round4"></div>
 </div>
 
-<ul>
+<div class="navigation">
+
+<ul class="menu">
 	<li><a href="$project.link$" target="classPane">Summary</a></li>
 </ul>
 
 <h2>Packages</h2>
-<ul>
+<ul class="package-list">
 	$project.packages:{ each |
 	<li><a href="$each.link$" target="classPane">$each.displayName$</a> ($each.coverageRate; format="percent"$)</li>
 	}$
 </ul>
+
+</div>
 
 $footer()$
 >>
@@ -136,8 +154,15 @@ $header()$
 
 <h3>Statistics</h3>
 <table>
+	<colgroup>
+		<col width="260" />
+		<col width="80" />
+		<col width="80" />
+		<col width="120" />
+		<col width="*" />
+	</colgroup>
 	<thead>
-		<tr><th></th><th>Classes</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th></th><th>Classes</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -152,8 +177,15 @@ $header()$
 
 <h3>Classes</h3>
 <table>
+	<colgroup>
+		<col width="260" />
+		<col width="80" />
+		<col width="80" />
+		<col width="120" />
+		<col width="*" />
+	</colgroup>
 	<thead>
-		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$package.classes:{ each |
@@ -178,8 +210,15 @@ $header()$
 
 <h3>Statistics</h3>
 <table>
+	<colgroup>
+		<col width="260" />
+		<col width="80" />
+		<col width="80" />
+		<col width="120" />
+		<col width="*" />
+	</colgroup>
 	<thead>
-		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Average Method Complexity</th><th>Coverage</th></tr>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$source.classes:{ each |
