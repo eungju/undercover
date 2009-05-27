@@ -96,7 +96,6 @@ public class BasicBlockAnalyzer {
 		for (TryCatchBlockNode each : (Collection<TryCatchBlockNode>) methodNode.tryCatchBlocks) {
 			targetLabels.add(each.handler.getLabel());
 		}
-		int offset = 0;
 		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();
 			if (each.getType() == AbstractInsnNode.JUMP_INSN) {
@@ -114,10 +113,6 @@ public class BasicBlockAnalyzer {
 				for (LabelNode labelNode : (List<LabelNode>) node.labels) {
 					targetLabels.add(labelNode.getLabel());
 				}
-			}
-			
-			if (each.getOpcode() != -1) {
-				offset++;
 			}
 		}
 	}

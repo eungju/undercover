@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.antlr.stringtemplate.AutoIndentWriter;
@@ -23,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
-import undercover.report.ClassItem;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.SourceItem;

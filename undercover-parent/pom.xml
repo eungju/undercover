@@ -61,6 +61,30 @@
 				<groupId>org.sonatype.maven.plugin</groupId>
 				<artifactId>emma-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<sourceEncoding>${maven.compiler.encoding}</sourceEncoding>
+					<minimumTokens>50</minimumTokens>
+					<includeTests>true</includeTests>
+					<targetJdk>${maven.compiler.target}</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<configuration>
+					<forceEncoding>${maven.compiler.encoding}</forceEncoding>
+				</configuration>
+			</plugin>
 		</plugins>
 	</reporting>
 
