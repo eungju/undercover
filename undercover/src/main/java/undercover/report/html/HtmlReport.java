@@ -70,7 +70,9 @@ public class HtmlReport {
 		generatePackageReports();
 		
 		for (SourceItem each : reportData.getAllSources()) {
-			new SourceReport(this, each).writeTo(outputDirectory);
+			StringTemplate st = getTemplate("sourceSummary");
+			st.setAttribute("source", each);
+			writeTemplate(st, each.getLink());
 		}
 	}
 	
