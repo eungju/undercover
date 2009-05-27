@@ -31,7 +31,7 @@ public abstract class UndercoverMojo extends AbstractMojo {
     /**
      * Location to store Undercover generated resources.
      * 
-     * @parameter expression="${undercover.outputDirectory}" default-value="${project.build.directory}/generated-classes/undercover"
+     * @parameter expression="${undercover.outputDirectory}" default-value="${project.build.directory}/undercover"
      */
     protected File outputDirectory;
 

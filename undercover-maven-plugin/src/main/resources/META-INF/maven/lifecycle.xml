@@ -16,7 +16,7 @@
 			<phase>
 				<id>test</id>
 				<configuration>
-					<classesDirectory>${project.build.directory}/generated-classes/undercover/classes</classesDirectory>
+					<classesDirectory>${project.build.directory}/undercover/classes</classesDirectory>
 					<testFailureIgnore>true</testFailureIgnore>
 					<forkMode>once</forkMode>
 				</configuration>

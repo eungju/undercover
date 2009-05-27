@@ -30,14 +30,14 @@ public class UndercoverReportMojo extends AbstractMavenReport {
     /**
      * Location to store class coverage metadata.
      *
-     * @parameter expression="${undercover.metaDataFile}" default-value="${project.build.directory}/undercover.md"
+     * @parameter expression="${undercover.metaDataFile}" default-value="${project.build.directory}/undercover/undercover.md"
      */
     protected File metaDataFile;
 
     /**
      * Location to store class coverage data.
      *
-     * @parameter expression="${undercover.coverageDataFile}" default-value="${project.build.directory}/undercover.cd"
+     * @parameter expression="${undercover.coverageDataFile}" default-value="${project.build.directory}/undercover/undercover.cd"
      */
     protected File coverageDataFile;
 

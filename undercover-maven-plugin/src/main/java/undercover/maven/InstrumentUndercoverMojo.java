@@ -33,14 +33,14 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
     /**
      * Location to store class coverage metadata.
      *
-     * @parameter expression="${undercover.metaDataFile}" default-value="${project.build.directory}/undercover.md"
+     * @parameter expression="${undercover.metaDataFile}"
      */
     protected File metaDataFile;
 
     /**
      * Location to store class coverage data.
      *
-     * @parameter expression="${undercover.coverageDataFile}" default-value="${project.build.directory}/undercover.cd"
+     * @parameter expression="${undercover.coverageDataFile}"
      */
     protected File coverageDataFile;
     
@@ -64,6 +64,14 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
         	}
 			getLog().info("Instrumentation paths: " + paths);
 			instrumentationPaths = paths.toArray(new File[paths.size()]);
+		}
+		
+		if (metaDataFile == null) {
+			metaDataFile = new File(outputDirectory, "undercover.md");
+		}
+		
+		if (coverageDataFile == null) {
+			 coverageDataFile = new File(outputDirectory, "undercover.cd");
 		}
 	}
 
