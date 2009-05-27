@@ -126,6 +126,10 @@ projectClasses(classes) ::= <<
 $header()$
 
 <table>
+	<colgroup>
+		<col width="*" />
+		<col width="80" />
+	</colgroup>
 	<thead>
 		<tr><th>Class</th><th>Coverage</th></tr>
 	</thead>
