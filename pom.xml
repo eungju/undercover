@@ -19,6 +19,17 @@
 		<connection>scm:hg:http://bitbucket.org/EP/undercover/</connection>
 		<url>http://www.bitbucket.org/EP/undercover/</url>
 		<developerConnection>scm:hg:https://bitbucket.org/EP/undercover/</developerConnection>
-  </scm>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>undercover</id>
+			<url>dav:https://undercover.googlecode.com/svn/maven/repository</url>
+		</repository>
+		<snapshotRepository>
+			<id>undercover-snapshot</id>
+			<url>dav:https://undercover.googlecode.com/svn/maven/snapshot-repository</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
 </project>
