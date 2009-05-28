@@ -110,7 +110,7 @@ $header()$
 	<li><a href="$project.link$" target="classPane">Summary</a></li>
 </ul>
 
-<h2>Packages</h2>
+<h3>Packages</h3>
 <ul class="package-list">
 	$project.packages:{ each |
 	<li><a href="$each.link$" target="classPane">$each.displayName$</a> ($each.coverageRate; format="percent"$)</li>
