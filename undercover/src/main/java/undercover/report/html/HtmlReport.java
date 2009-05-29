@@ -50,12 +50,8 @@ public class HtmlReport {
 		generateProjectClasses();
 		
 		generatePackageReports();
-		
-		for (SourceItem each : reportData.getAllSources()) {
-			StringTemplate st = getTemplate("sourceSummary");
-			st.setAttribute("source", each);
-			output.write(each.getLink(), st);
-		}
+
+		generateSourceReports();
 	}
 	
 	void copyResources() throws IOException {
@@ -114,6 +110,14 @@ public class HtmlReport {
 		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", packageItem.classes);
 		output.write("package-" + packageItem.getDisplayName() + "-classes.html", template);
+	}
+
+	void generateSourceReports() throws IOException {
+		for (SourceItem each : reportData.getAllSources()) {
+			StringTemplate st = getTemplate("sourceSummary");
+			st.setAttribute("source", each);
+			output.write(each.getLink(), st);
+		}
 	}
 
 	public StringTemplate getTemplate(String templateName) {
