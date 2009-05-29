@@ -1,38 +1,25 @@
 package undercover.report.html;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.antlr.stringtemplate.AutoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.StringTemplateWriter;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
+import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
 
 public class HtmlReport {
 	final String templateEncoding = "UTF-8";
-	final String outputEncoding = "UTF-8";
 
 	private ReportData reportData;
-	private File outputDirectory;
-	private File[] sourcePaths;
+	private ReportOutput output;
 	String sourceEncoding = "UTF-8";
 	
 	private StringTemplateGroup templateGroup;
@@ -48,11 +35,7 @@ public class HtmlReport {
 	}
 
 	public void setOutputDirectory(File outputDirectory) {
-		this.outputDirectory = outputDirectory;
-	}
-	
-	public void setSourcePaths(File[] sourcePaths) {
-		this.sourcePaths = sourcePaths;
+		this.output = new ReportOutput(outputDirectory);
 	}
 	
 	public void setSourceEncoding(String sourceEncoding) {
@@ -60,7 +43,6 @@ public class HtmlReport {
 	}
 	
 	public void generate() throws IOException {
-		outputDirectory.mkdirs();
 		copyResources();
 
 		generateProjectPackages();
@@ -72,7 +54,7 @@ public class HtmlReport {
 		for (SourceItem each : reportData.getAllSources()) {
 			StringTemplate st = getTemplate("sourceSummary");
 			st.setAttribute("source", each);
-			writeTemplate(st, each.getLink());
+			output.write(each.getLink(), st);
 		}
 	}
 	
@@ -88,35 +70,31 @@ public class HtmlReport {
 	}
 
 	void copyResource(String sourcePath, String destPath) throws IOException {
-		getOutputFile(destPath).getParentFile().mkdirs();
 		InputStream input = null;
-		OutputStream output = null;
 		try {
 			input = getClass().getResourceAsStream(sourcePath);
-			output = openOutputStream(destPath);
-			IOUtils.copy(input, output);
+			output.write(destPath, input);
 		} finally {
 			IOUtils.closeQuietly(input);
-			IOUtils.closeQuietly(output);
 		}
 	}
 
 	void generateProjectPackages() throws IOException {
 		StringTemplate template = getTemplate("projectPackages");
 		template.setAttribute("project", reportData.getProject());
-		writeTemplate(template, "project-packages.html");
+		output.write("project-packages.html", template);
 	}
 	
 	void generateProjectSummary() throws IOException {
 		StringTemplate template = getTemplate("projectSummary");
 		template.setAttribute("project", reportData.getProject());
-		writeTemplate(template, "project-summary.html");
+		output.write("project-summary.html", template);
 	}
 
 	void generateProjectClasses() throws IOException {
 		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", reportData.getAllClasses());
-		writeTemplate(template, "project-classes.html");
+		output.write("project-classes.html", template);
 	}
 
 	void generatePackageReports() throws IOException {
@@ -129,55 +107,16 @@ public class HtmlReport {
 	private void generatePackageSummary(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("packageSummary");
 		template.setAttribute("package", packageItem);
-		writeTemplate(template, packageItem.getLink());
+		output.write(packageItem.getLink(), template);
 	}
 
 	void generatePackageClasses(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", packageItem.classes);
-		writeTemplate(template, "package-" + packageItem.getDisplayName() + "-classes.html");
+		output.write("package-" + packageItem.getDisplayName() + "-classes.html", template);
 	}
 
 	public StringTemplate getTemplate(String templateName) {
 		return templateGroup.getInstanceOf(templateName);
-	}
-
-	public void writeTemplate(StringTemplate template, String path) throws IOException {
-		Writer out = new OutputStreamWriter(openOutputStream(path), outputEncoding);
-		StringTemplateWriter writer = new AutoIndentWriter(out);
-		try {
-			template.write(writer);
-		} finally	{
-			IOUtils.closeQuietly(out);
-		}
-	}
-	
-	public File getOutputFile(String path) {
-		return new File(outputDirectory, path);
-	}
-	
-	public OutputStream openOutputStream(String path) throws FileNotFoundException {
-		return new FileOutputStream(getOutputFile(path));
-	}
-
-	public String getRelativeSourcePath(File file) {
-		return getRelativeSourcePath(sourcePaths, file);
-	}
-	
-	public String getRelativeSourcePath(File[] paths, File file) {
-		for (File each : paths) {
-			if (file.getAbsolutePath().startsWith(each.getAbsolutePath() + File.separator)) {
-				return file.getAbsolutePath().substring(each.getAbsolutePath().length() + 1);
-			}
-		}
-		throw new IllegalArgumentException("Cannot find " + file);
-	}
-
-	public List<File> findAllSourceFiles() {
-		List<File> result = new ArrayList<File>();
-		for (File each : sourcePaths) {
-			result.addAll(FileUtils.listFiles(each, new RegexFileFilter(".*\\.(java|scala)"), TrueFileFilter.TRUE));
-		}
-		return result;
 	}
 }

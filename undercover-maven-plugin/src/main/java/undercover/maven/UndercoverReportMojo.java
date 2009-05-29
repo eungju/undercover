@@ -104,7 +104,6 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
 			report.setOutputDirectory(outputDirectory);
-			report.setSourcePaths(sourcePaths);
 			report.generate();
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);
