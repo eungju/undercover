@@ -17,6 +17,10 @@ public class MethodItem extends AbstractItem {
 		this.blockCount = blockCount;
 		this.coveredBlockCount = coveredBlockCount;
 	}
+	
+	public String getLinkName() {
+		throw new UnsupportedOperationException();
+	}
 
 	public int getBlockCount() {
 		return blockCount;

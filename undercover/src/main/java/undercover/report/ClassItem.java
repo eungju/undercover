@@ -17,10 +17,10 @@ public class ClassItem extends CompositeItem {
 		this.methods = new ArrayList<MethodItem>();
 	}
 	
-	public String getLink() {
-		return "source-" + sourceFile.path.replaceAll("/", ".") + ".html";
+	public String getLinkName() {
+		return sourceFile.path.replaceAll("/", ".");
 	}
-
+	
 	public void addMethod(MethodItem methodItem) {
 		methods.add(methodItem);
 	}

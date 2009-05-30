@@ -16,6 +16,10 @@ footer() ::= <<
 </html>
 >>
 
+linkName(item) ::= <<
+$item; format="linkName"$
+>>
+
 coverageBar(item) ::= <<
 <div class="coverageBar">
 $if(item.executable)$
@@ -76,7 +80,7 @@ $header()$
 	<tbody>
 		$project.packages:{ each |
 		<tr>
-			<td><a href="$each.link$">$each.displayName$</a></td>
+			<td><a href="package-$each:linkName()$-summary.html">$each.displayName$</a></td>
 			<td class="number">$length(each.classes)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
@@ -107,13 +111,13 @@ $header()$
 <div class="navigation">
 
 <ul class="menu">
-	<li><a href="$project.link$" target="classPane">Summary</a></li>
+	<li><a href="project-summary.html" target="classPane">Summary</a></li>
 </ul>
 
 <h3>Packages</h3>
 <ul class="package-list">
 	$project.packages:{ each |
-	<li><a href="$each.link$" target="classPane">$each.displayName$</a> ($each.coverageRate; format="percent"$)</li>
+	<li><a href="package-$each:linkName()$-summary.html" target="classPane">$each.displayName$</a> ($each.coverageRate; format="percent"$)</li>
 	}$
 </ul>
 
@@ -136,7 +140,7 @@ $header()$
 	<tbody>
 		$classes:{ each |
 		<tr>
-			<td><a href="$each.link$" target="classPane">$each.simpleName$</a></td>
+			<td><a href="source-$each:linkName()$.html" target="classPane">$each.simpleName$</a></td>
 			<td class="coverage">$each.coverageRate; format="percent"$</td>
 		</tr>
 		}$
@@ -194,7 +198,7 @@ $header()$
 	<tbody>
 		$package.classes:{ each |
 		<tr>
-			<td><a href="$each.link$">$each.simpleName$</a></td>
+			<td><a href="source-$each:linkName()$.html">$each.simpleName$</a></td>
 			<td class="number">$length(each.methods)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
@@ -227,7 +231,7 @@ $header()$
 	<tbody>
 		$source.classes:{ each |
 		<tr>
-			<td><a href="$each.link$">$each.displayName$</a></td>
+			<td><a href="source-$each:linkName()$.html">$each.displayName$</a></td>
 			<td class="number">$length(each.methods)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>

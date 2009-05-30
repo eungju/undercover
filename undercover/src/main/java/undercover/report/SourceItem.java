@@ -30,10 +30,10 @@ public class SourceItem extends CompositeItem {
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
 	}
 
-	public String getLink() {
-		return "source-" + name.replaceAll("/", ".") + ".html";
+	public String getLinkName() {
+		return name.replaceAll("/", ".");
 	}
-	
+
 	public void addClass(ClassItem classItem) {
 		classes.add(classItem);
 	}

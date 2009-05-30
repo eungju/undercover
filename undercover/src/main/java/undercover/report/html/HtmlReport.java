@@ -10,6 +10,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
 
+import undercover.report.ClassItem;
+import undercover.report.Item;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.ReportOutput;
@@ -28,6 +30,9 @@ public class HtmlReport {
 		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
 		templateGroup.registerRenderer(String.class, new StringRenderer());
 		templateGroup.registerRenderer(Double.class, new DoubleRenderer());
+		templateGroup.registerRenderer(PackageItem.class, new ItemRenderer());
+		templateGroup.registerRenderer(ClassItem.class, new ItemRenderer());
+		templateGroup.registerRenderer(SourceItem.class, new ItemRenderer());
 	}
 
 	public void setReportData(ReportData reportData) {
@@ -103,7 +108,7 @@ public class HtmlReport {
 	private void generatePackageSummary(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("packageSummary");
 		template.setAttribute("package", packageItem);
-		output.write(packageItem.getLink(), template);
+		output.write("package-" + packageItem.getLinkName() + "-summary.html", template);
 	}
 
 	void generatePackageClasses(PackageItem packageItem) throws IOException {
@@ -116,7 +121,7 @@ public class HtmlReport {
 		for (SourceItem each : reportData.getAllSources()) {
 			StringTemplate st = getTemplate("sourceSummary");
 			st.setAttribute("source", each);
-			output.write(each.getLink(), st);
+			output.write("source-" + each.getLinkName() + ".html", st);
 		}
 	}
 

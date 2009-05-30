@@ -12,8 +12,8 @@ public class ProjectItem extends CompositeItem {
 		packages = new TreeSet<PackageItem>(PackageItem.DISPLAY_ORDER);
 	}
 	
-	public String getLink() {
-		return "project-summary.html";
+	public String getLinkName() {
+		return "";
 	}
 	
 	public void addPackage(PackageItem packageItem) {

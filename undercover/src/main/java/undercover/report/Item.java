@@ -3,6 +3,7 @@ package undercover.report;
 public interface Item {
 	String getName();
 	String getDisplayName();
+	String getLinkName();
 	int getComplexity();
 	int getBlockCount();
 	int getMethodCount();

@@ -25,10 +25,6 @@ public class PackageItem extends CompositeItem {
 		return name.replaceAll("/", ".");
 	}
 
-	public String getLink() {
-		return "package-" + getLinkName() + ".html";
-	}
-
 	public static final Comparator<PackageItem> DISPLAY_ORDER = new Comparator<PackageItem>() {
 		public int compare(PackageItem a, PackageItem b) {
 			return a.name.compareTo(b.name);
