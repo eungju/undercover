@@ -23,7 +23,7 @@ $item; format="linkName"$
 coverageBar(item) ::= <<
 <div class="coverageBar">
 $if(item.executable)$
-	<span>$item.coverageRate; format="percent"$ ($item.coveredBlockCount$/$item.blockCount$)</span>
+	<span>$item; format="coveragePercent"$ ($item.coveredBlockCount$/$item.blockCount$)</span>
 	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div>
 $else$
 	<span>N/A</span>
@@ -117,7 +117,7 @@ $header()$
 <h3>Packages</h3>
 <ul class="package-list">
 	$project.packages:{ each |
-	<li><a href="package-$each:linkName()$-summary.html" target="classPane">$each.displayName$</a> ($each.coverageRate; format="percent"$)</li>
+	<li><a href="package-$each:linkName()$-summary.html" target="classPane">$each.displayName$</a> ($each; format="coveragePercent"$)</li>
 	}$
 </ul>
 
@@ -141,7 +141,7 @@ $header()$
 		$classes:{ each |
 		<tr>
 			<td><a href="source-$each:linkName()$.html" target="classPane">$each.simpleName$</a></td>
-			<td class="coverage">$each.coverageRate; format="percent"$</td>
+			<td class="coverage">$each; format="coveragePercent"$</td>
 		</tr>
 		}$
 	</tbody>
