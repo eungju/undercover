@@ -20,10 +20,10 @@ public class ItemRenderer implements AttributeRenderer {
 	}
 
 	String coveragePercent(Item item) {
-		if (item.getBlockCount() == 0) {
-			return "N/A";
-		} else {
+		if (item.isExecutable()) {
 			return String.format("%.1f", ((Double) item.getCoverageRate()) * 100) + "%";
+		} else {
+			return "N/A";
 		}
 	}
 }
