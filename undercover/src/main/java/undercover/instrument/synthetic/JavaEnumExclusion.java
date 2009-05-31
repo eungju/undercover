@@ -1,6 +1,7 @@
 package undercover.instrument.synthetic;
 
 import static org.objectweb.asm.Opcodes.*;
+import static undercover.instrument.synthetic.ExclusionUtils.*;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -14,18 +15,19 @@ public class JavaEnumExclusion implements Exclusion {
 	}
 
 	boolean isEnumClass(ClassNode classNode) {
-		final int ACCESS = ACC_FINAL + ACC_SUPER + ACC_ENUM;
 		return
-			((classNode.access & ACCESS) == ACCESS) &&
+			hasAccess(classNode.access, ACC_FINAL + ACC_SUPER + ACC_ENUM) &&
 			classNode.superName.equals("java/lang/Enum");
 	}
 	
 	public boolean exclude(ClassNode classNode, MethodNode methodNode) {
 		if (isEnumClass(classNode)) {
-			if (methodNode.name.equals("values") && methodNode.desc.equals("()[L" + classNode.name + ";")) {
+			if (hasAccess(methodNode.access, ACC_PUBLIC + ACC_FINAL + ACC_STATIC) &&
+					methodNode.name.equals("values") &&
+					methodNode.desc.equals("()[L" + classNode.name + ";")) {
 				return true;
-			}
-			else if (methodNode.name.equals("valueOf") && methodNode.desc.equals("(Ljava/lang/String;)L" + classNode.name + ";")) {
+			} else if (hasAccess(methodNode.access, ACC_PUBLIC + ACC_STATIC) &&
+					methodNode.name.equals("valueOf") && methodNode.desc.equals("(Ljava/lang/String;)L" + classNode.name + ";")) {
 				return true;
 			}
 		}
