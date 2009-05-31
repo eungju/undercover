@@ -16,12 +16,14 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
+import undercover.instrument.synthetic.ExclusionSet;
 import undercover.metric.ClassMeta;
 import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
 
 public class InstrumentClassVisitor extends ClassNode {
 	private final MetaData metaData;
+	private final ExclusionSet exclusionSet = new ExclusionSet();
 	
 	public InstrumentClassVisitor(MetaData metaData) {
 		super();
@@ -30,12 +32,19 @@ public class InstrumentClassVisitor extends ClassNode {
 	
 	public void visitEnd() {
 		super.visitEnd();
+		
+		if (exclusionSet.exclude(this)) {
+			return;
+		}
 
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
 		for (MethodNode each : (List<MethodNode>) methods) {
 			if (each.name.equals("<clinit>")) {
 				clinitMethod = each;
+			}
+			if (exclusionSet.exclude(this, each)) {
+				continue;
 			}
 			BasicBlockAnalyzer analyzer = new BasicBlockAnalyzer();
 			analyzer.analyze(each);
