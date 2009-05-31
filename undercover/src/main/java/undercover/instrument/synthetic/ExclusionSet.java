@@ -6,7 +6,8 @@ import org.objectweb.asm.tree.MethodNode;
 public class ExclusionSet implements Exclusion {
 	private final Exclusion[] exclusions = new Exclusion[] {
 			new JavaEnumExclusion(),
-			new ScalaClassObjectExclusion()
+			new ScalaClassObjectExclusion(),
+			new ScalaTagExclusion(),
 	};
 
 	public boolean exclude(ClassNode classNode) {
