@@ -11,7 +11,6 @@ import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
 
 import undercover.report.ClassItem;
-import undercover.report.Item;
 import undercover.report.MethodItem;
 import undercover.report.PackageItem;
 import undercover.report.ProjectItem;
@@ -53,13 +52,8 @@ public class HtmlReport {
 	
 	public void generate() throws IOException {
 		copyResources();
-
-		generateProjectPackages();
-		generateProjectSummary();
-		generateProjectClasses();
-		
+		generateProjectReport();
 		generatePackageReports();
-
 		generateSourceReports();
 	}
 	
@@ -84,6 +78,12 @@ public class HtmlReport {
 		}
 	}
 
+	void generateProjectReport() throws IOException {
+		generateProjectPackages();
+		generateProjectSummary();
+		generateProjectClasses();
+	}
+	
 	void generateProjectPackages() throws IOException {
 		StringTemplate template = getTemplate("projectPackages");
 		template.setAttribute("project", reportData.getProject());
@@ -109,7 +109,7 @@ public class HtmlReport {
 		}
 	}
 
-	private void generatePackageSummary(PackageItem packageItem) throws IOException {
+	void generatePackageSummary(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("packageSummary");
 		template.setAttribute("package", packageItem);
 		output.write("package-" + packageItem.getLinkName() + "-summary.html", template);
