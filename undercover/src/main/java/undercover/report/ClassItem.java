@@ -1,46 +1,72 @@
 package undercover.report;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-public class ClassItem extends CompositeItem {
+public class ClassItem extends ClassMeasure implements Item {
+	private final String name;
 	public final SourceFile sourceFile;
-	public final String simpleName;
 	public final List<MethodItem> methods;
+	private final LazyComplexity complexity;
+	private final LazyBlockCount blockCount;
+	private final LazyCoveredBlockCount coveredBlockCount;
+	private final LazyMethodCount methodCount;
 	
 	public ClassItem(String name, SourceFile sourceFile) {
-		super(name, name.replaceAll("/", "."));
+		this.name = name;
 		this.sourceFile = sourceFile;
-		this.simpleName = getSimpleName(name);
-		this.methods = new ArrayList<MethodItem>();
-	}
-	
-	public String getLinkName() {
-		return sourceFile.path.replaceAll("/", ".");
+		methods = new ArrayList<MethodItem>();
+		complexity = new LazyComplexity(methods);
+		blockCount = new LazyBlockCount(methods);
+		coveredBlockCount = new LazyCoveredBlockCount(methods);
+		methodCount = new LazyMethodCount(methods);
 	}
 	
 	public void addMethod(MethodItem methodItem) {
 		methods.add(methodItem);
 	}
 	
-	protected Collection<Item> getItems() {
-		return (Collection) methods;
+	public String getName() {
+		return name;
 	}
 	
-	public int getMethodCount() {
-		return methods.size();
+	public String getDisplayName() {
+		return name.replaceAll("/", ".");
 	}
 
 	static String getSimpleName(String className) {
 		int index = className.lastIndexOf('/');
 		return index == -1 ? className : className.substring(index + 1);
 	}
+
+	public String getSimpleName() {
+		return getSimpleName(name);
+	}
+	
+	public String getLinkName() {
+		return sourceFile.path.replaceAll("/", ".");
+	}
+
+	public int getComplexity() {
+		return complexity.value();
+	}
+
+	public int getBlockCount() {
+		return blockCount.value();
+	}
+
+	public int getCoveredBlockCount() {
+		return coveredBlockCount.value();
+	}
+	
+	public int getMethodCount() {
+		return methodCount.value();
+	}
 	
 	public static final Comparator<ClassItem> ORDER_BY_SIMPLE_NAME = new Comparator<ClassItem>() {
 		public int compare(ClassItem a, ClassItem b) {
-			return a.simpleName.compareTo(b.simpleName);
+			return a.getSimpleName().compareTo(b.getSimpleName());
 		}
 	};
 

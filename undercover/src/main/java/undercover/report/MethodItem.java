@@ -2,7 +2,8 @@ package undercover.report;
 
 import undercover.metric.MethodMeta;
 
-public class MethodItem extends AbstractItem {
+public class MethodItem extends MethodMeasure implements Item {
+	private final String name;
 	private final int complexity;
 	private final int blockCount;
 	private final int coveredBlockCount;
@@ -12,10 +13,18 @@ public class MethodItem extends AbstractItem {
 	}
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
-		super(name, name.replaceAll("/", "."));
+		this.name = name;
 		this.complexity = complexity;
 		this.blockCount = blockCount;
 		this.coveredBlockCount = coveredBlockCount;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public String getDisplayName() {
+		return name.replaceAll("/", ".");
 	}
 	
 	public String getLinkName() {
@@ -28,10 +37,6 @@ public class MethodItem extends AbstractItem {
 
 	public int getComplexity() {
 		return complexity;
-	}
-
-	public int getMethodCount() {
-		throw new UnsupportedOperationException();
 	}
 
 	public int getCoveredBlockCount() {

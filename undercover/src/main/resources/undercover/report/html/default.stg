@@ -16,14 +16,22 @@ footer() ::= <<
 </html>
 >>
 
+html(s) ::= <<
+$s; format="html"$
+>>
+
 linkName(item) ::= <<
-$item; format="linkName"$
+$item.linkName$
+>>
+
+coveragePercent(item) ::= <<
+$if(item.executable)$$item.coverageRate; format="percent"$$else$N/A$endif$
 >>
 
 coverageBar(item) ::= <<
 <div class="coverageBar">
 $if(item.executable)$
-	<span>$item; format="coveragePercent"$ ($item.coveredBlockCount$/$item.blockCount$)</span>
+	<span>$item:coveragePercent()$ ($item.coveredBlockCount$/$item.blockCount$)</span>
 	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div>
 $else$
 	<span>N/A</span>
@@ -40,7 +48,7 @@ $header()$
 });
 </script>
 
-<h2>$project.displayName; format="html"$</h2>
+<h2>$project.displayName:html()$</h2>
 
 <h3>Statistics</h3>
 <table>
@@ -117,7 +125,7 @@ $header()$
 <h3>Packages</h3>
 <ul class="package-list">
 	$project.packages:{ each |
-	<li><a href="package-$each:linkName()$-summary.html" target="classPane">$each.displayName$</a> ($each; format="coveragePercent"$)</li>
+	<li><a href="package-$each:linkName()$-summary.html" target="classPane">$each.displayName$</a> ($each:coveragePercent()$)</li>
 	}$
 </ul>
 
@@ -141,7 +149,7 @@ $header()$
 		$classes:{ each |
 		<tr>
 			<td><a href="source-$each:linkName()$.html" target="classPane">$each.simpleName$</a></td>
-			<td class="coverage">$each; format="coveragePercent"$</td>
+			<td class="coverage">$each:coveragePercent()$</td>
 		</tr>
 		}$
 	</tbody>
@@ -158,7 +166,7 @@ $header()$
 });
 </script>
 
-<h2>$package.displayName; format="html"$</h2>
+<h2>$package.displayName:html()$</h2>
 
 <h3>Statistics</h3>
 <table>
@@ -214,7 +222,7 @@ $footer()$
 sourceSummary(source, lines) ::= <<
 $header()$
 
-<h2>$source.name; format="html"$</h2>
+<h2>$source.name:html()$</h2>
 
 <h3>Statistics</h3>
 <table>
@@ -248,7 +256,7 @@ $header()$
 		<tr$if(each.executable)$ class="$if(each.coverage.completelyCovered)$completely$elseif(each.coverage.partialyCovered)$partialy$else$not$endif$-covered"$endif$>
 			<td class="source-line-number">$each.number$</td>
 			<td class="source-line-touch">$if(each.executable)$$each.coverage.touchCount$$endif$</td>
-			<td class="source-line-text">$each.text; format="html"$</td>
+			<td class="source-line-text">$each.text:html()$</td>
 		</tr>
 	}$
 	</tbody>

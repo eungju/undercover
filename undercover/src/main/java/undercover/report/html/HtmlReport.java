@@ -10,10 +10,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
 
-import undercover.report.ClassItem;
-import undercover.report.MethodItem;
 import undercover.report.PackageItem;
-import undercover.report.ProjectItem;
 import undercover.report.ReportData;
 import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
@@ -31,11 +28,6 @@ public class HtmlReport {
 		templateGroup = new StringTemplateGroup(new InputStreamReader(getClass().getResourceAsStream("default.stg"), templateEncoding), DefaultTemplateLexer.class);
 		templateGroup.registerRenderer(String.class, new StringRenderer());
 		templateGroup.registerRenderer(Double.class, new DoubleRenderer());
-		templateGroup.registerRenderer(ProjectItem.class, new ItemRenderer());
-		templateGroup.registerRenderer(PackageItem.class, new ItemRenderer());
-		templateGroup.registerRenderer(SourceItem.class, new ItemRenderer());
-		templateGroup.registerRenderer(ClassItem.class, new ItemRenderer());
-		templateGroup.registerRenderer(MethodItem.class, new ItemRenderer());
 	}
 
 	public void setReportData(ReportData reportData) {

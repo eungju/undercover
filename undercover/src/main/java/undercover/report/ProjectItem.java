@@ -1,26 +1,50 @@
 package undercover.report;
 
-import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProjectItem extends CompositeItem {
+public class ProjectItem extends ProjectMeasure implements Item {
+	private final String displayName;
 	public final SortedSet<PackageItem> packages;
+	private final LazyComplexity complexity;
+	private final LazyBlockCount blockCount;
+	private final LazyCoveredBlockCount coveredBlockCount;
+	private final LazyMethodCount methodCount;
 	
-	public ProjectItem(String name) {
-		super(name, name);
+	public ProjectItem(String displayName) {
+		this.displayName = displayName;
 		packages = new TreeSet<PackageItem>(PackageItem.DISPLAY_ORDER);
-	}
-	
-	public String getLinkName() {
-		return "";
+		complexity = new LazyComplexity(packages);
+		blockCount = new LazyBlockCount(packages);
+		coveredBlockCount = new LazyCoveredBlockCount(packages);
+		methodCount = new LazyMethodCount(packages);
 	}
 	
 	public void addPackage(PackageItem packageItem) {
 		packages.add(packageItem);
 	}
 
-	protected Collection<Item> getItems() {
-		return (Collection) packages;
+	public String getDisplayName() {
+		return displayName;
+	}
+	
+	public String getLinkName() {
+		throw new UnsupportedOperationException();
+	}
+
+	public int getComplexity() {
+		return complexity.value();
+	}
+
+	public int getBlockCount() {
+		return blockCount.value();
+	}
+
+	public int getCoveredBlockCount() {
+		return coveredBlockCount.value();
+	}
+	
+	public int getMethodCount() {
+		return methodCount.value();
 	}
 }
