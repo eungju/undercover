@@ -21,6 +21,7 @@ public class SourceItem extends SourceMeasure {
 	private final LazyBlockCount blockCount;
 	private final LazyCoveredBlockCount coveredBlockCount;
 	private final LazyMethodCount methodCount;
+	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	
 	public SourceItem(SourceFile sourceFile) {
 		this(sourceFile.path, sourceFile.file);
@@ -34,6 +35,7 @@ public class SourceItem extends SourceMeasure {
 		blockCount = new LazyBlockCount(classes);
 		coveredBlockCount = new LazyCoveredBlockCount(classes);
 		methodCount = new LazyMethodCount(classes);
+		maximumMethodComplexity = new LazyMaximumMethodComplexity(classes);
 	}
 	
 	public String getName() {
@@ -74,6 +76,10 @@ public class SourceItem extends SourceMeasure {
 
 	public int getMethodCount() {
 		return methodCount.value();
+	}
+	
+	public int getMaximumMethodComplexity() {
+		return maximumMethodComplexity.value();
 	}
 	
 	public List<SourceLine> getLines() {

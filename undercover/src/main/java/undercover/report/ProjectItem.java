@@ -10,6 +10,7 @@ public class ProjectItem extends ProjectMeasure implements Item {
 	private final LazyBlockCount blockCount;
 	private final LazyCoveredBlockCount coveredBlockCount;
 	private final LazyMethodCount methodCount;
+	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	
 	public ProjectItem(String displayName) {
 		this.displayName = displayName;
@@ -18,6 +19,7 @@ public class ProjectItem extends ProjectMeasure implements Item {
 		blockCount = new LazyBlockCount(packages);
 		coveredBlockCount = new LazyCoveredBlockCount(packages);
 		methodCount = new LazyMethodCount(packages);
+		maximumMethodComplexity = new LazyMaximumMethodComplexity(packages);
 	}
 	
 	public void addPackage(PackageItem packageItem) {
@@ -46,5 +48,9 @@ public class ProjectItem extends ProjectMeasure implements Item {
 	
 	public int getMethodCount() {
 		return methodCount.value();
+	}
+	
+	public int getMaximumMethodComplexity() {
+		return maximumMethodComplexity.value();
 	}
 }

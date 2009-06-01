@@ -12,6 +12,7 @@ public class ClassItem extends ClassMeasure implements Item {
 	private final LazyBlockCount blockCount;
 	private final LazyCoveredBlockCount coveredBlockCount;
 	private final LazyMethodCount methodCount;
+	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	
 	public ClassItem(String name, SourceFile sourceFile) {
 		this.name = name;
@@ -21,6 +22,7 @@ public class ClassItem extends ClassMeasure implements Item {
 		blockCount = new LazyBlockCount(methods);
 		coveredBlockCount = new LazyCoveredBlockCount(methods);
 		methodCount = new LazyMethodCount(methods);
+		maximumMethodComplexity = new LazyMaximumMethodComplexity(methods);
 	}
 	
 	public void addMethod(MethodItem methodItem) {
@@ -62,6 +64,10 @@ public class ClassItem extends ClassMeasure implements Item {
 	
 	public int getMethodCount() {
 		return methodCount.value();
+	}
+	
+	public int getMaximumMethodComplexity() {
+		return maximumMethodComplexity.value();
 	}
 	
 	public static final Comparator<ClassItem> ORDER_BY_SIMPLE_NAME = new Comparator<ClassItem>() {

@@ -56,11 +56,12 @@ $header()$
 		<col width="260" />
 		<col width="80" />
 		<col width="80" />
-		<col width="120" />
+		<col width="60" />
+		<col width="60" />
 		<col width="*" />
 	</colgroup>
 	<thead>
-		<tr><th></th><th>Packages</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
+		<tr><th></th><th>Packages</th><th>Complexity</th><th colspan="2">Method Complexity (Avg.,Max.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -68,6 +69,7 @@ $header()$
 			<td class="number">$length(project.packages)$</td>
 			<td class="complexity">$project.complexity$</td>
 			<td class="complexity">$project.averageMethodComplexity$</td>
+			<td class="complexity">$project.maximumMethodComplexity$</td>
 			<td class="coverage">$coverageBar(project)$</td>
 		</tr>
 	</tbody>
@@ -79,11 +81,12 @@ $header()$
 		<col width="260" />
 		<col width="80" />
 		<col width="80" />
-		<col width="120" />
+		<col width="60" />
+		<col width="60" />
 		<col width="*" />
 	</colgroup>
 	<thead>
-		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
+		<tr><th>Package</th><th>Classes</th><th>Complexity</th><th colspan="2">Method Complexity (Avg.,Max.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$project.packages:{ each |
@@ -92,6 +95,7 @@ $header()$
 			<td class="number">$length(each.classes)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$
@@ -174,11 +178,12 @@ $header()$
 		<col width="260" />
 		<col width="80" />
 		<col width="80" />
-		<col width="120" />
+		<col width="60" />
+		<col width="60" />
 		<col width="*" />
 	</colgroup>
 	<thead>
-		<tr><th></th><th>Classes</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
+		<tr><th></th><th>Classes</th><th>Complexity</th><th colspan="2">Method Complexity (Avg.,Max.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		<tr>
@@ -186,6 +191,7 @@ $header()$
 			<td class="number">$length(package.classes)$</td>
 			<td class="complexity">$package.complexity$</td>
 			<td class="complexity">$package.averageMethodComplexity$</td>
+			<td class="complexity">$package.maximumMethodComplexity$</td>
 			<td class="coverage">$coverageBar(package)$</td>
 		</tr>
 	</tbody>
@@ -197,11 +203,12 @@ $header()$
 		<col width="260" />
 		<col width="80" />
 		<col width="80" />
-		<col width="120" />
+		<col width="60" />
+		<col width="60" />
 		<col width="*" />
 	</colgroup>
 	<thead>
-		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th colspan="2">Method Complexity (Avg.,Max.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$package.classes:{ each |
@@ -210,6 +217,7 @@ $header()$
 			<td class="number">$length(each.methods)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$
@@ -230,11 +238,12 @@ $header()$
 		<col width="260" />
 		<col width="80" />
 		<col width="80" />
-		<col width="120" />
+		<col width="60" />
+		<col width="60" />
 		<col width="*" />
 	</colgroup>
 	<thead>
-		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th>Method Complexity (Avg.)</th><th>Coverage</th></tr>
+		<tr><th>Class</th><th>Methods</th><th>Complexity</th><th colspan="2">Method Complexity (Avg.,Max.)</th><th>Coverage</th></tr>
 	</thead>
 	<tbody>
 		$source.classes:{ each |
@@ -243,6 +252,7 @@ $header()$
 			<td class="number">$length(each.methods)$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		}$

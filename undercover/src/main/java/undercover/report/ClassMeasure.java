@@ -6,7 +6,8 @@ import undercover.support.LazyValue;
 
 public abstract class ClassMeasure extends MethodMeasure {
 	public abstract int getMethodCount();
-
+	public abstract int getMaximumMethodComplexity();
+	
 	public double getAverageMethodComplexity() {
 		return ((double) getComplexity()) / getMethodCount();
 	}
@@ -74,6 +75,28 @@ public abstract class ClassMeasure extends MethodMeasure {
 				} else {
 					result += 1;
 				}
+			}
+			return result;
+		}
+	};
+
+	static class LazyMaximumMethodComplexity extends LazyValue<Integer> {
+		private Collection<? extends MethodMeasure> children;
+
+		public LazyMaximumMethodComplexity(Collection<? extends MethodMeasure> children) {
+			this.children = children;
+		}
+		
+		protected Integer calculate() {
+			int result = 0;
+			for (MethodMeasure each : children) {
+				int complexity;
+				if (each instanceof ClassMeasure) {
+					complexity = ((ClassMeasure) each).getMaximumMethodComplexity();
+				} else {
+					complexity = each.getComplexity();
+				}
+				result = Math.max(result, complexity);
 			}
 			return result;
 		}
