@@ -14,4 +14,8 @@ public abstract class MethodMeasure {
 	public double getCoverageRate() {
 		return getBlockCount() == 0 ? 1 : ((double) getCoveredBlockCount()) / getBlockCount();
 	}
+	
+	public double getRisk() {
+		return getComplexity() + (getComplexity() * (1 - getCoverageRate()));
+	}
 }
