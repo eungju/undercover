@@ -15,11 +15,11 @@ public class JavaEnumExclusionTest {
 	@Before public void beforeEach() {
 		dut = new JavaEnumExclusion();
 		classNode = new ClassNode();
-		classNode.visit(V1_5, ACC_PUBLIC + ACC_FINAL + ACC_SUPER + ACC_ENUM, "tokyotyrant/protocol/CommandState", "Ljava/lang/Enum<Ltokyotyrant/protocol/CommandState;>;", "java/lang/Enum", null);
+		classNode.visit(V1_5, ACC_ENUM, "tokyotyrant/protocol/CommandState", "Ljava/lang/Enum<Ltokyotyrant/protocol/CommandState;>;", "java/lang/Enum", null);
 	}
 	
 	@Test public void excludeValues() {
-		MethodNode methodNode = new MethodNode(ACC_PUBLIC + ACC_FINAL + ACC_STATIC, "values", "()[Ltokyotyrant/protocol/CommandState;", null, null);
+		MethodNode methodNode = new MethodNode(ACC_PUBLIC + ACC_STATIC, "values", "()[Ltokyotyrant/protocol/CommandState;", null, null);
 		assertTrue(dut.exclude(classNode, methodNode));
 	}
 	
