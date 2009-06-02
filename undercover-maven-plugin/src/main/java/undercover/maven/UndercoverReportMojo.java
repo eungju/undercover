@@ -57,6 +57,13 @@ public class UndercoverReportMojo extends AbstractMavenReport {
     protected File[] sourcePaths;
 
     /**
+     * Source encoding.
+     *
+     * @parameter expression="${undercover.report.source.encoding}" default-value="UTF-8"
+     */
+    protected String sourceEncoding;
+
+    /**
      * Site renderer.
      *
      * @component
@@ -94,7 +101,7 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 	protected void executeReport(Locale locale) throws MavenReportException {
 		checkParameters();
 		
-		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths));
+		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
 		try {
 			ReportDataBuilder builder = new ReportDataBuilder(CoverageData.load(coverageDataFile));
 			builder.setProjectName(project.getName());

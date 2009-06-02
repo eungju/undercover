@@ -1,20 +1,19 @@
 package undercover.report;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import undercover.metric.BlockMeta;
 
 public class SourceItem extends SourceMeasure {
-	private final String name;
-	public final File file;
+	private final SourceFile sourceFile;
 	public final SortedSet<ClassItem> classes;
 	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
 	private final LazyComplexity complexity;
@@ -24,12 +23,7 @@ public class SourceItem extends SourceMeasure {
 	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	
 	public SourceItem(SourceFile sourceFile) {
-		this(sourceFile.path, sourceFile.file);
-	}
-	
-	public SourceItem(String name, File file) {
-		this.name = name;
-		this.file = file;
+		this.sourceFile = sourceFile;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
 		complexity = new LazyComplexity(classes);
 		blockCount = new LazyBlockCount(classes);
@@ -39,19 +33,19 @@ public class SourceItem extends SourceMeasure {
 	}
 	
 	public String getName() {
-		return name;
+		return sourceFile.path;
 	}
 	
 	public String getDisplayName() {
-		return name;
+		return getName();
 	}
 
 	public String getLinkName() {
-		return name.replaceAll("/", ".");
+		return getName().replaceAll("/", ".");
 	}
 	
 	public String getLanguage() {
-		return FilenameUtils.getExtension(name);
+		return FilenameUtils.getExtension(sourceFile.path);
 	}
 
 	public void addClass(ClassItem classItem) {
@@ -84,15 +78,19 @@ public class SourceItem extends SourceMeasure {
 	
 	public List<SourceLine> getLines() {
 		List<SourceLine> lines = new ArrayList<SourceLine>();
-		if (file != null) {
+		if (sourceFile.isExist()) {
+			Reader input = null;
 			try {
+				input = sourceFile.openReader();
 				int lineNumber = 1;
-				for (String each : (List<String>) FileUtils.readLines(file, "UTF-8")) {
+				for (String each : (List<String>) IOUtils.readLines(input)) {
 					lines.add(new SourceLine(lineNumber, each, lineCoverageAnalysis.getLine(lineNumber)));
 					lineNumber++;
 				}
 			} catch (IOException e) {
 				//TODO: warning
+			} finally {
+				IOUtils.closeQuietly(input);
 			}
 		}
 		return lines;

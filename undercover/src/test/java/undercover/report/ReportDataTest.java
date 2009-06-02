@@ -43,8 +43,9 @@ public class ReportDataTest {
 		MethodMeta methodMeta = new MethodMeta("m()V", 1, Arrays.asList(b1, new BlockMeta(new ArrayList<Integer>())));
 		dut.classCoverage = new Coverage("p/c", new int[][] { {1, 0} });
 
-		dut.classItem = new ClassItem("p/c", new SourceFile("c.java"));
-		dut.sourceItem = new SourceItem("c.java", null);
+		SourceFile sourceFile = new SourceFile("c.java");
+		dut.classItem = new ClassItem("p/c", sourceFile);
+		dut.sourceItem = new SourceItem(sourceFile);
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockCount());
 		assertEquals(1, dut.methodItem.getCoveredBlockCount());

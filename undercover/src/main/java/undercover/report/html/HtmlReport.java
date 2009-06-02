@@ -20,7 +20,6 @@ public class HtmlReport {
 
 	private ReportData reportData;
 	private ReportOutput output;
-	String sourceEncoding = "UTF-8";
 	
 	private StringTemplateGroup templateGroup;
 	
@@ -36,10 +35,6 @@ public class HtmlReport {
 
 	public void setOutputDirectory(File outputDirectory) {
 		this.output = new ReportOutput(outputDirectory);
-	}
-	
-	public void setSourceEncoding(String sourceEncoding) {
-		this.sourceEncoding = sourceEncoding;
 	}
 	
 	public void generate() throws IOException {

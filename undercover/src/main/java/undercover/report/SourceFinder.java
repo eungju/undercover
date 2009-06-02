@@ -6,21 +6,30 @@ import java.util.List;
 import undercover.metric.ClassMeta;
 
 public class SourceFinder {
-	private List<File> sourcePaths;
+	private final List<File> sourcePaths;
+	private final String sourceEncoding;
 
 	public SourceFinder(List<File> sourcePaths) {
+		this(sourcePaths, "UTF-8");
+	}
+	
+	public SourceFinder(List<File> sourcePaths, String sourceEncoding) {
 		this.sourcePaths = sourcePaths;
+		this.sourceEncoding = sourceEncoding;
 	}
 
 	public SourceFile findSourceFile(ClassMeta classMeta) {
 		String expectedPath = getExpectedSourcePath(classMeta);
+		SourceFile result = new SourceFile(expectedPath);
 		for (File each : sourcePaths) {
 			File file = new File(each, expectedPath);
 			if (file.exists() && file.isFile()) {
-				return new SourceFile(each, file);
+				result = new SourceFile(each, file);
+				break;
 			}
 		}
-		return new SourceFile(expectedPath);
+		result.setEncoding(sourceEncoding);
+		return result;
 	}
 
 	public String getExpectedSourcePath(ClassMeta classMeta) {
