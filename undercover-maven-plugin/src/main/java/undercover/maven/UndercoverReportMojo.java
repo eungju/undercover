@@ -103,7 +103,8 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 		
 		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
 		try {
-			ReportDataBuilder builder = new ReportDataBuilder(CoverageData.load(coverageDataFile));
+			CoverageData coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
+			ReportDataBuilder builder = new ReportDataBuilder(coverageData);
 			builder.setProjectName(project.getName());
 			builder.setSourceFinder(sourceFinder);
 			MetaData.load(metaDataFile).accept(builder);
