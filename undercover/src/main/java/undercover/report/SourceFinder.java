@@ -19,7 +19,7 @@ public class SourceFinder {
 	}
 
 	public SourceFile findSourceFile(ClassMeta classMeta) {
-		String expectedPath = getExpectedSourcePath(classMeta);
+		String expectedPath = classMeta.getExpectedSourcePath();
 		SourceFile result = new SourceFile(expectedPath);
 		for (File each : sourcePaths) {
 			File file = new File(each, expectedPath);
@@ -30,9 +30,5 @@ public class SourceFinder {
 		}
 		result.setEncoding(sourceEncoding);
 		return result;
-	}
-
-	public String getExpectedSourcePath(ClassMeta classMeta) {
-		return classMeta.getPackageName() + "/" + classMeta.source;
 	}
 }
