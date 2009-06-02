@@ -18,6 +18,7 @@ public class MethodItemTest {
 		MethodItem methodItem = new MethodItem(classItem, new MethodMeta("m()V", 0), 1);
 		assertEquals("p/c.m()V", methodItem.getName());
 		assertEquals("p.c.m()V", methodItem.getDisplayName());
+		assertEquals("m()V", methodItem.getSimpleName());
 	}
 	
 	@Test public void isExecutable() {

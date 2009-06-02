@@ -22,7 +22,11 @@ public class MethodItem extends MethodMeasure implements Item {
 	public String getName() {
 		return name;
 	}
-	
+
+	public String getSimpleName() {
+		return name.substring(name.lastIndexOf('.') + 1, name.length());
+	}
+
 	public String getDisplayName() {
 		return name.replaceAll("/", ".");
 	}
