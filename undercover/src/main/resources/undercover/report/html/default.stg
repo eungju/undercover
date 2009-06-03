@@ -319,28 +319,63 @@ $header()$
 $footer()$
 >>
 
-dashboard(coverageDistribution) ::= <<
+dashboard(project, coverageDistribution) ::= <<
 $header()$
 
 <h3>Coverage Distribution</h3>
 
-<div id="coverage-distribution" style="width: 300px; height: 240px;">
+<div id="coverage-distribution-graph" style="width: 300px; height: 240px;">
 </div>
 <script type="text/javascript">
 \$(function () {
     var counts = [];
-    $coverageDistribution.counts:{ each |
-    	counts.push([$i0$ * 10, $each$])
+    $coverageDistribution.counts:{ each | counts.push([$i0$ * 10, $each$])
     }$;
     
-    \$.plot(\$("#coverage-distribution"),
-    	[{data: counts, bars: { show: true, fill: true, barWidth: 9, lineWidth: 0 }}],
+    \$.plot(\$("#coverage-distribution-graph"),
+    	[
+    		{data: counts, bars: { show: true, barWidth: 10, fill: true }}
+    	],
     	{
-    		xaxis: { tickSize: 10, min: 0, max: 100, tickFormatter: function(v, axis) { return v + "%" } },
-                yaxis: { min: 0 },
-                colors: ["#0000ff"]
+			colors: ["#00b"],
+			xaxis: { min: 0, max: 100, tickSize: 10, tickFormatter: function(v, axis) { return v + "%" } },
+			yaxis: { min: 0 },
+			grid: { hoverable: true }
     	}
     );
+    
+    var previousPoint = null;
+    \$("#coverage-distribution-graph").bind("plothover", function (event, pos, item) {
+        if (item) {
+            if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+                
+                \$("#tooltip").remove();
+                
+                var x = item.datapoint[0];
+                var y = item.datapoint[1];
+                var message = y + " classes have " + x + "-" + (x + (x == 90 ? 10 : 9)) + "% coverage";
+                showTooltip(item.pageX, item.pageY, message);
+            }
+        }
+        else {
+            \$("#tooltip").remove();
+            previousPoint = null;            
+        }
+    });
+
+	function showTooltip(x, y, html) {
+        \$('<div id="tooltip">' + html + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    }
 });
 </script>
 
