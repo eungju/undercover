@@ -13,7 +13,7 @@ public class CoverageDistribution {
 		}
 	}
 	
-	public void count(ClassItem item) {
+	void count(ClassItem item) {
 		counts[coverageInterval(item.getCoverageRate())]++;
 	}
 	

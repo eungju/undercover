@@ -319,7 +319,7 @@ $header()$
 $footer()$
 >>
 
-dashboard(project, coverageDistribution, classes) ::= <<
+dashboard(project, coverageDistribution, coverageComplexity) ::= <<
 $header()$
 
 <h3>Coverage</h3>
@@ -404,7 +404,7 @@ function showTooltip(tooltip, x, y, text) {
 
 <script type="text/javascript">
 \$(function () {
-    var data = [$classes:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.displayName$", "source-$each.linkName$.html"], }$];
+    var data = [$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.displayName$", "source-$each.linkName$.html"], }$];
     
     \$.plot(\$("#coverage-complexity div.graph"),
     	[

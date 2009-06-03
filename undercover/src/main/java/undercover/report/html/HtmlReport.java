@@ -121,10 +121,11 @@ public class HtmlReport {
 	
 	void generateDashboardReport() throws IOException {
 		StringTemplate template = getTemplate("dashboard");
-		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getAllClasses());
 		template.setAttribute("project", reportData.getProject());
+		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getAllClasses());
 		template.setAttribute("coverageDistribution", coverageDistribution);
-		template.setAttribute("classes", reportData.getAllClasses());
+		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
+		template.setAttribute("coverageComplexity", coverageComplexity);
 		output.write("project-dashboard.html", template);
 	}
 
