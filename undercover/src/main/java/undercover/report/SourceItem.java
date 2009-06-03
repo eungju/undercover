@@ -88,7 +88,7 @@ public class SourceItem extends SourceMeasure {
 					lineNumber++;
 				}
 			} catch (IOException e) {
-				//TODO: warning
+				e.printStackTrace();
 			} finally {
 				IOUtils.closeQuietly(input);
 			}

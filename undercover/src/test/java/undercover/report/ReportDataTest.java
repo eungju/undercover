@@ -5,8 +5,14 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import undercover.metric.BlockMeta;
 import undercover.metric.ClassMeta;
@@ -15,9 +21,13 @@ import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
 
+@RunWith(JMock.class)
 public class ReportDataTest {
-	private CoverageData coverageData;
 	private ReportDataBuilder dut;
+	private CoverageData coverageData;
+	private Mockery mockery = new JUnit4Mockery() {{
+		setImposteriser(ClassImposteriser.INSTANCE);
+	}};
 
 	@Before public void beforeEach() {
 		coverageData = new CoverageData();
@@ -49,5 +59,28 @@ public class ReportDataTest {
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockCount());
 		assertEquals(1, dut.methodItem.getCoveredBlockCount());
+	}
+	
+	@Test public void visitBlockWithoutClassCoverage() {
+		final BlockMeta block = new BlockMeta(Arrays.asList(1, 2, 3));
+		dut.sourceItem = mockery.mock(SourceItem.class);
+		
+		mockery.checking(new Expectations() {{
+			one(dut.sourceItem).addBlock(block, 0);
+		}});
+
+		block.accept(dut);
+	}
+
+	@Test public void visitBlockWithClassCoverage() {
+		final BlockMeta block = new BlockMeta(Arrays.asList(1, 2, 3));
+		dut.sourceItem = mockery.mock(SourceItem.class);
+		dut.classCoverage = new Coverage("", new int[][] { {1} });
+
+		mockery.checking(new Expectations() {{
+			one(dut.sourceItem).addBlock(block, 1);
+		}});
+
+		block.accept(dut);
 	}
 }

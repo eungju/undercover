@@ -109,9 +109,8 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visit(BlockMeta blockMeta) {
-		if (classCoverage != null) {
-			sourceItem.addBlock(blockMeta, classCoverage.blocks[methodIndex][blockIndex]);
-		}
+		int executionCount = classCoverage == null ? 0 : classCoverage.blocks[methodIndex][blockIndex];
+		sourceItem.addBlock(blockMeta, executionCount);
 		blockIndex++;
 	}
 }
