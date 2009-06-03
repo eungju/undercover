@@ -42,13 +42,16 @@ public class HtmlReport {
 		generateProjectReport();
 		generatePackageReports();
 		generateSourceReports();
+		generateDashboardReport();
 	}
-	
+
 	void copyResources() throws IOException {
 		final String[] resources = {
+				"index.html",
 				"style.css",
 				"jquery-1.3.2.min.js",
-				"index.html",
+				"jquery.flot.pack.js",
+				"excanvas.pack.js",
 		};
 		for (String each : resources) {
 			copyResource("resources/" + each, each);
@@ -114,6 +117,13 @@ public class HtmlReport {
 			st.setAttribute("source", each);
 			output.write("source-" + each.getLinkName() + ".html", st);
 		}
+	}
+	
+	void generateDashboardReport() throws IOException {
+		StringTemplate template = getTemplate("dashboard");
+		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getAllClasses());
+		template.setAttribute("coverageDistribution", coverageDistribution);
+		output.write("project-dashboard.html", template);
 	}
 
 	public StringTemplate getTemplate(String templateName) {
