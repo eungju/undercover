@@ -322,10 +322,21 @@ $footer()$
 dashboard(project, coverageDistribution) ::= <<
 $header()$
 
+<h3>Coverage</h3>
+<div>
+	$coverageBar(project)$
+</div>
+
+<h3>Complexity</h3>
+<div>
+	$project.complexity$
+</div>
+
 <h3>Coverage Distribution</h3>
 
 <div id="coverage-distribution-graph" style="width: 300px; height: 240px;">
 </div>
+
 <script type="text/javascript">
 \$(function () {
     var counts = [];
