@@ -19,7 +19,7 @@ public class DoubleRendererTest {
 	}
 	
 	@Test public void percentFormat() {
-		assertEquals("99.9%", dut.toString(0.999D, "percent"));
-		assertEquals("100%", dut.toString(1D, "percent"));
+		assertEquals("99.9", dut.toString(0.999D, "percent"));
+		assertEquals("100", dut.toString(1D, "percent"));
 	}
 }

@@ -124,6 +124,7 @@ public class HtmlReport {
 		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getAllClasses());
 		template.setAttribute("project", reportData.getProject());
 		template.setAttribute("coverageDistribution", coverageDistribution);
+		template.setAttribute("classes", reportData.getAllClasses());
 		output.write("project-dashboard.html", template);
 	}
 

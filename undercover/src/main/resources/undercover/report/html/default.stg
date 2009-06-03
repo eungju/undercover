@@ -26,14 +26,14 @@ $item.linkName$
 >>
 
 coveragePercent(item) ::= <<
-$if(item.executable)$$item.coverageRate; format="percent"$$else$N/A$endif$
+$if(item.executable)$$item.coverageRate; format="percent"$%$else$N/A$endif$
 >>
 
 coverageBar(item) ::= <<
 <div class="coverageBar">
 $if(item.executable)$
 	<span>$item:coveragePercent()$ ($item.coveredBlockCount$/$item.blockCount$)</span>
-	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$;"></div> </div>
+	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$%;"></div> </div>
 $else$
 	<span>N/A</span>
 	<div class="coverageBarNotAvailable"></div>
@@ -319,7 +319,7 @@ $header()$
 $footer()$
 >>
 
-dashboard(project, coverageDistribution) ::= <<
+dashboard(project, coverageDistribution, classes) ::= <<
 $header()$
 
 <h3>Coverage</h3>
@@ -332,23 +332,40 @@ $header()$
 	$project.complexity$
 </div>
 
+<div id="coverage-distribution">
 <h3>Coverage Distribution</h3>
 
-<div id="coverage-distribution-graph" style="width: 300px; height: 240px;">
+<div class="graph" style="width: 320px; height: 240px;"></div>
+<div class="tooltip"></div>
 </div>
 
 <script type="text/javascript">
+function showTooltip(tooltip, x, y, text) {
+    tooltip.text(text).css({
+        position: 'absolute',
+        display: 'none',
+        top: y + 5,
+        left: x + 5,
+        border: '1px solid #dfd',
+        padding: '2px',
+        'background-color': '#efe',
+        opacity: 0.80
+    }).show();
+}
+</script>
+
+<script type="text/javascript">
 \$(function () {
-    var counts = [];
-    $coverageDistribution.counts:{ each | counts.push([$i0$ * 10, $each$])
+    var data = [];
+    $coverageDistribution.counts:{ each | data.push([$i0$ * 10, $each$])
     }$;
     
-    \$.plot(\$("#coverage-distribution-graph"),
+    \$.plot(\$("#coverage-distribution div.graph"),
     	[
-    		{data: counts, bars: { show: true, barWidth: 10, fill: true }}
+    		{data: data, bars: { show: true, barWidth: 10, fill: true }}
     	],
     	{
-			colors: ["#00b"],
+			colors: ["#3b3"],
 			xaxis: { min: 0, max: 100, tickSize: 10, tickFormatter: function(v, axis) { return v + "%" } },
 			yaxis: { min: 0 },
 			grid: { hoverable: true }
@@ -356,37 +373,77 @@ $header()$
     );
     
     var previousPoint = null;
-    \$("#coverage-distribution-graph").bind("plothover", function (event, pos, item) {
+    \$("#coverage-distribution div.graph").bind("plothover", function (event, pos, item) {
+    	var tooltip = \$("#coverage-distribution .tooltip");
         if (item) {
             if (previousPoint != item.datapoint) {
                 previousPoint = item.datapoint;
                 
-                \$("#tooltip").remove();
+                tooltip.hide();
                 
                 var x = item.datapoint[0];
                 var y = item.datapoint[1];
                 var message = y + " classes have " + x + "-" + (x + (x == 90 ? 10 : 9)) + "% coverage";
-                showTooltip(item.pageX, item.pageY, message);
+                showTooltip(tooltip, item.pageX, item.pageY, message);
             }
         }
         else {
-            \$("#tooltip").remove();
+            tooltip.hide();
+            previousPoint = null;            
+        }
+    });
+});
+</script>
+
+<div id="coverage-complexity">
+<h3>Coverage-Complexity</h3>
+
+<div class="graph" style="width: 320px; height: 240px;"></div>
+<div class="tooltip"></div>
+</div>
+
+<script type="text/javascript">
+\$(function () {
+    var data = [$classes:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.displayName$", "source-$each.linkName$.html"], }$];
+    
+    \$.plot(\$("#coverage-complexity div.graph"),
+    	[
+    		{data: data, points: { show: true }}
+    	],
+    	{
+			colors: ["#3b3"],
+			xaxis: { min: 0, max: 100, tickSize: 10, tickFormatter: function(v, axis) { return v + "%" } },
+			yaxis: { min: 0 },
+			grid: { hoverable: true, clickable: true }
+    	}
+    );
+
+    var previousPoint = null;
+    \$("#coverage-complexity div.graph").bind("plothover", function (event, pos, item) {
+    	var tooltip = \$("#coverage-complexity .tooltip");
+        if (item) {
+            if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+                
+                tooltip.hide();
+                
+                var className = item.datapoint[2];
+                var message = className;
+                showTooltip(tooltip, item.pageX, item.pageY, message);
+            }
+        }
+        else {
+            tooltip.hide();
             previousPoint = null;            
         }
     });
 
-	function showTooltip(x, y, html) {
-        \$('<div id="tooltip">' + html + '</div>').css( {
-            position: 'absolute',
-            display: 'none',
-            top: y + 5,
-            left: x + 5,
-            border: '1px solid #fdd',
-            padding: '2px',
-            'background-color': '#fee',
-            opacity: 0.80
-        }).appendTo("body").fadeIn(200);
-    }
+    \$("#coverage-complexity div.graph").bind("plotclick", function (event, pos, item) {
+        if (item) {
+            var link = item.datapoint[3];
+            window.location = link;
+        }
+    });
 });
 </script>
 
