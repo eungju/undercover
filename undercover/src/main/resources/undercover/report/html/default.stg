@@ -415,7 +415,7 @@ function showTooltip(tooltip, x, y, text) {
 
 <script type="text/javascript">
 \$(function () {
-    var data = [$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.displayName$", "source-$each.linkName$.html"], }$];
+    var data = [$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"], }$];
     
     \$.plot(\$("#coverage-complexity div.graph"),
     	[
@@ -438,8 +438,10 @@ function showTooltip(tooltip, x, y, text) {
                 
                 tooltip.hide();
                 
+                var coverage = item.datapoint[0];
+                var complexity = item.datapoint[1];
                 var className = item.datapoint[2];
-                var message = className;
+                var message = className + ": Coverage=" + coverage + "%, Complexity=" + complexity;
                 showTooltip(tooltip, item.pageX, item.pageY, message);
             }
         }
