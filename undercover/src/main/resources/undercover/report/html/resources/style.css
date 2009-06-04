@@ -134,3 +134,11 @@ td.source-line-touch {
 td.source-line-text {
 	white-space: pre;
 }
+
+/* Copyright */
+div.copyright {
+	margin: 16px;
+	border-top: 2px dotted #bbb;
+	padding: 4px;
+	font-size: 90%;
+}

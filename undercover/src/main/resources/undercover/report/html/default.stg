@@ -17,6 +17,14 @@ footer() ::= <<
 </html>
 >>
 
+copyright() ::= <<
+<div class="copyright">
+<p>
+<a href="http://code.google.com/p/undercover/" target="_top">Undercover</a> | Copyright © 2009 Eung-ju PARK. All rights reserved. Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_top">Apache License, Version 2.0</a>.
+</p>
+</div>
+>>
+
 html(s) ::= <<
 $s; format="html"$
 >>
@@ -115,6 +123,7 @@ $header()$
 	</tbody>
 </table>
 
+$copyright()$
 $footer()$
 >>
 
@@ -250,6 +259,7 @@ $header()$
 	</tbody>
 </table>
 
+$copyright()$
 $footer()$
 >>
 
@@ -316,6 +326,7 @@ $header()$
 	</tbody>
 </table>
 
+$copyright()$
 $footer()$
 >>
 
@@ -447,5 +458,6 @@ function showTooltip(tooltip, x, y, text) {
 });
 </script>
 
+$copyright()$
 $footer()$
 >>
