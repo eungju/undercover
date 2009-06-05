@@ -9,9 +9,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.antlr.stringtemplate.AutoIndentWriter;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateWriter;
 import org.apache.commons.io.IOUtils;
 
 public class ReportOutput {
@@ -35,11 +32,10 @@ public class ReportOutput {
 		}
 	}
 	
-	public void write(String path, StringTemplate template) throws IOException {
+	public void write(String path, String input) throws IOException {
 		Writer out = new OutputStreamWriter(openOutputStream(path), encoding);
-		StringTemplateWriter writer = new AutoIndentWriter(out);
 		try {
-			template.write(writer);
+			out.write(input);
 		} finally	{
 			IOUtils.closeQuietly(out);
 		}

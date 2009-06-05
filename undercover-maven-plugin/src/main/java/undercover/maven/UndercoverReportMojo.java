@@ -16,6 +16,7 @@ import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
+import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 
@@ -109,9 +110,12 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 			builder.setSourceFinder(sourceFinder);
 			MetaData.load(metaDataFile).accept(builder);
 			ReportData reportData = builder.getReportData();
+			
+			ReportOutput output = new ReportOutput(outputDirectory);
+			
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
-			report.setOutputDirectory(outputDirectory);
+			report.setOutput(output);
 			report.generate();
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);

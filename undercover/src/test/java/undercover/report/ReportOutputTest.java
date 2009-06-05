@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.antlr.stringtemplate.StringTemplate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,10 +27,9 @@ public class ReportOutputTest {
 		assertTrue(new File(directory, "file.ext").exists());
 	}
 	
-	@Test public void writeStringTemplate() throws IOException {
-		StringTemplate template = new StringTemplate("$key$");
-		template.setAttribute("key", "value");
-		dut.write("file.ext", template);
+	@Test public void writeString() throws IOException {
+		String input = "hello";
+		dut.write("file.ext", input);
 		assertTrue(new File(directory, "file.ext").exists());
 	}
 }

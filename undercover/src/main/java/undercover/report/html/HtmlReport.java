@@ -33,8 +33,8 @@ public class HtmlReport {
 		this.reportData = reportData;
 	}
 
-	public void setOutputDirectory(File outputDirectory) {
-		this.output = new ReportOutput(outputDirectory);
+	public void setOutput(ReportOutput output) {
+		this.output = output;
 	}
 	
 	public void generate() throws IOException {
@@ -77,19 +77,19 @@ public class HtmlReport {
 	void generateProjectPackages() throws IOException {
 		StringTemplate template = getTemplate("projectPackages");
 		template.setAttribute("project", reportData.getProject());
-		output.write("project-packages.html", template);
+		output.write("project-packages.html", template.toString());
 	}
 	
 	void generateProjectSummary() throws IOException {
 		StringTemplate template = getTemplate("projectSummary");
 		template.setAttribute("project", reportData.getProject());
-		output.write("project-summary.html", template);
+		output.write("project-summary.html", template.toString());
 	}
 
 	void generateProjectClasses() throws IOException {
 		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", reportData.getAllClasses());
-		output.write("project-classes.html", template);
+		output.write("project-classes.html", template.toString());
 	}
 
 	void generatePackageReports() throws IOException {
@@ -102,20 +102,20 @@ public class HtmlReport {
 	void generatePackageSummary(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("packageSummary");
 		template.setAttribute("package", packageItem);
-		output.write("package-" + packageItem.getLinkName() + "-summary.html", template);
+		output.write("package-" + packageItem.getLinkName() + "-summary.html", template.toString());
 	}
 
 	void generatePackageClasses(PackageItem packageItem) throws IOException {
 		StringTemplate template = getTemplate("projectClasses");
 		template.setAttribute("classes", packageItem.classes);
-		output.write("package-" + packageItem.getDisplayName() + "-classes.html", template);
+		output.write("package-" + packageItem.getLinkName() + "-classes.html", template.toString());
 	}
 
 	void generateSourceReports() throws IOException {
 		for (SourceItem each : reportData.getAllSources()) {
 			StringTemplate st = getTemplate("sourceSummary");
 			st.setAttribute("source", each);
-			output.write("source-" + each.getLinkName() + ".html", st);
+			output.write("source-" + each.getLinkName() + ".html", st.toString());
 		}
 	}
 	
@@ -126,7 +126,7 @@ public class HtmlReport {
 		template.setAttribute("coverageDistribution", coverageDistribution);
 		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
 		template.setAttribute("coverageComplexity", coverageComplexity);
-		output.write("project-dashboard.html", template);
+		output.write("project-dashboard.html", template.toString());
 	}
 
 	public StringTemplate getTemplate(String templateName) {

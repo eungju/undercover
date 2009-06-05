@@ -8,8 +8,6 @@ import java.util.Arrays;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,14 +18,13 @@ import undercover.metric.Coverage;
 import undercover.metric.CoverageData;
 import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
+import undercover.support.UndercoverMockery;
 
 @RunWith(JMock.class)
 public class ReportDataTest {
 	private ReportDataBuilder dut;
 	private CoverageData coverageData;
-	private Mockery mockery = new JUnit4Mockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
+	private Mockery mockery = new UndercoverMockery();
 
 	@Before public void beforeEach() {
 		coverageData = new CoverageData();
