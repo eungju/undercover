@@ -49,18 +49,8 @@ $endif$
 </div>
 >>
 
-projectSummary(project) ::= <<
-$header()$
-<script type="text/javascript">
-\$(document).ready(function() {
-	parent.classesPane.location = "project-classes.html";
-});
-</script>
-
-<h2>$project.displayName:html()$</h2>
-
-<h3>Statistics</h3>
-<table>
+projectStatistics(project) ::= <<
+<table class="item-statistics">
 	<colgroup>
 		<col width="260" />
 		<col width="80" />
@@ -89,9 +79,22 @@ $header()$
 		</tr>
 	</tbody>
 </table>
+>>
+
+projectSummary(project) ::= <<
+$header()$
+<script type="text/javascript">
+\$(document).ready(function() {
+	parent.classListPane.location = "project-classes.html";
+});
+</script>
+
+<h2>$project.displayName:html()$</h2>
+
+$projectStatistics(project)$
 
 <h3>Packages</h3>
-<table>
+<table class="item-children">
 	<colgroup>
 		<col width="260" />
 		<col width="80" />
@@ -146,7 +149,7 @@ $header()$
 
 <ul class="menu">
 	<li><a href="project-dashboard.html" target="classPane">Dashboard</a></li>
-	<li><a href="project-summary.html" target="classPane">Summary</a></li>
+	<li><a href="project-summary.html" target="classPane">Coverage</a></li>
 </ul>
 
 <h3>Packages</h3>
@@ -164,7 +167,7 @@ $footer()$
 projectClasses(classes) ::= <<
 $header()$
 
-<table>
+<table class="item-children">
 	<colgroup>
 		<col width="*" />
 		<col width="80" />
@@ -189,14 +192,13 @@ packageSummary(package) ::= <<
 $header()$
 <script type="text/javascript">
 \$(document).ready(function() {
-	parent.classesPane.location = "package-$package.linkName$-classes.html";
+	parent.classListPane.location = "package-$package.linkName$-classes.html";
 });
 </script>
 
 <h2>$package.displayName:html()$</h2>
 
-<h3>Statistics</h3>
-<table>
+<table class="item-statistics">
 	<colgroup>
 		<col width="260" />
 		<col width="80" />
@@ -227,7 +229,7 @@ $header()$
 </table>
 
 <h3>Classes</h3>
-<table>
+<table class="item-children">
 	<colgroup>
 		<col width="260" />
 		<col width="80" />
@@ -268,8 +270,8 @@ $header()$
 
 <h2>$source.name:html()$</h2>
 
-<h3>Statistics</h3>
-<table>
+<h3>Classes</h3>
+<table class="item-children">
 	<colgroup>
 		<col width="260" />
 		<col width="80" />
@@ -309,7 +311,7 @@ $header()$
 </table>
 
 <h3>Source</h3>
-<table>
+<table class="source">
 	<colgroup>
 		<col width="60" />
 		<col width="40" />
@@ -333,15 +335,13 @@ $footer()$
 dashboard(project, coverageDistribution, coverageComplexity) ::= <<
 $header()$
 
-<h3>Coverage</h3>
-<div>
-	$coverageBar(project)$
-</div>
+<h2>$project.displayName$</h2>
 
-<h3>Complexity</h3>
-<div>
-	$project.complexity$
-</div>
+$projectStatistics(project)$
+
+<table class="dashboard">
+<tr>
+<td>
 
 <div id="coverage-distribution">
 <h3>Coverage Distribution</h3>
@@ -349,6 +349,20 @@ $header()$
 <div class="graph" style="width: 320px; height: 240px;"></div>
 <div class="tooltip"></div>
 </div>
+
+</td>
+<td>
+
+<div id="coverage-complexity">
+<h3>Coverage-Complexity</h3>
+
+<div class="graph" style="width: 320px; height: 240px;"></div>
+<div class="tooltip"></div>
+</div>
+
+</td>
+</tr>
+</table>
 
 <script type="text/javascript">
 function showTooltip(tooltip, x, y, text) {
@@ -363,9 +377,7 @@ function showTooltip(tooltip, x, y, text) {
         opacity: 0.80
     }).show();
 }
-</script>
 
-<script type="text/javascript">
 \$(function () {
     var data = [];
     $coverageDistribution.counts:{ each | data.push([$i0$ * 10, $each$])
@@ -403,18 +415,7 @@ function showTooltip(tooltip, x, y, text) {
             previousPoint = null;            
         }
     });
-});
-</script>
 
-<div id="coverage-complexity">
-<h3>Coverage-Complexity</h3>
-
-<div class="graph" style="width: 320px; height: 240px;"></div>
-<div class="tooltip"></div>
-</div>
-
-<script type="text/javascript">
-\$(function () {
     var data = [$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"], }$];
     
     \$.plot(\$("#coverage-complexity div.graph"),
