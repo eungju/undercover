@@ -25,10 +25,6 @@ public class ReportData {
 		return classItems.values();
 	}
 	
-	public ClassItem getClass(String name) {
-		return classItems.get(name);
-	}
-
 	public Collection<SourceItem> getAllSources() {
 		return sourceItems.values();
 	}
