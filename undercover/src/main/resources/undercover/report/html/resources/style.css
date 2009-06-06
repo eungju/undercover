@@ -140,6 +140,7 @@ table.source {
 }
 
 table.source td {
+	font-family: Courier New, serif;
 	font-size: 9pt;
 	border: 1px solid #ddd;
 	padding: 2px;
