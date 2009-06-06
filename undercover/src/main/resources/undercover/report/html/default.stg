@@ -9,6 +9,7 @@ header() ::= <<
 	<script src="jquery-1.3.2.min.js" type="text/javascript"></script> 
     <!--[if IE]><script src="excanvas.pack.js" type="text/javascript"></script><![endif]-->
     <script src="jquery.flot.pack.js" type="text/javascript"></script></head>
+    <script src="undercover.js" type="text/javascript"></script></head>
 <body>
 >>
 
@@ -346,7 +347,7 @@ $projectStatistics(project)$
 <div id="coverage-distribution">
 <h3>Coverage Distribution</h3>
 
-<div class="graph" style="width: 320px; height: 240px;"></div>
+<div class="graph" style="width: 320px; height: 260px;"></div>
 <div class="tooltip"></div>
 </div>
 
@@ -356,7 +357,7 @@ $projectStatistics(project)$
 <div id="coverage-complexity">
 <h3>Coverage-Complexity</h3>
 
-<div class="graph" style="width: 320px; height: 240px;"></div>
+<div class="graph" style="width: 320px; height: 260px;"></div>
 <div class="tooltip"></div>
 </div>
 
@@ -365,99 +366,18 @@ $projectStatistics(project)$
 </table>
 
 <script type="text/javascript">
-function showTooltip(tooltip, x, y, text) {
-    tooltip.text(text).css({
-        position: 'absolute',
-        display: 'none',
-        top: y + 5,
-        left: x + 5,
-        border: '1px solid #dfd',
-        padding: '2px',
-        'background-color': '#efe',
-        opacity: 0.80
-    }).show();
-}
-
 \$(function () {
-    var data = [];
-    $coverageDistribution.counts:{ each | data.push([$i0$ * 10, $each$])
-    }$;
-    
-    \$.plot(\$("#coverage-distribution div.graph"),
-    	[
-    		{data: data, bars: { show: true, barWidth: 10, fill: true }}
-    	],
-    	{
-			colors: ["#3b3"],
-			xaxis: { min: 0, max: 100, tickSize: 10, tickFormatter: function(v, axis) { return v + "%" } },
-			yaxis: { min: 0 },
-			grid: { hoverable: true }
-    	}
-    );
-    
-    var previousPoint = null;
-    \$("#coverage-distribution div.graph").bind("plothover", function (event, pos, item) {
-    	var tooltip = \$("#coverage-distribution .tooltip");
-        if (item) {
-            if (previousPoint != item.datapoint) {
-                previousPoint = item.datapoint;
-                
-                tooltip.hide();
-                
-                var x = item.datapoint[0];
-                var y = item.datapoint[1];
-                var message = y + " classes have " + x + "-" + (x + (x == 90 ? 10 : 9)) + "% coverage";
-                showTooltip(tooltip, item.pageX, item.pageY, message);
-            }
-        }
-        else {
-            tooltip.hide();
-            previousPoint = null;            
-        }
-    });
-
-    var data = [$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"], }$];
-    
-    \$.plot(\$("#coverage-complexity div.graph"),
-    	[
-    		{data: data, points: { show: true }}
-    	],
-    	{
-			colors: ["#3b3"],
-			xaxis: { min: 0, max: 100, tickSize: 10, tickFormatter: function(v, axis) { return v + "%" } },
-			yaxis: { min: 0 },
-			grid: { hoverable: true, clickable: true }
-    	}
+    drawCoverageDistributionGraph(
+    	"#coverage-distribution div.graph",
+    	"#coverage-distribution .tooltip",
+    	[$coverageDistribution.counts:{ each | [$i0$ * 10, $each$], }$]
     );
 
-    var previousPoint = null;
-    \$("#coverage-complexity div.graph").bind("plothover", function (event, pos, item) {
-    	var tooltip = \$("#coverage-complexity .tooltip");
-        if (item) {
-            if (previousPoint != item.datapoint) {
-                previousPoint = item.datapoint;
-                
-                tooltip.hide();
-                
-                var coverage = item.datapoint[0];
-                var complexity = item.datapoint[1];
-                var className = item.datapoint[2];
-                var message = className + ": Coverage=" + coverage + "%, Complexity=" + complexity;
-                showTooltip(tooltip, item.pageX, item.pageY, message);
-            }
-        }
-        else {
-            tooltip.hide();
-            previousPoint = null;            
-        }
-    });
-
-    \$("#coverage-complexity div.graph").bind("plotclick", function (event, pos, item) {
-        if (item) {
-            var link = item.datapoint[3];
-            window.location = link;
-        }
-    });
+    drawCoverageComplexityGraph(
+    	"#coverage-complexity div.graph",
+    	"#coverage-complexity .tooltip",
+    	[$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"], }$]
+    );
 });
 </script>
 

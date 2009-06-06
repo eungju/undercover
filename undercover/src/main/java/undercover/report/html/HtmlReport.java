@@ -51,6 +51,7 @@ public class HtmlReport {
 				"jquery-1.3.2.min.js",
 				"jquery.flot.pack.js",
 				"excanvas.pack.js",
+				"undercover.js",
 		};
 		for (String each : resources) {
 			copyResource("resources/" + each, each);
