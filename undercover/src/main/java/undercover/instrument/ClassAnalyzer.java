@@ -16,62 +16,54 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
-import undercover.instrument.synthetic.ExclusionSet;
+import undercover.instrument.synthetic.Exclusion;
 import undercover.metric.ClassMeta;
-import undercover.metric.MetaData;
 import undercover.metric.MethodMeta;
 
-public class InstrumentClassVisitor extends ClassNode {
-	private final MetaData metaData;
-	private final ExclusionSet exclusionSet = new ExclusionSet();
-	
-	public InstrumentClassVisitor(MetaData metaData) {
-		super();
-		this.metaData = metaData;
+public class ClassAnalyzer {
+	private final Exclusion exclusion;
+
+	public ClassAnalyzer(Exclusion exclusion) {
+		this.exclusion = exclusion;
 	}
 	
-	public void visitEnd() {
-		super.visitEnd();
-		
-		if (exclusionSet.exclude(this)) {
-			return;
-		}
-
+	public ClassMeta instrument(ClassNode classNode) {
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
-		for (MethodNode each : (List<MethodNode>) methods) {
+		for (MethodNode each : (List<MethodNode>) classNode.methods) {
 			if (each.name.equals("<clinit>")) {
 				clinitMethod = each;
 			}
-			if (exclusionSet.exclude(this, each)) {
+			if (exclusion.exclude(classNode, each)) {
 				continue;
 			}
 			BasicBlockAnalyzer analyzer = new BasicBlockAnalyzer();
 			analyzer.analyze(each);
-			MethodMeta methodMeta = analyzer.instrument(each, name, methodMetas.size());
+			MethodMeta methodMeta = analyzer.instrument(each, classNode.name, methodMetas.size());
 			methodMetas.add(methodMeta);
 		}
 		
-		ClassMeta classMeta = new ClassMeta(name, sourceFile, methodMetas);
-		metaData.addClass(classMeta);
+		ClassMeta classMeta = new ClassMeta(classNode.name, classNode.sourceFile, methodMetas);
 		
-		addCoverageField();
-		addClinitMethod(name, methodMetas, clinitMethod);
+		addCoverageField(classNode);
+		addClinitMethod(classNode, clinitMethod, methodMetas);
+		
+		return classMeta;
 	}
 	
-	void addCoverageField() {
+	void addCoverageField(ClassNode classNode) {
 		//Should be "public static final" for interfaces
-		fields.add(new FieldNode(ACC_SYNTHETIC | ACC_PUBLIC | ACC_FINAL | ACC_STATIC, Instrument.COVERAGE_FIELD_NAME, "[[I", null, null));
+		classNode.fields.add(new FieldNode(ACC_SYNTHETIC | ACC_PUBLIC | ACC_FINAL | ACC_STATIC, Instrument.COVERAGE_FIELD_NAME, "[[I", null, null));
 	}
 
-	void addClinitMethod(String className, List<MethodMeta> methodMetas, MethodNode clinitMethod) {
+	void addClinitMethod(ClassNode classNode, MethodNode clinitMethod, List<MethodMeta> methodMetas) {
 		InsnList code = new InsnList();
 		code.add(new IntInsnNode(SIPUSH, methodMetas.size()));
 		code.add(new TypeInsnNode(ANEWARRAY, "[I"));
-		code.add(new FieldInsnNode(PUTSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
+		code.add(new FieldInsnNode(PUTSTATIC, classNode.name, Instrument.COVERAGE_FIELD_NAME, "[[I"));
 		int methodIndex = 0;
 		for (MethodMeta each : methodMetas) {
-			code.add(new FieldInsnNode(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
+			code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.COVERAGE_FIELD_NAME, "[[I"));
 			code.add(new IntInsnNode(SIPUSH, methodIndex));
 			code.add(new IntInsnNode(SIPUSH, each.blocks.size()));
 			code.add(new IntInsnNode(NEWARRAY, T_INT));
@@ -79,13 +71,13 @@ public class InstrumentClassVisitor extends ClassNode {
 			methodIndex++;
 		}
 		code.add(new FieldInsnNode(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;"));
-		code.add(new LdcInsnNode(className));
-		code.add(new FieldInsnNode(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
+		code.add(new LdcInsnNode(classNode.name));
+		code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.COVERAGE_FIELD_NAME, "[[I"));
 		code.add(new MethodInsnNode(INVOKEVIRTUAL, "undercover/runtime/Probe", "register", "(Ljava/lang/String;[[I)V"));
 
 		if (clinitMethod == null) {
 			clinitMethod = new MethodNode(ACC_SYNTHETIC | ACC_STATIC, "<clinit>", "()V", null, null);
-			methods.add(clinitMethod);
+			classNode.methods.add(clinitMethod);
 			code.add(new InsnNode(RETURN));
 		}
 		
