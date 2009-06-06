@@ -59,7 +59,9 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 		return outer != null;
 	}
 	
-	public static class Outer {
+	public static class Outer implements Serializable {
+		private static final long serialVersionUID = 1160336265135937380L;
+		
 		public final String className;
 		public final String methodName;
 		
