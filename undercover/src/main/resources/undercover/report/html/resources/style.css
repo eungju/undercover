@@ -4,6 +4,10 @@ body {
 	margin: 8px;
 }
 
+h1, h2, h3 {
+	margin: 16px 0px 8px 0px;
+}
+
 ul, ol {
 	margin: 8px 0px 8px 0px;
 }	
