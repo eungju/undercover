@@ -5,16 +5,25 @@ import java.util.Collection;
 import undercover.report.ClassItem;
 
 public class CoverageDistribution {
-	private int[] counts = new int[10];
+	private final int[] counts;
 	
 	public CoverageDistribution(Collection<ClassItem> items) {
+		this();
+		countAll(items);
+	}
+	
+	public CoverageDistribution() {
+		counts = new int[10];
+	}
+
+	public void count(ClassItem item) {
+		counts[coverageInterval(item.getCoverageRate())]++;
+	}
+	
+	public void countAll(Collection<ClassItem> items) {
 		for (ClassItem each : items) {
 			count(each);
 		}
-	}
-	
-	void count(ClassItem item) {
-		counts[coverageInterval(item.getCoverageRate())]++;
 	}
 	
 	public int[] getCounts() {

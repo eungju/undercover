@@ -6,16 +6,23 @@ import java.util.Collection;
 import undercover.report.ClassItem;
 
 public class CoverageComplexity {
-	private Collection<ClassItem> items = new ArrayList<ClassItem>();
+	private final Collection<ClassItem> items;
 
 	public CoverageComplexity(Collection<ClassItem> items) {
-		for (ClassItem each : items) {
-			add(each);
-		}
+		this();
+		addAll(items);
 	}
 
+	public CoverageComplexity() {
+		items = new ArrayList<ClassItem>();
+	}
+	
 	public void add(ClassItem item) {
 		items.add(item);
+	}
+	
+	public void addAll(Collection<ClassItem> items) {
+		this.items.addAll(items);
 	}
 	
 	public Collection<ClassItem> getItems() {
