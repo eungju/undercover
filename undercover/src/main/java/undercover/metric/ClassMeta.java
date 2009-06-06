@@ -1,7 +1,7 @@
 package undercover.metric;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import undercover.support.ObjectSupport;
@@ -12,15 +12,21 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 	public final String name;
 	public final String source;
 	public final List<MethodMeta> methods;
-
+	public final Outer outer;
+	
 	public ClassMeta(String name, String source) {
-		this(name, source, Collections.<MethodMeta>emptyList());
+		this(name, source, new ArrayList<MethodMeta>());
 	}
 	
 	public ClassMeta(String name, String source, List<MethodMeta> methods) {
+		this(name, source, methods, null);
+	}
+	
+	public ClassMeta(String name, String source, List<MethodMeta> methods, Outer outer) {
 		this.name = name;
 		this.source = source;
 		this.methods = methods;
+		this.outer = outer;
 	}
 
 	public String getPackageName() {
@@ -47,5 +53,23 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 			each.accept(visitor);
 		}
 		visitor.visitLeave(this);
+	}
+
+	public boolean isAnonymous() {
+		return outer != null;
+	}
+	
+	public static class Outer {
+		public final String className;
+		public final String methodName;
+		
+		public Outer(String className, String methodName) {
+			this.className = className;
+			this.methodName = methodName;
+		}
+		
+		public boolean isMethod() {
+			return methodName != null;
+		}
 	}
 }

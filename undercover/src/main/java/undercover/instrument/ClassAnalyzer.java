@@ -28,6 +28,8 @@ public class ClassAnalyzer {
 	}
 	
 	public ClassMeta instrument(ClassNode classNode) {
+		ClassMeta.Outer outer = detectOuter(classNode);
+		
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
 		for (MethodNode each : (List<MethodNode>) classNode.methods) {
@@ -43,12 +45,20 @@ public class ClassAnalyzer {
 			methodMetas.add(methodMeta);
 		}
 		
-		ClassMeta classMeta = new ClassMeta(classNode.name, classNode.sourceFile, methodMetas);
+		ClassMeta classMeta = new ClassMeta(classNode.name, classNode.sourceFile, methodMetas, outer);
 		
 		addCoverageField(classNode);
 		addClinitMethod(classNode, clinitMethod, methodMetas);
 		
 		return classMeta;
+	}
+	
+	ClassMeta.Outer detectOuter(ClassNode classNode) {
+		if (classNode.outerClass == null) {
+			return null;
+		}
+		String methodName = classNode.outerMethod == null ? null : classNode.outerMethod + classNode.outerMethodDesc;
+		return new ClassMeta.Outer(classNode.outerClass, methodName);
 	}
 	
 	void addCoverageField(ClassNode classNode) {
