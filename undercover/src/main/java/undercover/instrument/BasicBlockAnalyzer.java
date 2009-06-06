@@ -91,10 +91,17 @@ public class BasicBlockAnalyzer {
 		blocks.add(basicBlock);
 		basicBlock = new BasicBlock(nextOffset);
 	}
+	
+	boolean isCatchClause(TryCatchBlockNode node) {
+		return node.type != null;
+	}
 
 	void scanJumpTargets(MethodNode methodNode) {
 		for (TryCatchBlockNode each : (Collection<TryCatchBlockNode>) methodNode.tryCatchBlocks) {
 			targetLabels.add(each.handler.getLabel());
+			if (isCatchClause(each)) {
+				complexity++;
+			}
 		}
 		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();

@@ -71,7 +71,7 @@ public class InstrumentTest {
 	@Test public void tryCatchBranchMethod() throws IOException {
 		MethodMeta methodMeta = classMeta.getMethod("tryCatchBranch()V");
 		assertEquals(3, methodMeta.blocks.size());
-		assertEquals(1, methodMeta.complexity);
+		assertEquals(2, methodMeta.complexity);
 	}
 
 	@Test public void tryFinallyBranchMethod() throws IOException {
@@ -84,7 +84,7 @@ public class InstrumentTest {
 		MethodMeta methodMeta = classMeta.getMethod("tryCatchFinallyBranch()V");
 		//FIXME: Optimizer can create extra block.
 		assertTrue(4 <= methodMeta.blocks.size());
-		assertEquals(1, methodMeta.complexity);
+		assertEquals(2, methodMeta.complexity);
 	}
 
 	@Test public void forLoop() throws IOException {

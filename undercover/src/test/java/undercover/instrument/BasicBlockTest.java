@@ -161,7 +161,7 @@ public class BasicBlockTest implements Opcodes {
 						new BasicBlock(4, 8, set(63, 64)),
 						new BasicBlock(8, 9, set(66))),
 				dut.blocks);
-		assertEquals(1, dut.complexity);
+		assertEquals(2, dut.complexity);
 	}
 	
 	@Test public void backwardJumpTargetsAreEdges() {
@@ -403,6 +403,6 @@ public class BasicBlockTest implements Opcodes {
 						new BasicBlock(15, 20, set(82)),
 						new BasicBlock(20, 21, set(84))),
 				dut.blocks);
-		assertEquals(1, dut.complexity);
+		assertEquals(2, dut.complexity);
 	}
 }
