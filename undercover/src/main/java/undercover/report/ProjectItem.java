@@ -3,7 +3,7 @@ package undercover.report;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProjectItem extends ProjectMeasure implements Item {
+public class ProjectItem extends ProjectMeasure {
 	private final String displayName;
 	public final SortedSet<PackageItem> packages;
 	private final LazyComplexity complexity;

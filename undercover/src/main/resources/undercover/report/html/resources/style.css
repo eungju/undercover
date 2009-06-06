@@ -4,13 +4,13 @@ body {
 	margin: 8px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	margin: 8px 0px 8px 0px;
-}
-
 ul, ol {
 	margin: 8px 0px 8px 0px;
 }	
+
+th, td {
+	font-size: 9pt;
+}
 
 table.item-statistics {
     margin: 4px;
@@ -21,6 +21,7 @@ table.item-statistics {
 table.item-statistics th, table.item-statistics td {
 	font-size: 9pt;
 	border: 1px solid #ddd;
+	padding: 4px;
 }
 
 table.item-statistics th {
@@ -36,6 +37,7 @@ table.item-children {
 table.item-children th, table.item-children td {
 	font-size: 9pt;
 	border: 1px solid #ddd;
+	padding: 4px;
 }
 
 table.item-children th {
@@ -51,7 +53,7 @@ div.coverageBarNegative {
 
 div.coverageBarPositive {
 	background: #0d0;
-	height: 10px;
+	height: 12px;
 }
 
 div.coverageBarNotAvailable {
@@ -59,7 +61,7 @@ div.coverageBarNotAvailable {
 	min-width: 100px; 
 	padding: 0px; 
 	background: #ddd;
-	height: 10px;
+	height: 12px;
 }
 
 td.coverage {
@@ -136,6 +138,7 @@ table.source {
 table.source td {
 	font-size: 9pt;
 	border: 1px solid #ddd;
+	padding: 2px;
 }
 
 tr.completely-covered {
@@ -164,8 +167,15 @@ td.source-line-text {
 
 /* Dashboard */
 
-table.dashboard {
-	width: 100%;
+.left {
+	float: left;
+	margin: 12px 24px 12px 12px;
+}
+
+.right {
+	float: right;
+	margin: 12px;
+	margin: 12px 24px 12px 12px;
 }
 
 /* Copyright */

@@ -3,12 +3,18 @@ package undercover.report.html;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
 
+import undercover.report.MethodMeasure;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.ReportOutput;
@@ -126,7 +132,36 @@ public class HtmlReport {
 		template.setAttribute("coverageDistribution", coverageDistribution);
 		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
 		template.setAttribute("coverageComplexity", coverageComplexity);
+		template.setAttribute("mostRiskyClasses", mostRisky(20, reportData.getAllClasses()));
+		template.setAttribute("mostComplexPackages", mostComplex(10, reportData.getProject().packages));
+		template.setAttribute("mostComplexClasses", mostComplex(10, reportData.getAllClasses()));
 		output.write("project-dashboard.html", template.toString());
+	}
+
+	public <T extends MethodMeasure> List<T> mostRisky(int max, Collection<T> candidates) {
+		List<T> items = new ArrayList<T>(candidates);
+		Collections.sort(items, new Comparator<T>() {
+			public int compare(T a, T b) {
+				return (int) Math.signum((b.getRisk() - a.getRisk()));
+			}
+		});
+		if (items.size() > max) {
+			items = items.subList(0, max);
+		}
+		return items;
+	}
+
+	public <T extends MethodMeasure> List<T> mostComplex(int max, Collection<T> candidates) {
+		List<T> items = new ArrayList<T>(candidates);
+		Collections.sort(items, new Comparator<T>() {
+			public int compare(T a, T b) {
+				return b.getComplexity() - a.getComplexity();
+			}
+		});
+		if (items.size() > max) {
+			items = items.subList(0, max);
+		}
+		return items;
 	}
 
 	public StringTemplate getTemplate(String templateName) {

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class PackageItem extends PackageMeasure implements Item {
+public class PackageItem extends PackageMeasure {
 	private final String name;
 	public final SortedSet<ClassItem> classes;
 	private final LazyComplexity complexity;

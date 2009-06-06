@@ -2,7 +2,7 @@ package undercover.report;
 
 import undercover.metric.MethodMeta;
 
-public class MethodItem extends MethodMeasure implements Item {
+public class MethodItem extends MethodMeasure {
 	private final String name;
 	private final int complexity;
 	private final int blockCount;

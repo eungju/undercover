@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ClassItem extends ClassMeasure implements Item {
+public class ClassItem extends ClassMeasure {
 	private final String name;
 	public final SourceFile sourceFile;
 	public final List<MethodItem> methods;
