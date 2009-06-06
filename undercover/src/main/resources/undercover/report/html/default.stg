@@ -373,6 +373,12 @@ $projectStatistics(project)$
 
 	<h3>Most Risky Classes</h3>
 	<table>
+		<colgroup>
+			<col width="30" />
+			<col width="50" />
+			<col width="100" />
+			<col width="*" />
+		</colgroup>
 		<tbody>
 		$mostRiskyClasses:{ each |
 		<tr>
@@ -397,6 +403,10 @@ $projectStatistics(project)$
 
 	<h3>Most Complex Packages</h3>
 	<table>
+		<col width="30" />
+		<col width="50" />
+		<col width="100" />
+		<col width="*" />
 		<tbody>
 		$mostComplexPackages:{ each |
 		<tr>
@@ -411,6 +421,10 @@ $projectStatistics(project)$
 
 	<h3>Most Complex Classes</h3>
 	<table>
+		<col width="30" />
+		<col width="50" />
+		<col width="100" />
+		<col width="*" />
 		<tbody>
 		$mostComplexClasses:{ each |
 		<tr>
