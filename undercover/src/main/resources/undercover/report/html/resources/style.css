@@ -1,6 +1,6 @@
 body {
 	font-family: Helvetica, Arial, sans-serif;
-	font-size: 10pt;
+	font-size: 9pt;
 	margin: 8px;
 }
 
@@ -11,6 +11,10 @@ h1, h2, h3 {
 ul, ol {
 	margin: 8px 0px 8px 0px;
 }	
+
+table {
+	width: 100%;
+}
 
 th, td {
 	font-size: 9pt;
@@ -23,13 +27,11 @@ table.item-statistics {
 }
 
 table.item-statistics th, table.item-statistics td {
-	font-size: 9pt;
-	border: 1px solid #ddd;
-	padding: 4px;
+	padding: 2px;
 }
 
 table.item-statistics th {
-	background: #bdb;
+	text-align: left;
 }
 
 table.item-children {
@@ -39,13 +41,12 @@ table.item-children {
 }
 
 table.item-children th, table.item-children td {
-	font-size: 9pt;
 	border: 1px solid #ddd;
 	padding: 4px;
 }
 
 table.item-children th {
-	background: #bdb;
+	background: #D0F0D0;
 }
 
 div.coverageBarNegative {
@@ -84,7 +85,7 @@ td.number {
 /* Rounded-box */
 
 div.rounded-box {
-	background: #bdb;
+	background: #D0F0D0;
 }
 
 div.round1, div.round2, div.round4 {

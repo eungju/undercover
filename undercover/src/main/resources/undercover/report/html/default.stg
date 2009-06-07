@@ -61,38 +61,86 @@ $endif$
 </div>
 >>
 
-projectStatistics(project) ::= <<
+itemStatistics(item) ::= <<
+<div>
+	<a href="project-dashboard.html">Dashboard</a>
+	<a href="project-summary.html">Overview</a>
+	<a href="index.html" target="_top">Frames</a>
+	<a href="#" target="_top">No Frames</a>
+</div>
+
+<h1>$item.displayName:html()$</h1>
+
+<div class="rounded-box">
+	<div class="round4"></div>
+	<div class="round2"></div>
+	<div class="round1"></div>
+	<div class="box-inner">
+
 <table class="item-statistics">
 	<colgroup>
+		<col width="300" />
 		<col width="*" />
-		<col width="80" />
-		<col width="100" />
-		<col width="150" />
-		<col width="70" />
-		<col width="60" />
-		<col width="60" />
 	</colgroup>
-	<thead>
-		<tr>
-			<th></th>
-			<th>Complexity</th>
-			<th colspan="2">Coverage</th>
-			<th>Packages</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
-		</tr>
-	</thead>
 	<tbody>
 		<tr>
-			<td>$project.displayName$</td>
-			<td class="complexity">$project.complexity$</td>
-			<td class="coverage">$blockCoverage(project)$</td>
-			<td class="coverage">$coverageBar(project)$</td>
-			<td class="number">$length(project.packages)$</td>
-			<td class="complexity">$project.averageMethodComplexity$</td>
-			<td class="complexity">$project.maximumMethodComplexity$</td>
+			<td>
+							
+				<table width="100%">
+					<colgroup>
+						<col width="80" />
+						<col width="*" />
+					</colgroup>
+					<tbody>
+					<tr>
+						<th>Complexity</th><td>$item.complexity$</td>
+					</tr>
+					<tr>
+						<th>Coverage</th><td>$blockCoverage(item)$</td>
+					</tr>
+					<tr>
+						<td colspan="2">$coverageBar(item)$</td>
+					</tr>
+					</tbody>
+				</table>
+				
+			</td>
+			<td style="border-left: 1px solid #999;"></td>
+			<td>
+				
+				<table>
+					$!
+					$if(item.packageCount)$
+					<tr>
+						<th>Packages</th><td>$item.packageCount$</td>	
+						<th>Avg. Complexity</th><td>$item.averagePackageComplexity$</td>	
+						<th>Max. Complexity</th><td>$item.maximumPackageComplexity$</td>	
+					</tr>
+					$end$
+					$if(item.classCount)$
+					<tr>
+						<th>Classes</th><td>$item.classCount$</td>	
+						<th>Avg. Complexity</th><td>$item.averageClassComplexity$</td>	
+						<th>Max. Complexity</th><td>$item.maximumClassComplexity$</td>	
+					</tr>
+					$endif$
+					!$
+					<tr>
+						<th>Methods</th><td>$item.methodCount$</td>	
+						<th>Avg. Complexity</th><td>$item.averageMethodComplexity$</td>	
+						<th>Max. Complexity</th><td>$item.maximumMethodComplexity$</td>	
+					</tr>
+				</table>
+			</td>
 		</tr>
 	</tbody>
 </table>
+
+	</div>
+	<div class="round1"></div>
+	<div class="round2"></div>
+	<div class="round4"></div>
+</div>
 >>
 
 projectSummary(project) ::= <<
@@ -103,9 +151,7 @@ $header()$
 });
 </script>
 
-<h2>$project.displayName:html()$</h2>
-
-$projectStatistics(project)$
+$itemStatistics(project)$
 
 <h3>Packages</h3>
 <table class="item-children">
@@ -212,39 +258,7 @@ $header()$
 });
 </script>
 
-<h2>$package.displayName:html()$</h2>
-
-<table class="item-statistics">
-	<colgroup>
-		<col width="*" />
-		<col width="80" />
-		<col width="100" />
-		<col width="150" />
-		<col width="70" />
-		<col width="60" />
-		<col width="60" />
-	</colgroup>
-	<thead>
-		<tr>
-			<th></th>
-			<th>Complexity</th>
-			<th colspan="2">Coverage</th>
-			<th>Classes</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>$package.displayName$</td>
-			<td class="complexity">$package.complexity$</td>
-			<td class="coverage">$blockCoverage(package)$</td>
-			<td class="coverage">$coverageBar(package)$</td>
-			<td class="number">$length(package.classes)$</td>
-			<td class="complexity">$package.averageMethodComplexity$</td>
-			<td class="complexity">$package.maximumMethodComplexity$</td>
-		</tr>
-	</tbody>
-</table>
+$itemStatistics(package)$
 
 <h3>Classes</h3>
 <table class="item-children">
@@ -288,7 +302,7 @@ $footer()$
 sourceSummary(source, lines) ::= <<
 $header()$
 
-<h2>$source.name:html()$</h2>
+$itemStatistics(source)$
 
 <h3>Classes</h3>
 <table class="item-children">
@@ -333,7 +347,7 @@ $header()$
 	</tbody>
 </table>
 
-<h3>Line Coverage</h3>
+<h3>Source</h3>
 <table class="source">
 	<colgroup>
 		<col width="60" />
@@ -358,9 +372,7 @@ $footer()$
 dashboard(project, coverageDistribution, coverageComplexity, mostRiskyClasses, mostComplexClasses, leastCoveredClasses) ::= <<
 $header()$
 
-<h2>$project.displayName$</h2>
-
-$projectStatistics(project)$
+$itemStatistics(project)$
 
 <table><tr><td>
 <div class="left">
