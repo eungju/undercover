@@ -65,31 +65,31 @@ projectStatistics(project) ::= <<
 <table class="item-statistics">
 	<colgroup>
 		<col width="*" />
-		<col width="60" />
-		<col width="60" />
-		<col width="60" />
 		<col width="80" />
 		<col width="100" />
 		<col width="150" />
+		<col width="70" />
+		<col width="60" />
+		<col width="60" />
 	</colgroup>
 	<thead>
 		<tr>
 			<th></th>
-			<th>Packages</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 			<th>Complexity</th>
 			<th colspan="2">Coverage</th>
+			<th>Packages</th>
+			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td>$project.displayName$</td>
-			<td class="number">$length(project.packages)$</td>
-			<td class="complexity">$project.averageMethodComplexity$</td>
-			<td class="complexity">$project.maximumMethodComplexity$</td>
 			<td class="complexity">$project.complexity$</td>
 			<td class="coverage">$blockCoverage(project)$</td>
 			<td class="coverage">$coverageBar(project)$</td>
+			<td class="number">$length(project.packages)$</td>
+			<td class="complexity">$project.averageMethodComplexity$</td>
+			<td class="complexity">$project.maximumMethodComplexity$</td>
 		</tr>
 	</tbody>
 </table>
@@ -111,32 +111,32 @@ $projectStatistics(project)$
 <table class="item-children">
 	<colgroup>
 		<col width="*" />
-		<col width="60" />
-		<col width="60" />
-		<col width="60" />
 		<col width="80" />
 		<col width="100" />
 		<col width="150" />
+		<col width="70" />
+		<col width="60" />
+		<col width="60" />
 	</colgroup>
 	<thead>
 		<tr>
 			<th>Package</th>
-			<th>Classes</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 			<th>Complexity</th>
 			<th colspan="2">Coverage</th>
+			<th>Classes</th>
+			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 		</tr>
 	</thead>
 	<tbody>
 		$project.packages:{ each |
 		<tr>
 			<td><a href="package-$each:linkName()$-summary.html">$each.displayName$</a></td>
-			<td class="number">$length(each.classes)$</td>
-			<td class="complexity">$each.averageMethodComplexity$</td>
-			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
+			<td class="number">$length(each.classes)$</td>
+			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="complexity">$each.maximumMethodComplexity$</td>
 		</tr>
 		}$
 	</tbody>
@@ -217,31 +217,31 @@ $header()$
 <table class="item-statistics">
 	<colgroup>
 		<col width="*" />
-		<col width="60" />
-		<col width="60" />
-		<col width="60" />
 		<col width="80" />
 		<col width="100" />
 		<col width="150" />
+		<col width="70" />
+		<col width="60" />
+		<col width="60" />
 	</colgroup>
 	<thead>
 		<tr>
 			<th></th>
-			<th>Classes</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 			<th>Complexity</th>
 			<th colspan="2">Coverage</th>
+			<th>Classes</th>
+			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td>$package.displayName$</td>
-			<td class="number">$length(package.classes)$</td>
-			<td class="complexity">$package.averageMethodComplexity$</td>
-			<td class="complexity">$package.maximumMethodComplexity$</td>
 			<td class="complexity">$package.complexity$</td>
 			<td class="coverage">$blockCoverage(package)$</td>
 			<td class="coverage">$coverageBar(package)$</td>
+			<td class="number">$length(package.classes)$</td>
+			<td class="complexity">$package.averageMethodComplexity$</td>
+			<td class="complexity">$package.maximumMethodComplexity$</td>
 		</tr>
 	</tbody>
 </table>
@@ -250,32 +250,32 @@ $header()$
 <table class="item-children">
 	<colgroup>
 		<col width="*" />
-		<col width="60" />
-		<col width="60" />
-		<col width="60" />
 		<col width="80" />
 		<col width="100" />
 		<col width="150" />
+		<col width="70" />
+		<col width="60" />
+		<col width="60" />
 	</colgroup>
 	<thead>
 		<tr>
 			<th>Class</th>
-			<th>Methods</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 			<th>Complexity</th>
 			<th colspan="2">Coverage</th>
+			<th>Methods</th>
+			<th colspan="2">Method Complexity (Avg.,Max.)</th>
 		</tr>
 	</thead>
 	<tbody>
 		$package.classes:{ each |
 		<tr>
 			<td><a href="source-$each:linkName()$.html">$each.simpleName$</a></td>
-			<td class="number">$length(each.methods)$</td>
-			<td class="complexity">$each.averageMethodComplexity$</td>
-			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="complexity">$each.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
+			<td class="number">$length(each.methods)$</td>
+			<td class="complexity">$each.averageMethodComplexity$</td>
+			<td class="complexity">$each.maximumMethodComplexity$</td>
 		</tr>
 		}$
 	</tbody>
@@ -294,7 +294,7 @@ $header()$
 <table class="item-children">
 	<colgroup>
 		<col width="*" />
-		<col width="60" />
+		<col width="70" />
 		<col width="60" />
 		<col width="60" />
 		<col width="80" />
@@ -333,7 +333,7 @@ $header()$
 	</tbody>
 </table>
 
-<h3>Source</h3>
+<h3>Line Coverage</h3>
 <table class="source">
 	<colgroup>
 		<col width="60" />
