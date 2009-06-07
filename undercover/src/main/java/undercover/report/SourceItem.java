@@ -3,6 +3,7 @@ package undercover.report;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -16,20 +17,11 @@ public class SourceItem extends SourceMeasure {
 	private final SourceFile sourceFile;
 	public final SortedSet<ClassItem> classes;
 	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
-	private final LazyComplexity complexity;
-	private final LazyBlockCount blockCount;
-	private final LazyCoveredBlockCount coveredBlockCount;
-	private final LazyMethodCount methodCount;
-	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	
 	public SourceItem(SourceFile sourceFile) {
 		this.sourceFile = sourceFile;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
-		complexity = new LazyComplexity(classes);
-		blockCount = new LazyBlockCount(classes);
-		coveredBlockCount = new LazyCoveredBlockCount(classes);
-		methodCount = new LazyMethodCount(classes);
-		maximumMethodComplexity = new LazyMaximumMethodComplexity(classes);
+		initializeSourceMeasure(classes);
 	}
 	
 	public String getName() {
@@ -54,26 +46,6 @@ public class SourceItem extends SourceMeasure {
 	
 	public void addBlock(BlockMeta blockMeta, int blockCoverage) {
 		lineCoverageAnalysis.analyze(blockMeta, blockCoverage);
-	}
-
-	public int getComplexity() {
-		return complexity.value();
-	}
-
-	public int getBlockCount() {
-		return blockCount.value();
-	}
-
-	public int getCoveredBlockCount() {
-		return coveredBlockCount.value();
-	}
-
-	public int getMethodCount() {
-		return methodCount.value();
-	}
-	
-	public int getMaximumMethodComplexity() {
-		return maximumMethodComplexity.value();
 	}
 	
 	public List<SourceLine> getLines() {

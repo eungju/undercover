@@ -1,11 +1,27 @@
 package undercover.report;
 
 public abstract class MethodMeasure {
-	public abstract int getComplexity();
+	private int complexity;
+	private int blockCount;
+	private int coveredBlockCount;
+
+	public void initializeMethodMeasure(int complexity, int blockCount, int coveredBlockCount) {
+		this.complexity = complexity;
+		this.blockCount = blockCount;
+		this.coveredBlockCount = coveredBlockCount;
+	}
 	
-	public abstract int getBlockCount();
-	
-	public abstract int getCoveredBlockCount();
+	public int getBlockCount() {
+		return blockCount;
+	}
+
+	public int getComplexity() {
+		return complexity;
+	}
+
+	public int getCoveredBlockCount() {
+		return coveredBlockCount;
+	}
 	
 	public boolean isExecutable() {
 		return getBlockCount() > 0;

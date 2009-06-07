@@ -109,24 +109,26 @@ itemStatistics(item) ::= <<
 			<td>
 				
 				<table>
-					$!
 					$if(item.packageCount)$
 					<tr>
-						<th>Packages</th><td>$item.packageCount$</td>	
+						<th>Packages</th><td>$item.packageCount$</td>
 						<th>Avg. Complexity</th><td>$item.averagePackageComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.maximumPackageComplexity$</td>	
-					</tr>
-					$end$
-					$if(item.classCount)$
-					<tr>
-						<th>Classes</th><td>$item.classCount$</td>	
-						<th>Avg. Complexity</th><td>$item.averageClassComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.maximumClassComplexity$</td>	
+						$!
+						<th>Max. Complexity</th><td>$item.maximumPackageComplexity$</td>
+						!$
 					</tr>
 					$endif$
-					!$
+					$if(item.classCount)$
 					<tr>
-						<th>Methods</th><td>$item.methodCount$</td>	
+						<th>Classes</th><td>$item.classCount$</td>
+						<th>Avg. Complexity</th><td>$item.averageClassComplexity$</td>	
+						$!
+						<th>Max. Complexity</th><td>$item.maximumClassComplexity$</td>	
+						!$
+					</tr>
+					$endif$
+					<tr>
+						<th>Methods</th><td>$item.methodCount$</td>
 						<th>Avg. Complexity</th><td>$item.averageMethodComplexity$</td>	
 						<th>Max. Complexity</th><td>$item.maximumMethodComplexity$</td>	
 					</tr>
@@ -180,7 +182,7 @@ $itemStatistics(project)$
 			<td class="complexity">$each.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
-			<td class="number">$length(each.classes)$</td>
+			<td class="number">$each.classCount$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
 			<td class="complexity">$each.maximumMethodComplexity$</td>
 		</tr>
@@ -287,7 +289,7 @@ $itemStatistics(package)$
 			<td class="complexity">$each.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
-			<td class="number">$length(each.methods)$</td>
+			<td class="number">$each.methodCount$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
 			<td class="complexity">$each.maximumMethodComplexity$</td>
 		</tr>
@@ -328,7 +330,7 @@ $itemStatistics(source)$
 		$source.classes:{ each |
 		<tr>
 			<td>$each.displayName$</td>
-			<td class="number">$length(each.methods)$</td>
+			<td class="number">$each.methodCount$</td>
 			<td class="complexity">$each.averageMethodComplexity$</td>
 			<td class="complexity">$each.maximumMethodComplexity$</td>
 			<td class="complexity">$each.complexity$</td>
@@ -457,13 +459,13 @@ $itemStatistics(project)$
     drawCoverageDistributionGraph(
     	"#coverage-distribution div.graph",
     	"#coverage-distribution .tooltip",
-    	[$coverageDistribution.counts:{ each | [$i0$ * 10, $each$], }$]
+    	[$coverageDistribution.counts:{ each | [$i0$ * 10, $each$] }; separator=", "$]
     );
 
     drawCoverageComplexityGraph(
     	"#coverage-complexity div.graph",
     	"#coverage-complexity .tooltip",
-    	[$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"], }$]
+    	[$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"] }; separator=", "$]
     );
 });
 </script>

@@ -4,9 +4,6 @@ import undercover.metric.MethodMeta;
 
 public class MethodItem extends MethodMeasure {
 	private final String name;
-	private final int complexity;
-	private final int blockCount;
-	private final int coveredBlockCount;
 	
 	public MethodItem(ClassItem parent, MethodMeta methodMeta, int coveredBlockCount) {
 		this(parent.getName() + "." + methodMeta.name, methodMeta.complexity, methodMeta.blocks.size(), coveredBlockCount);
@@ -14,10 +11,7 @@ public class MethodItem extends MethodMeasure {
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
 		this.name = name;
-		this.complexity = complexity;
-		this.blockCount = blockCount;
-		this.coveredBlockCount = coveredBlockCount;
-	}
+		initializeMethodMeasure(complexity, blockCount, coveredBlockCount);	}
 
 	public String getName() {
 		return name;
@@ -33,17 +27,5 @@ public class MethodItem extends MethodMeasure {
 	
 	public String getLinkName() {
 		throw new UnsupportedOperationException();
-	}
-
-	public int getBlockCount() {
-		return blockCount;
-	}
-
-	public int getComplexity() {
-		return complexity;
-	}
-
-	public int getCoveredBlockCount() {
-		return coveredBlockCount;
 	}
 }
