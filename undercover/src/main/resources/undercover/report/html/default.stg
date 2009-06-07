@@ -355,7 +355,7 @@ $copyright()$
 $footer()$
 >>
 
-dashboard(project, coverageDistribution, coverageComplexity, mostRiskyClasses, mostComplexPackages, mostComplexClasses) ::= <<
+dashboard(project, coverageDistribution, coverageComplexity, mostRiskyClasses, mostComplexClasses, leastCoveredClasses) ::= <<
 $header()$
 
 <h2>$project.displayName$</h2>
@@ -371,7 +371,7 @@ $projectStatistics(project)$
 		<div class="tooltip"></div>
 	</div>
 
-	<h3>Most Risky Classes</h3>
+	<h3>Weakest Classes</h3>
 	<table>
 		<colgroup>
 			<col width="30" />
@@ -401,25 +401,7 @@ $projectStatistics(project)$
 		<div class="tooltip"></div>
 	</div>
 
-	<h3>Most Complex Packages</h3>
-	<table>
-		<col width="30" />
-		<col width="50" />
-		<col width="100" />
-		<col width="*" />
-		<tbody>
-		$mostComplexPackages:{ each |
-		<tr>
-			<td class="number">$i$.</td>
-			<td class="coverage">$coveragePercent(each)$</td>
-			<td class="coverage">$coverageBar(each)$</td>
-			<td><a href="source-$each:linkName()$.html">$each.displayName:html()$</a></td>
-		</tr>
-		}$
-		</tbody>
-	</table>
-
-	<h3>Most Complex Classes</h3>
+	<h3>Heaviest Classes</h3>
 	<table>
 		<col width="30" />
 		<col width="50" />
@@ -427,6 +409,24 @@ $projectStatistics(project)$
 		<col width="*" />
 		<tbody>
 		$mostComplexClasses:{ each |
+		<tr>
+			<td class="number">$i$.</td>
+			<td class="coverage">$coveragePercent(each)$</td>
+			<td class="coverage">$coverageBar(each)$</td>
+			<td><a href="source-$each:linkName()$.html">$each.simpleName:html()$</a></td>
+		</tr>
+		}$
+		</tbody>
+	</table>
+
+	<h3>Least Exercised Classes</h3>
+	<table>
+		<col width="30" />
+		<col width="50" />
+		<col width="100" />
+		<col width="*" />
+		<tbody>
+		$leastCoveredClasses:{ each |
 		<tr>
 			<td class="number">$i$.</td>
 			<td class="coverage">$coveragePercent(each)$</td>

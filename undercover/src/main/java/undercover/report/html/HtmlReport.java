@@ -133,8 +133,8 @@ public class HtmlReport {
 		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
 		template.setAttribute("coverageComplexity", coverageComplexity);
 		template.setAttribute("mostRiskyClasses", mostRisky(20, reportData.getAllClasses()));
-		template.setAttribute("mostComplexPackages", mostComplex(10, reportData.getProject().packages));
 		template.setAttribute("mostComplexClasses", mostComplex(10, reportData.getAllClasses()));
+		template.setAttribute("leastCoveredClasses", leastCovered(10, reportData.getAllClasses()));
 		output.write("project-dashboard.html", template.toString());
 	}
 
@@ -156,6 +156,19 @@ public class HtmlReport {
 		Collections.sort(items, new Comparator<T>() {
 			public int compare(T a, T b) {
 				return b.getComplexity() - a.getComplexity();
+			}
+		});
+		if (items.size() > max) {
+			items = items.subList(0, max);
+		}
+		return items;
+	}
+
+	public <T extends MethodMeasure> List<T> leastCovered(int max, Collection<T> candidates) {
+		List<T> items = new ArrayList<T>(candidates);
+		Collections.sort(items, new Comparator<T>() {
+			public int compare(T a, T b) {
+				return (int) Math.signum(a.getCoverageRate() - b.getCoverageRate());
 			}
 		});
 		if (items.size() > max) {
