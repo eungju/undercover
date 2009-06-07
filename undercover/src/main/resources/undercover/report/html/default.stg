@@ -371,36 +371,6 @@ $projectStatistics(project)$
 		<div class="tooltip"></div>
 	</div>
 
-	<h3>Weakest Classes</h3>
-	<table>
-		<colgroup>
-			<col width="30" />
-			<col width="50" />
-			<col width="100" />
-			<col width="*" />
-		</colgroup>
-		<tbody>
-		$mostRiskyClasses:{ each |
-		<tr>
-			<td class="number">$i$.</td>
-			<td class="coverage">$coveragePercent(each)$</td>
-			<td class="coverage">$coverageBar(each)$</td>
-			<td><a href="source-$each:linkName()$.html">$each.simpleName:html()$</a></td>
-		</tr>
-		}$
-		</tbody>
-	</table>
-
-</div>
-
-<div class="right">
-
-	<h3>Coverage-Complexity</h3>
-	<div id="coverage-complexity">
-		<div class="graph" style="width: 360px; height: 300px;"></div>
-		<div class="tooltip"></div>
-	</div>
-
 	<h3>Heaviest Classes</h3>
 	<table>
 		<col width="30" />
@@ -427,6 +397,36 @@ $projectStatistics(project)$
 		<col width="*" />
 		<tbody>
 		$leastCoveredClasses:{ each |
+		<tr>
+			<td class="number">$i$.</td>
+			<td class="coverage">$coveragePercent(each)$</td>
+			<td class="coverage">$coverageBar(each)$</td>
+			<td><a href="source-$each:linkName()$.html">$each.simpleName:html()$</a></td>
+		</tr>
+		}$
+		</tbody>
+	</table>
+
+</div>
+
+<div class="right">
+
+	<h3>Coverage-Complexity</h3>
+	<div id="coverage-complexity">
+		<div class="graph" style="width: 360px; height: 300px;"></div>
+		<div class="tooltip"></div>
+	</div>
+
+	<h3>Weakest Classes</h3>
+	<table>
+		<colgroup>
+			<col width="30" />
+			<col width="50" />
+			<col width="100" />
+			<col width="*" />
+		</colgroup>
+		<tbody>
+		$mostRiskyClasses:{ each |
 		<tr>
 			<td class="number">$i$.</td>
 			<td class="coverage">$coveragePercent(each)$</td>
