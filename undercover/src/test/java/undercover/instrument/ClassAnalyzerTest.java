@@ -50,4 +50,15 @@ public class ClassAnalyzerTest {
 		assertEquals(cw.outerClass, classMeta.outer.className);
 		assertEquals(cw.outerMethod + cw.outerMethodDesc, classMeta.outer.methodName);
 	}
+	
+	@Test public void scalaFunctionLiteral() {
+		ClassNode cw = new ClassNode();
+		cw.visit(V1_5, ACC_PUBLIC + ACC_FINAL + ACC_SUPER + ACC_SYNTHETIC, "net/me2day/scala/XmlResultParser$$anonfun$tags$1", null, "java/lang/Object", new String[] { "scala/Function1", "scala/ScalaObject" });
+		cw.visitSource("XmlResultParser.scala", null);
+		// ATTRIBUTE Scala
+		cw.visitInnerClass("net/me2day/scala/XmlResultParser$$anonfun$tags$1", "net/me2day/scala/XmlResultParser", "$anonfun$tags$1", ACC_PUBLIC + ACC_FINAL + ACC_SYNCHRONIZED + ACC_SYNTHETIC);
+		ClassMeta classMeta = dut.instrument(cw);
+		assertTrue(classMeta.isAnonymous());
+		assertFalse(classMeta.outer.isMethod());
+	}
 }

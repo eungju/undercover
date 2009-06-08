@@ -8,6 +8,7 @@ import java.util.List;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -54,11 +55,17 @@ public class ClassAnalyzer {
 	}
 	
 	ClassMeta.Outer detectOuter(ClassNode classNode) {
-		if (classNode.outerClass == null) {
-			return null;
+		if (classNode.outerClass != null) {
+			String methodName = classNode.outerMethod == null ? null : classNode.outerMethod + classNode.outerMethodDesc;
+			return new ClassMeta.Outer(classNode.outerClass, methodName);
+		} else if (classNode.innerClasses.size() > 0) {
+			for (InnerClassNode inner : (List<InnerClassNode>) classNode.innerClasses) {
+				if (inner.name.equals(classNode.name) && inner.innerName.startsWith("$anonfun$")) {
+					return new ClassMeta.Outer(inner.outerName, null);
+				}
+			}
 		}
-		String methodName = classNode.outerMethod == null ? null : classNode.outerMethod + classNode.outerMethodDesc;
-		return new ClassMeta.Outer(classNode.outerClass, methodName);
+		return null;
 	}
 	
 	void addCoverageField(ClassNode classNode) {
