@@ -27,26 +27,26 @@ public class ClassItemTest {
 	}
 
 	@Test public void getComplexity() {
-		assertEquals(3, dut.getComplexity());
+		assertEquals(3, dut.getBlockMetrics().getComplexity());
 	}
 
 	@Test public void getBlockCount() {
-		assertEquals(4, dut.getBlockCount());
+		assertEquals(4, dut.getBlockMetrics().getBlockCount());
 	}
 
 	@Test public void getCoveredBlockCount() {
-		assertEquals(3, dut.getCoveredBlockCount());
+		assertEquals(3, dut.getBlockMetrics().getCoveredBlockCount());
 	}
 	
 	@Test public void getMethodCount() {
-		assertEquals(2, dut.getMethodCount());
+		assertEquals(2, dut.getMethodMetrics().getCount());
 	}
 
 	@Test public void getAverageMethodComplexity() {
-		assertEquals(1.5, dut.getAverageMethodComplexity(), 0.01);
+		assertEquals(1.5, dut.getMethodMetrics().getAverageComplexity(), 0.01);
 	}
 
 	@Test public void getMaximumMethodComplexity() {
-		assertEquals(2, dut.getMaximumMethodComplexity());
+		assertEquals(2, dut.getMethodMetrics().getMaximumComplexity());
 	}
 }

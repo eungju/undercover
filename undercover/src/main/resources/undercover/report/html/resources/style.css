@@ -47,7 +47,7 @@ table.item-children th {
 
 div.coverageBarNegative {
 	border: none; 
-	min-width: 100px; 
+	min-width: 50px; 
 	padding: 0px; 
 	background: #d00;
 }
@@ -59,7 +59,7 @@ div.coverageBarPositive {
 
 div.coverageBarNotAvailable {
 	border: none; 
-	min-width: 100px; 
+	min-width: 50px; 
 	padding: 0px; 
 	background: #ddd;
 	height: 12px;

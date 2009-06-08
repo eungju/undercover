@@ -3,25 +3,23 @@ package undercover.report;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProjectItem extends ProjectMeasure {
+import undercover.report.BlockMetrics.Composite;
+
+public class ProjectItem implements Item {
 	private final String displayName;
 	public final SortedSet<PackageItem> packages;
-	private final LazyComplexity complexity;
-	private final LazyBlockCount blockCount;
-	private final LazyCoveredBlockCount coveredBlockCount;
-	private final LazyMethodCount methodCount;
-	private final LazyMaximumMethodComplexity maximumMethodComplexity;
-	private final LazyClassCount classCount;
+	private Composite blockMetrics;
+	private MethodMetrics methodMetrics;
+	private ClassMetrics classMetrics;
+	private PackageMetrics packageMetrics;
 	
 	public ProjectItem(String displayName) {
 		this.displayName = displayName;
 		packages = new TreeSet<PackageItem>(PackageItem.DISPLAY_ORDER);
-		complexity = new LazyComplexity(packages);
-		blockCount = new LazyBlockCount(packages);
-		coveredBlockCount = new LazyCoveredBlockCount(packages);
-		methodCount = new LazyMethodCount(packages);
-		maximumMethodComplexity = new LazyMaximumMethodComplexity(packages);
-		classCount = new LazyClassCount(packages);
+		blockMetrics = new BlockMetrics.Composite(packages);
+		methodMetrics = new MethodMetrics(packages, blockMetrics);
+		classMetrics = new ClassMetrics(packages, blockMetrics);
+		packageMetrics = new PackageMetrics(packages, blockMetrics);
 	}
 	
 	public void addPackage(PackageItem packageItem) {
@@ -36,31 +34,19 @@ public class ProjectItem extends ProjectMeasure {
 		throw new UnsupportedOperationException();
 	}
 
-	public int getComplexity() {
-		return complexity.value();
+	public BlockMetrics getBlockMetrics() {
+		return blockMetrics;
 	}
 
-	public int getBlockCount() {
-		return blockCount.value();
+	public MethodMetrics getMethodMetrics() {
+		return methodMetrics;
 	}
 
-	public int getCoveredBlockCount() {
-		return coveredBlockCount.value();
+	public ClassMetrics getClassMetrics() {
+		return classMetrics;
 	}
 	
-	public int getMethodCount() {
-		return methodCount.value();
-	}
-	
-	public int getMaximumMethodComplexity() {
-		return maximumMethodComplexity.value();
-	}
-
-	public int getClassCount() {
-		return classCount.value();
-	}
-	
-	public int getPackageCount() {
-		return packages.size();
+	public PackageMetrics getPackageMetrics() {
+		return packageMetrics;
 	}
 }

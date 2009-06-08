@@ -5,20 +5,20 @@ import java.util.Collection;
 import undercover.support.LazyValue;
 
 public class LazyMaximumMethodComplexity extends LazyValue<Integer> {
-	private Collection<? extends MethodMeasure> children;
+	private Collection<? extends Item> children;
 
-	public LazyMaximumMethodComplexity(Collection<? extends MethodMeasure> children) {
+	public LazyMaximumMethodComplexity(Collection<? extends Item> children) {
 		this.children = children;
 	}
 	
 	protected Integer calculate() {
 		int result = 0;
-		for (MethodMeasure each : children) {
+		for (Item each : children) {
 			int complexity;
-			if (each instanceof ClassMeasure) {
-				complexity = ((ClassMeasure) each).getMaximumMethodComplexity();
+			if (each instanceof MethodItem) {
+				complexity = each.getBlockMetrics().getComplexity();
 			} else {
-				complexity = each.getComplexity();
+				complexity = each.getMethodMetrics().getMaximumComplexity();
 			}
 			result = Math.max(result, complexity);
 		}

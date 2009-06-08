@@ -1,6 +1,5 @@
 package undercover.report;
 
-
 public class SourceLine {
 	public final int number;
 	public final String text;

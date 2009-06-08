@@ -5,16 +5,16 @@ import java.util.Collection;
 import undercover.support.LazyValue;
 
 public class LazyCoveredBlockCount extends LazyValue<Integer> {
-	private Collection<? extends MethodMeasure> children;
+	private Collection<? extends Item> children;
 
-	public LazyCoveredBlockCount(Collection<? extends MethodMeasure> children) {
+	public LazyCoveredBlockCount(Collection<? extends Item> children) {
 		this.children = children;
 	}
 	
 	protected Integer calculate() {
 		int result = 0;
-		for (MethodMeasure each : children) {
-			result += each.getCoveredBlockCount();
+		for (Item each : children) {
+			result += each.getBlockMetrics().getCoveredBlockCount();
 		}
 		return result;
 	}

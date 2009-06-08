@@ -35,17 +35,17 @@ $item.linkName$
 >>
 
 coveragePercent(item) ::= <<
-$if(item.executable)$
-$item.coverageRate; format="percent"$%
+$if(item.blockMetrics.executable)$
+$item.blockMetrics.coverageRate; format="percent"$%
 $else$
 N/A
 $endif$
 >>
 
 blockCoverage(item) ::= <<
-$if(item.executable)$
-$item.coverageRate; format="percent"$%
-($item.coveredBlockCount$/$item.blockCount$)
+$if(item.blockMetrics.executable)$
+$item.blockMetrics.coverageRate; format="percent"$%
+($item.blockMetrics.coveredBlockCount$/$item.blockMetrics.blockCount$)
 $else$
 N/A
 $endif$
@@ -53,8 +53,8 @@ $endif$
 
 coverageBar(item) ::= <<
 <div class="coverageBar">
-$if(item.executable)$
-	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.coverageRate; format="percent"$%;"></div> </div>
+$if(item.blockMetrics.executable)$
+	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.blockMetrics.coverageRate; format="percent"$%;"></div> </div>
 $else$
 	<div class="coverageBarNotAvailable"></div>
 $endif$
@@ -93,7 +93,7 @@ itemStatistics(item) ::= <<
 					</colgroup>
 					<tbody>
 					<tr>
-						<th>Complexity</th><td>$item.complexity$</td>
+						<th>Complexity</th><td>$item.blockMetrics.complexity$</td>
 					</tr>
 					<tr>
 						<th>Coverage</th><td>$blockCoverage(item)$</td>
@@ -109,28 +109,28 @@ itemStatistics(item) ::= <<
 			<td>
 				
 				<table>
-					$if(item.packageCount)$
+					$if(item.packageMetrics)$
 					<tr>
-						<th>Packages</th><td>$item.packageCount$</td>
-						<th>Avg. Complexity</th><td>$item.averagePackageComplexity$</td>	
+						<th>Packages</th><td>$item.packageMetrics.count$</td>
+						<th>Avg. Complexity</th><td>$item.packageMetrics.averageComplexity$</td>	
 						$!
-						<th>Max. Complexity</th><td>$item.maximumPackageComplexity$</td>
+						<th>Max. Complexity</th><td>$item.packageMetrics.maximumComplexity$</td>
 						!$
 					</tr>
 					$endif$
-					$if(item.classCount)$
+					$if(item.classMetrics)$
 					<tr>
-						<th>Classes</th><td>$item.classCount$</td>
-						<th>Avg. Complexity</th><td>$item.averageClassComplexity$</td>	
+						<th>Classes</th><td>$item.classMetrics.count$</td>
+						<th>Avg. Complexity</th><td>$item.classMetrics.averageComplexity$</td>	
 						$!
-						<th>Max. Complexity</th><td>$item.maximumClassComplexity$</td>	
+						<th>Max. Complexity</th><td>$item.classMetrics.maximumComplexity$</td>	
 						!$
 					</tr>
 					$endif$
 					<tr>
-						<th>Methods</th><td>$item.methodCount$</td>
-						<th>Avg. Complexity</th><td>$item.averageMethodComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.maximumMethodComplexity$</td>	
+						<th>Methods</th><td>$item.methodMetrics.count$</td>
+						<th>Avg. Complexity</th><td>$item.methodMetrics.averageComplexity$</td>	
+						<th>Max. Complexity</th><td>$item.methodMetrics.maximumComplexity$</td>	
 					</tr>
 				</table>
 			</td>
@@ -179,12 +179,12 @@ $itemStatistics(project)$
 		$project.packages:{ each |
 		<tr>
 			<td><a href="package-$each:linkName()$-summary.html">$each.displayName$</a></td>
-			<td class="complexity">$each.complexity$</td>
+			<td class="complexity">$each.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
-			<td class="number">$each.classCount$</td>
-			<td class="complexity">$each.averageMethodComplexity$</td>
-			<td class="complexity">$each.maximumMethodComplexity$</td>
+			<td class="number">$each.classMetrics.count$</td>
+			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
+			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
 		</tr>
 		}$
 	</tbody>
@@ -286,12 +286,12 @@ $itemStatistics(package)$
 		$package.classes:{ each |
 		<tr>
 			<td><a href="source-$each:linkName()$.html">$each.simpleName$</a></td>
-			<td class="complexity">$each.complexity$</td>
+			<td class="complexity">$each.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
-			<td class="number">$each.methodCount$</td>
-			<td class="complexity">$each.averageMethodComplexity$</td>
-			<td class="complexity">$each.maximumMethodComplexity$</td>
+			<td class="number">$each.methodMetrics.count$</td>
+			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
+			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
 		</tr>
 		}$
 	</tbody>
@@ -330,17 +330,17 @@ $itemStatistics(source)$
 		$source.classes:{ each |
 		<tr>
 			<td>$each.displayName$</td>
-			<td class="number">$each.methodCount$</td>
-			<td class="complexity">$each.averageMethodComplexity$</td>
-			<td class="complexity">$each.maximumMethodComplexity$</td>
-			<td class="complexity">$each.complexity$</td>
+			<td class="number">$each.methodMetrics.count$</td>
+			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
+			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
+			<td class="complexity">$each.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 		</tr>
 		$each.methods:{ method |
 		<tr>
 			<td colspan="4">$method.simpleName:html()$</td>
-			<td class="complexity">$method.complexity$</td>
+			<td class="complexity">$method.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(method)$</td>
 			<td class="coverage">$coverageBar(method)$</td>
 		</tr>
@@ -381,15 +381,15 @@ $itemStatistics(project)$
 
 	<h3>Coverage Distribution</h3>
 	<div id="coverage-distribution">
-		<div class="graph" style="width: 360px; height: 300px;"></div>
+		<div class="graph" style="width: 340px; height: 280px;"></div>
 		<div class="tooltip"></div>
 	</div>
 
 	<h3>Heaviest Classes</h3>
 	<table>
-		<col width="30" />
+		<col width="20" />
 		<col width="50" />
-		<col width="100" />
+		<col width="80" />
 		<col width="*" />
 		<tbody>
 		$mostComplexClasses:{ each |
@@ -405,9 +405,9 @@ $itemStatistics(project)$
 
 	<h3>Least Exercised Classes</h3>
 	<table>
-		<col width="30" />
+		<col width="20" />
 		<col width="50" />
-		<col width="100" />
+		<col width="80" />
 		<col width="*" />
 		<tbody>
 		$leastCoveredClasses:{ each |
@@ -427,16 +427,16 @@ $itemStatistics(project)$
 
 	<h3>Coverage-Complexity</h3>
 	<div id="coverage-complexity">
-		<div class="graph" style="width: 360px; height: 300px;"></div>
+		<div class="graph" style="width: 340px; height: 280px;"></div>
 		<div class="tooltip"></div>
 	</div>
 
 	<h3>Weakest Classes</h3>
 	<table>
 		<colgroup>
-			<col width="30" />
+			<col width="20" />
 			<col width="50" />
-			<col width="100" />
+			<col width="80" />
 			<col width="*" />
 		</colgroup>
 		<tbody>
@@ -465,7 +465,7 @@ $itemStatistics(project)$
     drawCoverageComplexityGraph(
     	"#coverage-complexity div.graph",
     	"#coverage-complexity .tooltip",
-    	[$coverageComplexity.items:{ each | [$each.coverageRate; format="percent"$, $each.complexity$, "$each.simpleName$", "source-$each.linkName$.html"] }; separator=", "$]
+    	[$coverageComplexity.items:{ each | [$each.blockMetrics.coverageRate; format="percent"$, $each.blockMetrics.complexity$, "$each.simpleName$", "source-$each.linkName$.html"] }; separator=", "$]
     );
 });
 </script>

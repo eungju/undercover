@@ -3,7 +3,6 @@ package undercover.report;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -12,16 +11,22 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import undercover.metric.BlockMeta;
+import undercover.report.BlockMetrics.Composite;
 
-public class SourceItem extends SourceMeasure {
+public class SourceItem implements Item {
 	private final SourceFile sourceFile;
 	public final SortedSet<ClassItem> classes;
 	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
+	private Composite blockMetrics;
+	private MethodMetrics methodMetrics;
+	private ClassMetrics classMetrics;
 	
 	public SourceItem(SourceFile sourceFile) {
 		this.sourceFile = sourceFile;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
-		initializeSourceMeasure(classes);
+		blockMetrics = new BlockMetrics.Composite(classes);
+		methodMetrics = new MethodMetrics(classes, blockMetrics);
+		classMetrics = new ClassMetrics(classes, blockMetrics);
 	}
 	
 	public String getName() {
@@ -66,5 +71,21 @@ public class SourceItem extends SourceMeasure {
 			}
 		}
 		return lines;
+	}
+
+	public BlockMetrics getBlockMetrics() {
+		return blockMetrics;
+	}
+
+	public MethodMetrics getMethodMetrics() {
+		return methodMetrics;
+	}
+
+	public ClassMetrics getClassMetrics() {
+		return classMetrics;
+	}
+	
+	public PackageMetrics getPackageMetrics() {
+		return null;
 	}
 }

@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ClassItem extends ClassMeasure {
+public class ClassItem implements Item {
 	private final String name;
 	public final SourceFile sourceFile;
 	public final List<MethodItem> methods;
+	private final BlockMetrics blockMetrics;
+	private final MethodMetrics methodMetrics;
 	
 	public ClassItem(String name, SourceFile sourceFile) {
 		this.name = name;
 		this.sourceFile = sourceFile;
 		methods = new ArrayList<MethodItem>();
-		initializeClassMeasure(methods);
+		blockMetrics = new BlockMetrics.Composite(methods);
+		methodMetrics = new MethodMetrics(methods, blockMetrics);
 	}
 	
 	public void addMethod(MethodItem methodItem) {
@@ -39,6 +42,22 @@ public class ClassItem extends ClassMeasure {
 	
 	public String getLinkName() {
 		return sourceFile.path.replaceAll("/", ".");
+	}
+
+	public BlockMetrics getBlockMetrics() {
+		return blockMetrics;
+	}
+	
+	public MethodMetrics getMethodMetrics() {
+		return methodMetrics;
+	}
+	
+	public ClassMetrics getClassMetrics() {
+		return null;
+	}
+	
+	public PackageMetrics getPackageMetrics() {
+		return null;
 	}
 
 	public static final Comparator<ClassItem> ORDER_BY_SIMPLE_NAME = new Comparator<ClassItem>() {

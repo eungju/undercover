@@ -14,7 +14,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.apache.commons.io.IOUtils;
 
-import undercover.report.MethodMeasure;
+import undercover.report.Item;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.ReportOutput;
@@ -138,11 +138,11 @@ public class HtmlReport {
 		output.write("project-dashboard.html", template.toString());
 	}
 
-	public <T extends MethodMeasure> List<T> mostRisky(int max, Collection<T> candidates) {
+	public <T extends Item> List<T> mostRisky(int max, Collection<T> candidates) {
 		List<T> items = new ArrayList<T>(candidates);
 		Collections.sort(items, new Comparator<T>() {
 			public int compare(T a, T b) {
-				return (int) Math.signum((b.getRisk() - a.getRisk()));
+				return (int) Math.signum((b.getBlockMetrics().getRisk() - a.getBlockMetrics().getRisk()));
 			}
 		});
 		if (items.size() > max) {
@@ -151,11 +151,11 @@ public class HtmlReport {
 		return items;
 	}
 
-	public <T extends MethodMeasure> List<T> mostComplex(int max, Collection<T> candidates) {
+	public <T extends Item> List<T> mostComplex(int max, Collection<T> candidates) {
 		List<T> items = new ArrayList<T>(candidates);
 		Collections.sort(items, new Comparator<T>() {
 			public int compare(T a, T b) {
-				return b.getComplexity() - a.getComplexity();
+				return b.getBlockMetrics().getComplexity() - a.getBlockMetrics().getComplexity();
 			}
 		});
 		if (items.size() > max) {
@@ -164,11 +164,11 @@ public class HtmlReport {
 		return items;
 	}
 
-	public <T extends MethodMeasure> List<T> leastCovered(int max, Collection<T> candidates) {
+	public <T extends Item> List<T> leastCovered(int max, Collection<T> candidates) {
 		List<T> items = new ArrayList<T>(candidates);
 		Collections.sort(items, new Comparator<T>() {
 			public int compare(T a, T b) {
-				return (int) Math.signum(a.getCoverageRate() - b.getCoverageRate());
+				return (int) Math.signum(a.getBlockMetrics().getCoverageRate() - b.getBlockMetrics().getCoverageRate());
 			}
 		});
 		if (items.size() > max) {

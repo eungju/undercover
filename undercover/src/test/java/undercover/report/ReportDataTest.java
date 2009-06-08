@@ -54,8 +54,8 @@ public class ReportDataTest {
 		dut.classItem = new ClassItem("p/c", sourceFile);
 		dut.sourceItem = new SourceItem(sourceFile);
 		methodMeta.accept(dut);
-		assertEquals(2, dut.methodItem.getBlockCount());
-		assertEquals(1, dut.methodItem.getCoveredBlockCount());
+		assertEquals(2, dut.methodItem.getBlockMetrics().getBlockCount());
+		assertEquals(1, dut.methodItem.getBlockMetrics().getCoveredBlockCount());
 	}
 	
 	@Test public void visitBlockWithoutClassCoverage() {

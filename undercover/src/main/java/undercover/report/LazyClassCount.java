@@ -5,19 +5,19 @@ import java.util.Collection;
 import undercover.support.LazyValue;
 
 public class LazyClassCount extends LazyValue<Integer> {
-	private Collection<? extends ClassMeasure> children;
+	private Collection<? extends Item> children;
 
-	public LazyClassCount(Collection<? extends ClassMeasure> children) {
+	public LazyClassCount(Collection<? extends Item> children) {
 		this.children = children;
 	}
 	
 	protected Integer calculate() {
 		int result = 0;
-		for (ClassMeasure each : children) {
-			if (each instanceof PackageMeasure) {
-				result += ((PackageMeasure) each).getClassCount();
+		for (Item each : children) {
+			if (each instanceof ClassItem) {
+				result ++;
 			} else {
-				result += 1;
+				result += each.getClassMetrics().getCount();
 			}
 		}
 		return result;

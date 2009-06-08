@@ -4,14 +4,21 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class PackageItem extends PackageMeasure {
+import undercover.report.BlockMetrics.Composite;
+
+public class PackageItem implements Item {
 	private final String name;
 	public final SortedSet<ClassItem> classes;
+	private Composite blockMetrics;
+	private MethodMetrics methodMetrics;
+	private ClassMetrics classMetrics;
 	
 	public PackageItem(String name) {
 		this.name = name;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
-		initializePackageMeasure(classes);
+		blockMetrics = new BlockMetrics.Composite(classes);
+		methodMetrics = new MethodMetrics(classes, blockMetrics);
+		classMetrics = new ClassMetrics(classes, blockMetrics);
 	}
 	
 	public void addClass(ClassItem child) {
@@ -28,6 +35,22 @@ public class PackageItem extends PackageMeasure {
 	
 	public String getLinkName() {
 		return name.replaceAll("/", ".");
+	}
+
+	public BlockMetrics getBlockMetrics() {
+		return blockMetrics;
+	}
+
+	public MethodMetrics getMethodMetrics() {
+		return methodMetrics;
+	}
+
+	public ClassMetrics getClassMetrics() {
+		return classMetrics;
+	}
+	
+	public PackageMetrics getPackageMetrics() {
+		return null;
 	}
 
 	public static final Comparator<PackageItem> DISPLAY_ORDER = new Comparator<PackageItem>() {
