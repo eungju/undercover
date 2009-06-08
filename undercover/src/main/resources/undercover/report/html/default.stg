@@ -168,7 +168,7 @@ $itemStatistics(project)$
 			<th>Complexity</th>
 			<th colspan="2">Coverage</th>
 			<th>Classes</th>
-			<th colspan="2">Method Complexity (Avg.,Max.)</th>
+			<th colspan="2">Class Complexity (Avg.,Max.)</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -179,8 +179,8 @@ $itemStatistics(project)$
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 			<td class="number">$each.classMetrics.count$</td>
-			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
-			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
+			<td class="complexity">$each.classMetrics.averageComplexity$</td>
+			<td class="complexity">$each.classMetrics.maximumComplexity$</td>
 		</tr>
 		}$
 	</tbody>
