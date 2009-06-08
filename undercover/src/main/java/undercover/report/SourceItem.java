@@ -11,20 +11,19 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import undercover.data.BlockMeta;
-import undercover.report.BlockMetrics.Composite;
 
 public class SourceItem implements Item {
 	private final SourceFile sourceFile;
 	public final SortedSet<ClassItem> classes;
 	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
-	private Composite blockMetrics;
+	private BlockMetrics blockMetrics;
 	private MethodMetrics methodMetrics;
 	private ClassMetrics classMetrics;
 	
 	public SourceItem(SourceFile sourceFile) {
 		this.sourceFile = sourceFile;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
-		blockMetrics = new BlockMetrics.Composite(classes);
+		blockMetrics = new BlockMetrics(classes);
 		methodMetrics = new MethodMetrics(classes, blockMetrics);
 		classMetrics = new ClassMetrics(classes, blockMetrics);
 	}

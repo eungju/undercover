@@ -7,22 +7,42 @@ import java.util.List;
 public class ClassItem implements Item {
 	private final String name;
 	public final SourceFile sourceFile;
+	public final List<Item> children;
 	public final List<MethodItem> methods;
+	public final List<ClassItem> classes;
 	private final BlockMetrics blockMetrics;
 	private final MethodMetrics methodMetrics;
 	
 	public ClassItem(String name, SourceFile sourceFile) {
 		this.name = name;
 		this.sourceFile = sourceFile;
+		children = new ArrayList<Item>();
 		methods = new ArrayList<MethodItem>();
-		blockMetrics = new BlockMetrics.Composite(methods);
-		methodMetrics = new MethodMetrics(methods, blockMetrics);
+		classes = new ArrayList<ClassItem>();
+		blockMetrics = new BlockMetrics(children);
+		methodMetrics = new MethodMetrics(children, blockMetrics);
 	}
 	
 	public void addMethod(MethodItem methodItem) {
+		children.add(methodItem);
 		methods.add(methodItem);
 	}
-	
+
+	public MethodItem getMethod(String methodName) {
+		for (MethodItem each : methods) {
+			System.out.println(each.getName() + "==" + methodName);
+			if (each.getName().equals(methodName)) {
+				return each;
+			}
+		}
+		return null;
+	}
+
+	public void addClass(ClassItem classItem) {
+		children.add(classItem);
+		classes.add(classItem);
+	}
+
 	public String getName() {
 		return name;
 	}

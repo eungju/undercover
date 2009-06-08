@@ -2,12 +2,38 @@ package undercover.report;
 
 import java.util.Collection;
 
-public abstract class BlockMetrics {
-	public abstract int getComplexity();
+public class BlockMetrics {
+	private final int complexity_;
+	private final int blockCount_;
+	private final int coveredBlockCount_;
+	private final LazyComplexity complexity;
+	private final LazyBlockCount blockCount;
+	private final LazyCoveredBlockCount coveredBlockCount;
 
-	public abstract int getBlockCount();
+	public BlockMetrics(Collection<? extends Item> children) {
+		this(0, 0, 0, children);
+	}
+	
+	public BlockMetrics(int complexity, int blockCount, int coveredBlockCount, Collection<? extends Item> children) {
+		this.complexity_ = complexity;
+		this.blockCount_ = blockCount;
+		this.coveredBlockCount_ = coveredBlockCount;
+		this.complexity = new LazyComplexity(children);
+		this.blockCount = new LazyBlockCount(children);
+		this.coveredBlockCount = new LazyCoveredBlockCount(children);
+	}
 
-	public abstract int getCoveredBlockCount();
+	public int getComplexity() {
+		return complexity_ + complexity.value();
+	}
+
+	public int getBlockCount() {
+		return blockCount_ + blockCount.value();
+	}
+
+	public int getCoveredBlockCount() {
+		return coveredBlockCount_ + coveredBlockCount.value();
+	}
 	
 	public boolean isExecutable() {
 		return getBlockCount() > 0;
@@ -19,53 +45,5 @@ public abstract class BlockMetrics {
 	
 	public double getRisk() {
 		return getComplexity() + (getComplexity() * (1 - getCoverageRate()));
-	}
-	
-	public static class Leaf extends BlockMetrics {
-		private final int complexity;
-		private final int blockCount;
-		private final int coveredBlockCount;
-
-		public Leaf(int complexity, int blockCount, int coveredBlockCount) {
-			this.complexity = complexity;
-			this.blockCount = blockCount;
-			this.coveredBlockCount = coveredBlockCount;
-		}
-
-		public int getComplexity() {
-			return complexity;
-		}
-
-		public int getBlockCount() {
-			return blockCount;
-		}
-
-		public int getCoveredBlockCount() {
-			return coveredBlockCount;
-		}
-	}
-	
-	public static class Composite extends BlockMetrics {
-		private LazyComplexity complexity;
-		private LazyBlockCount blockCount;
-		private LazyCoveredBlockCount coveredBlockCount;
-
-		public Composite(Collection<? extends Item> children) {
-			complexity = new LazyComplexity(children);
-			blockCount = new LazyBlockCount(children);
-			coveredBlockCount = new LazyCoveredBlockCount(children);
-		}
-
-		public int getComplexity() {
-			return complexity.value();
-		}
-		
-		public int getBlockCount() {
-			return blockCount.value();
-		}
-
-		public int getCoveredBlockCount() {
-			return coveredBlockCount.value();
-		}
 	}
 }

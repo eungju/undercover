@@ -3,6 +3,7 @@ package undercover.report;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import undercover.data.BlockMeta;
@@ -22,7 +23,8 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();
 	final Map<String, ClassItem> classItems = new HashMap<String, ClassItem>();
 	final Map<String, SourceItem> sourceItems = new HashMap<String, SourceItem>();
-	
+	final List<ClassMeta> anonymousClasses = new ArrayList<ClassMeta>();
+
 	ReportData reportData;
 	ProjectItem projectItem;
 	PackageItem packageItem;
@@ -54,7 +56,20 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitLeave(MetaData metaData) {
-		reportData = new ReportData(projectItem, classItems, sourceItems);
+		Map<String, ClassItem> namedClassItems = new HashMap<String, ClassItem>(classItems);
+		for (ClassMeta each : anonymousClasses) {
+			ClassItem outerClass = classItems.get(each.outer.className);
+			ClassItem nestedClass = classItems.get(each.name);
+			if (each.outer.isMethod()) {
+				MethodItem outerMethod = outerClass.getMethod(each.outer.className + "." + each.outer.methodName);
+				outerMethod.addClass(nestedClass);
+			} else {
+				outerClass.addClass(nestedClass);
+			}
+			namedClassItems.remove(each.name);
+		}
+		
+		reportData = new ReportData(projectItem, namedClassItems, sourceItems);
 	}
 
 	public void visitEnter(ClassMeta classMeta) {
@@ -70,19 +85,26 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			sourceItem = new SourceItem(sourceFile);
 		}
 		
+		if (classMeta.isAnonymous()) {
+			anonymousClasses.add(classMeta);
+		}
+
 		classItem = new ClassItem(classMeta.name, sourceFile);
 		classCoverage = coverageData.getCoverage(classMeta.name);
 		methodIndex = 0;
 	}
 
 	public void visitLeave(ClassMeta classMeta) {
-		packageItem.addClass(classItem);
+		if (!classMeta.isAnonymous()) {
+			packageItem.addClass(classItem);
+			sourceItem.addClass(classItem);
+		}
+		
 		if (!packageItems.containsKey(packageItem.getName())) {
 			packageItems.put(packageItem.getName(), packageItem);
 			projectItem.addPackage(packageItem);
 		}
 
-		sourceItem.addClass(classItem);
 		if (!sourceItems.containsKey(sourceItem.getName())) {
 			sourceItems.put(sourceItem.getName(), sourceItem);
 		}

@@ -1,9 +1,13 @@
 package undercover.report;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import undercover.data.MethodMeta;
 
 public class MethodItem implements Item {
 	private final String name;
+	public final List<ClassItem> classes;
 	private final BlockMetrics blockMetrics;
 	
 	public MethodItem(ClassItem parent, MethodMeta methodMeta, int coveredBlockCount) {
@@ -12,7 +16,12 @@ public class MethodItem implements Item {
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
 		this.name = name;
-		blockMetrics = new BlockMetrics.Leaf(complexity, blockCount, coveredBlockCount);
+		classes = new ArrayList<ClassItem>();
+		blockMetrics = new BlockMetrics(complexity, blockCount, coveredBlockCount, classes);
+	}
+
+	public void addClass(ClassItem classItem) {
+		classes.add(classItem);
 	}
 
 	public String getName() {

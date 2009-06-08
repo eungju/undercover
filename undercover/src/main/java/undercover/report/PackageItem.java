@@ -4,19 +4,17 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import undercover.report.BlockMetrics.Composite;
-
 public class PackageItem implements Item {
 	private final String name;
 	public final SortedSet<ClassItem> classes;
-	private Composite blockMetrics;
+	private BlockMetrics blockMetrics;
 	private MethodMetrics methodMetrics;
 	private ClassMetrics classMetrics;
 	
 	public PackageItem(String name) {
 		this.name = name;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
-		blockMetrics = new BlockMetrics.Composite(classes);
+		blockMetrics = new BlockMetrics(classes);
 		methodMetrics = new MethodMetrics(classes, blockMetrics);
 		classMetrics = new ClassMetrics(classes, blockMetrics);
 	}
