@@ -18,7 +18,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 
 import undercover.data.ClassMeta;
 import undercover.data.MethodMeta;
-import undercover.instrument.synthetic.Exclusion;
+import undercover.instrument.filter.Exclusion;
 
 public class ClassAnalyzer {
 	private final Exclusion exclusion;

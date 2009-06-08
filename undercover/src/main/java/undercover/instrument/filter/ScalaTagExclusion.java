@@ -1,7 +1,7 @@
-package undercover.instrument.synthetic;
+package undercover.instrument.filter;
 
 import static org.objectweb.asm.Opcodes.*;
-import static undercover.instrument.synthetic.ExclusionUtils.*;
+import static undercover.instrument.filter.ExclusionUtils.*;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;

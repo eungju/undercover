@@ -1,4 +1,4 @@
-package undercover.instrument.synthetic;
+package undercover.instrument.filter;
 
 public class ExclusionUtils {
 	public static boolean hasAccess(int access, int required) {

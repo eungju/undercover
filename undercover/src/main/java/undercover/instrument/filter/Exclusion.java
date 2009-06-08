@@ -1,4 +1,4 @@
-package undercover.instrument.synthetic;
+package undercover.instrument.filter;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;

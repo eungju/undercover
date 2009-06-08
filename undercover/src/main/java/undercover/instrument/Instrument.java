@@ -9,8 +9,8 @@ import org.objectweb.asm.tree.ClassNode;
 
 import undercover.data.ClassMeta;
 import undercover.data.MetaData;
-import undercover.instrument.synthetic.Exclusion;
-import undercover.instrument.synthetic.ExclusionSet;
+import undercover.instrument.filter.Exclusion;
+import undercover.instrument.filter.ExclusionSet;
 
 public class Instrument {
 	static final String COVERAGE_FIELD_NAME = "$undercover$coverage";

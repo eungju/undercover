@@ -1,4 +1,4 @@
-package undercover.instrument.synthetic;
+package undercover.instrument.filter;
 
 import static org.junit.Assert.*;
 import static org.objectweb.asm.Opcodes.*;
