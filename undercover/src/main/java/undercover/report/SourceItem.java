@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import undercover.metric.BlockMeta;
+import undercover.data.BlockMeta;
 import undercover.report.BlockMetrics.Composite;
 
 public class SourceItem implements Item {

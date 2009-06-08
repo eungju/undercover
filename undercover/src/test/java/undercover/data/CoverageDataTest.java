@@ -1,4 +1,4 @@
-package undercover.metric;
+package undercover.data;
 
 import static org.junit.Assert.*;
 

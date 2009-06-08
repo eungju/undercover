@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.asm.tree.ClassNode;
 
+import undercover.data.ClassMeta;
 import undercover.instrument.synthetic.NoExclusion;
-import undercover.metric.ClassMeta;
 
 public class ClassAnalyzerTest {
 	private ClassAnalyzer dut;

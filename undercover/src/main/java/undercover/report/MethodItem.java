@@ -1,6 +1,6 @@
 package undercover.report;
 
-import undercover.metric.MethodMeta;
+import undercover.data.MethodMeta;
 
 public class MethodItem implements Item {
 	private final String name;

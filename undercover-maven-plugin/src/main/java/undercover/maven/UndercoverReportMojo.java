@@ -12,8 +12,8 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
-import undercover.metric.CoverageData;
-import undercover.metric.MetaData;
+import undercover.data.CoverageData;
+import undercover.data.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
 import undercover.report.ReportOutput;

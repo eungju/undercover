@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.ClassMeta;
+import undercover.data.ClassMeta;
 
 public class SourceFinderTest {
 	private SourceFinder dut;

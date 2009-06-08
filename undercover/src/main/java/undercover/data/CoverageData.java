@@ -1,4 +1,4 @@
-package undercover.metric;
+package undercover.data;
 
 import java.io.File;
 import java.io.FileInputStream;

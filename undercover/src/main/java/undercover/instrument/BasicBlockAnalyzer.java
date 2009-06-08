@@ -24,8 +24,8 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 
-import undercover.metric.BlockMeta;
-import undercover.metric.MethodMeta;
+import undercover.data.BlockMeta;
+import undercover.data.MethodMeta;
 
 public class BasicBlockAnalyzer {
 	public List<BasicBlock> blocks = new ArrayList<BasicBlock>();

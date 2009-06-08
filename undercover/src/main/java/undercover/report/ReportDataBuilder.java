@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import undercover.metric.BlockMeta;
-import undercover.metric.ClassMeta;
-import undercover.metric.Coverage;
-import undercover.metric.CoverageData;
-import undercover.metric.MetaData;
-import undercover.metric.MetaDataVisitor;
-import undercover.metric.MethodMeta;
+import undercover.data.BlockMeta;
+import undercover.data.ClassMeta;
+import undercover.data.Coverage;
+import undercover.data.CoverageData;
+import undercover.data.MetaData;
+import undercover.data.MetaDataVisitor;
+import undercover.data.MethodMeta;
 
 public class ReportDataBuilder implements MetaDataVisitor {
 	private final CoverageData coverageData;

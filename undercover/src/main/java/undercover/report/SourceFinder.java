@@ -3,7 +3,7 @@ package undercover.report;
 import java.io.File;
 import java.util.List;
 
-import undercover.metric.ClassMeta;
+import undercover.data.ClassMeta;
 
 public class SourceFinder {
 	private final List<File> sourcePaths;

@@ -1,4 +1,4 @@
-package undercover.metric;
+package undercover.data;
 
 public interface MetaDataVisitor {
 	void visitEnter(MetaData metaData);

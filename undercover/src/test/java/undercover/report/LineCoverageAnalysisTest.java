@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.BlockMeta;
+import undercover.data.BlockMeta;
 
 public class LineCoverageAnalysisTest {
 	private LineCoverageAnalysis dut;

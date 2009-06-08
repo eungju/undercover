@@ -3,7 +3,7 @@ package undercover.runtime;
 import java.io.IOException;
 
 import undercover.UndercoverSettings;
-import undercover.metric.CoverageData;
+import undercover.data.CoverageData;
 
 public class ExitHook extends Thread {
 	private Probe probe;

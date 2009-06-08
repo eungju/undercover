@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.MethodMeta;
+import undercover.data.MethodMeta;
 
 public class MethodItemTest {
 	private ClassItem classItem;

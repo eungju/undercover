@@ -8,9 +8,9 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.metric.ClassMeta;
-import undercover.metric.MetaData;
-import undercover.metric.MethodMeta;
+import undercover.data.ClassMeta;
+import undercover.data.MetaData;
+import undercover.data.MethodMeta;
 
 //FIXME: How to test instrumented bytecode?
 public class InstrumentTest {

@@ -1,4 +1,4 @@
-package undercover.metric;
+package undercover.data;
 
 import java.io.Serializable;
 import java.util.Collections;

@@ -3,7 +3,7 @@ package undercover.report;
 import java.util.HashMap;
 import java.util.Map;
 
-import undercover.metric.BlockMeta;
+import undercover.data.BlockMeta;
 
 public class LineCoverageAnalysis {
 	private final Map<Integer, LineCoverage> lines = new HashMap<Integer, LineCoverage>();
