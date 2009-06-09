@@ -355,9 +355,9 @@ $itemStatistics(source)$
 	<tbody>
 	$source.lines:{ each |
 		<tr$if(each.executable)$ class="$if(each.coverage.completelyCovered)$completely$elseif(each.coverage.partialyCovered)$partialy$else$not$endif$-covered"$endif$>
-			<td class="source-line-number">$each.number$</td>
-			<td class="source-line-touch">$if(each.executable)$$each.coverage.touchCount$$endif$</td>
-			<td class="source-line-text">$each.text:html()$</td>
+			<td class="line-number">$each.number$</td>
+			<td class="line-touch">$if(each.executable)$$each.coverage.touchCount$$endif$</td>
+			<td class="line-text">$each.text:html()$</td>
 		</tr>
 	}$
 	</tbody>

@@ -142,27 +142,27 @@ table.source td {
 	padding: 2px;
 }
 
-tr.completely-covered {
+table.source tr.completely-covered {
 	background-color: #efe;
 }
 
-tr.partialy-covered {
+table.source tr.partialy-covered {
 	background-color: #ff9;
 }
 
-tr.not-covered {
+table.source tr.not-covered {
 	background-color: #fbb;
 }
 
-td.source-line-number {
+table.source td.line-number {
 	text-align: right;
 }
 
-td.source-line-touch {
+table.source td.line-touch {
 	text-align: right;
 }
 
-td.source-line-text {
+table.source td.line-text {
 	white-space: pre;
 	font-family: Courier New, serif;
 }
