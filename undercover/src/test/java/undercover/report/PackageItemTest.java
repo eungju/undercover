@@ -11,10 +11,10 @@ public class PackageItemTest {
 	@Before public void beforeEach() {
 		dut = new PackageItem("p");
 		ClassItem c1 = new ClassItem("p/c1", new SourceFile("p/c1.java"));
-		c1.addMethod(new MethodItem("p/c1.m1()V", 1, 2, 2));
+		c1.addMethod(new MethodItem("m1()V", 1, 2, 2));
 		dut.addClass(c1);
 		ClassItem c2 = new ClassItem("p/c2", new SourceFile("p/c2.java"));
-		c2.addMethod(new MethodItem("p/c2.m2()V", 2, 2, 1));
+		c2.addMethod(new MethodItem("m2()V", 2, 2, 1));
 		dut.addClass(c2);
 	}
 	

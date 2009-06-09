@@ -10,8 +10,8 @@ public class MethodItem implements Item {
 	public final List<ClassItem> classes;
 	private final BlockMetrics blockMetrics;
 	
-	public MethodItem(ClassItem parent, MethodMeta methodMeta, int coveredBlockCount) {
-		this(parent.getName() + "." + methodMeta.name, methodMeta.complexity, methodMeta.blocks.size(), coveredBlockCount);
+	public MethodItem(MethodMeta methodMeta, int coveredBlockCount) {
+		this(methodMeta.name + methodMeta.descriptor, methodMeta.complexity, methodMeta.blocks.size(), coveredBlockCount);
 	}
 	
 	public MethodItem(String name, int complexity, int blockCount, int coveredBlockCount) {
@@ -26,10 +26,6 @@ public class MethodItem implements Item {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getSimpleName() {
-		return name.substring(name.lastIndexOf('.') + 1, name.length());
 	}
 
 	public String getDisplayName() {

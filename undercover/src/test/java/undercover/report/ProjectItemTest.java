@@ -13,13 +13,13 @@ public class ProjectItemTest {
 		
 		PackageItem p1 = new PackageItem("p1");
 		ClassItem c1 = new ClassItem("p1/c1", new SourceFile("p1/c1.java"));
-		c1.addMethod(new MethodItem("p1/c1.m1()V", 1, 2, 2));
+		c1.addMethod(new MethodItem("m1()V", 1, 2, 2));
 		p1.addClass(c1);
 		dut.addPackage(p1);
 		
 		PackageItem p2 = new PackageItem("p2");
 		ClassItem c2 = new ClassItem("p2/c2", new SourceFile("p2/c2.java"));
-		c2.addMethod(new MethodItem("p2/c2.m2()V", 2, 2, 1));
+		c2.addMethod(new MethodItem("m2()V", 2, 2, 1));
 		p2.addClass(c2);
 		dut.addPackage(p2);
 	}

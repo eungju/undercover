@@ -153,7 +153,7 @@ public class BasicBlockAnalyzer {
 		
 		methodNode.maxStack += 4;
 		
-		return new MethodMeta(methodNode.name + methodNode.desc, complexity, blockMetas);
+		return new MethodMeta(methodNode.name, methodNode.desc, complexity, blockMetas);
 	}
 
     static void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {

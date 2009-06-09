@@ -61,7 +61,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			ClassItem outerClass = classItems.get(each.outer.className);
 			ClassItem nestedClass = classItems.get(each.name);
 			if (each.outer.isMethod()) {
-				MethodItem outerMethod = outerClass.getMethod(each.outer.className + "." + each.outer.methodName);
+				MethodItem outerMethod = outerClass.getMethod(each.outer.methodName);
 				outerMethod.addClass(nestedClass);
 			} else {
 				outerClass.addClass(nestedClass);
@@ -125,7 +125,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 				}
 			}
 		}
-		methodItem = new MethodItem(classItem, methodMeta, coveredBlockCount);
+		methodItem = new MethodItem(methodMeta, coveredBlockCount);
 		classItem.addMethod(methodItem);
 		methodIndex++;
 	}

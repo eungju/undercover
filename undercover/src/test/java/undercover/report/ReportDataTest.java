@@ -47,7 +47,7 @@ public class ReportDataTest {
 	
 	@Test public void visitMethod() {
 		BlockMeta b1 = new BlockMeta(new ArrayList<Integer>());
-		MethodMeta methodMeta = new MethodMeta("m()V", 1, Arrays.asList(b1, new BlockMeta(new ArrayList<Integer>())));
+		MethodMeta methodMeta = new MethodMeta("m", "()V", 1, Arrays.asList(b1, new BlockMeta(new ArrayList<Integer>())));
 		dut.classCoverage = new Coverage("p/c", new int[][] { {1, 0} });
 
 		SourceFile sourceFile = new SourceFile("c.java");

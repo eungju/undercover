@@ -10,8 +10,8 @@ public class ClassItemTest {
 
 	@Before public void beforeEach() {
 		dut = new ClassItem("p/c", new SourceFile("p/c.java"));
-		dut.addMethod(new MethodItem("p/c.m1()V", 1, 2, 2));
-		dut.addMethod(new MethodItem("p/c.m2()V", 2, 2, 1));
+		dut.addMethod(new MethodItem("m1()V", 1, 2, 2));
+		dut.addMethod(new MethodItem("m2()V", 2, 2, 1));
 	}
 	
 	@Test public void getDisplayName() {

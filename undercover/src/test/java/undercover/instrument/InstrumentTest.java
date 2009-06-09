@@ -26,69 +26,69 @@ public class InstrumentTest {
 	}
 	
 	@Test public void abstractMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("abstractMethod()V");
+		MethodMeta methodMeta = classMeta.getMethod("abstractMethod", "()V");
 		assertEquals(0, methodMeta.blocks.size());
 		assertEquals(1, methodMeta.complexity);
 	}
 
 	@Test public void block() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("b1()Z"); 
+		MethodMeta methodMeta = classMeta.getMethod("b1", "()Z"); 
 		assertEquals(1, methodMeta.blocks.size());
 		assertEquals(1, methodMeta.complexity);
 	}
 
 	@Test public void simple() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("simple()V"); 
+		MethodMeta methodMeta = classMeta.getMethod("simple", "()V"); 
 		assertEquals(1, methodMeta.blocks.size());
 		assertEquals(1, methodMeta.complexity);
 	}
 
 	@Test public void sequential() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("sequential()V"); 
+		MethodMeta methodMeta = classMeta.getMethod("sequential", "()V"); 
 		assertEquals(1, methodMeta.blocks.size());
 		assertEquals(1, methodMeta.complexity);
 	}
 
 	@Test public void ifBranchMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("ifBranch()V"); 
+		MethodMeta methodMeta = classMeta.getMethod("ifBranch", "()V"); 
 		assertEquals(3, methodMeta.blocks.size());
 		assertEquals(2, methodMeta.complexity);
 	}
 
 	@Test public void ifElseIfBranchesMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("ifElseIfBranches()V"); 
+		MethodMeta methodMeta = classMeta.getMethod("ifElseIfBranches", "()V"); 
 		assertEquals(5, methodMeta.blocks.size());
 		assertEquals(3, methodMeta.complexity);
 	}
 	
 	@Test public void shortCircuitBranchMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("shortCircuitBranch()Z");
+		MethodMeta methodMeta = classMeta.getMethod("shortCircuitBranch", "()Z");
 		//FIXME: Optimizer can create extra block.
 		assertTrue(4 <= methodMeta.blocks.size());
 		assertEquals(3, methodMeta.complexity);
 	}
 	
 	@Test public void tryCatchBranchMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("tryCatchBranch()V");
+		MethodMeta methodMeta = classMeta.getMethod("tryCatchBranch", "()V");
 		assertEquals(3, methodMeta.blocks.size());
 		assertEquals(2, methodMeta.complexity);
 	}
 
 	@Test public void tryFinallyBranchMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("tryFinallyBranch()V");
+		MethodMeta methodMeta = classMeta.getMethod("tryFinallyBranch", "()V");
 		assertEquals(3, methodMeta.blocks.size());
 		assertEquals(1, methodMeta.complexity);
 	}
 
 	@Test public void tryCatchFinallyBranchMethod() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("tryCatchFinallyBranch()V");
+		MethodMeta methodMeta = classMeta.getMethod("tryCatchFinallyBranch", "()V");
 		//FIXME: Optimizer can create extra block.
 		assertTrue(4 <= methodMeta.blocks.size());
 		assertEquals(2, methodMeta.complexity);
 	}
 
 	@Test public void forLoop() throws IOException {
-		MethodMeta methodMeta = classMeta.getMethod("forLoop(I)V");
+		MethodMeta methodMeta = classMeta.getMethod("forLoop", "(I)V");
 		assertEquals(4, methodMeta.blocks.size());
 		assertEquals(2, methodMeta.complexity);
 	}
