@@ -8,6 +8,24 @@
 	<name>Undercover Parent</name>
 	<inceptionYear>2009</inceptionYear>
 
+	<issueManagement>
+		<url>http://code.google.com/p/undercover/issues/</url>
+	</issueManagement>
+	
+	<developers>
+		<developer>
+			<id>eungju</id>
+			<name>Eung-ju PARK</name>
+		</developer>
+	</developers>
+	
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
 	<properties>
 		<maven.compiler.encoding>utf-8</maven.compiler.encoding>
 		<maven.compiler.target>1.5</maven.compiler.target>
