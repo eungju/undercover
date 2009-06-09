@@ -30,7 +30,6 @@ public class ClassItem implements Item {
 
 	public MethodItem getMethod(String methodName) {
 		for (MethodItem each : methods) {
-			System.out.println(each.getName() + "==" + methodName);
 			if (each.getName().equals(methodName)) {
 				return each;
 			}

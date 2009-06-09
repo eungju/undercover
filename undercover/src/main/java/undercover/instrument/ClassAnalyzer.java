@@ -29,7 +29,7 @@ public class ClassAnalyzer {
 	}
 	
 	public ClassMeta instrument(ClassNode classNode) {
-		ClassMeta.Outer outer = detectOuter(classNode);
+		ClassMeta.Outer outer = detectOuterOfAnonymous(classNode);
 		
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
@@ -54,11 +54,12 @@ public class ClassAnalyzer {
 		return classMeta;
 	}
 	
-	ClassMeta.Outer detectOuter(ClassNode classNode) {
+	ClassMeta.Outer detectOuterOfAnonymous(ClassNode classNode) {
 		if (classNode.outerClass != null) {
 			String methodName = classNode.outerMethod == null ? null : classNode.outerMethod + classNode.outerMethodDesc;
 			return new ClassMeta.Outer(classNode.outerClass, methodName);
 		} else if (classNode.innerClasses.size() > 0) {
+			//For Scala funtion literal
 			for (InnerClassNode inner : (List<InnerClassNode>) classNode.innerClasses) {
 				if (inner.name.equals(classNode.name) && inner.innerName.startsWith("$anonfun$")) {
 					return new ClassMeta.Outer(inner.outerName, null);
