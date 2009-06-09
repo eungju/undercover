@@ -23,13 +23,15 @@ import undercover.instrument.filter.Exclusion;
 
 public class ClassAnalyzer {
 	private final Exclusion exclusion;
-
+	private final AnonymousDetector anonymousDetector;
+	
 	public ClassAnalyzer(Exclusion exclusion) {
 		this.exclusion = exclusion;
+		anonymousDetector = new AnonymousDetector();
 	}
 	
 	public ClassMeta instrument(ClassNode classNode) {
-		ClassMeta.Outer outer = detectOuterOfAnonymous(classNode);
+		ClassMeta.Outer outer = anonymousDetector.inspect(classNode);
 		
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
 		MethodNode clinitMethod = null;
@@ -52,21 +54,6 @@ public class ClassAnalyzer {
 		addClinitMethod(classNode, clinitMethod, methodMetas);
 		
 		return classMeta;
-	}
-	
-	ClassMeta.Outer detectOuterOfAnonymous(ClassNode classNode) {
-		if (classNode.outerClass != null) {
-			String methodName = classNode.outerMethod == null ? null : classNode.outerMethod + classNode.outerMethodDesc;
-			return new ClassMeta.Outer(classNode.outerClass, methodName);
-		} else if (classNode.innerClasses.size() > 0) {
-			//For Scala funtion literal
-			for (InnerClassNode inner : (List<InnerClassNode>) classNode.innerClasses) {
-				if (inner.name.equals(classNode.name) && inner.innerName.startsWith("$anonfun$")) {
-					return new ClassMeta.Outer(inner.outerName, null);
-				}
-			}
-		}
-		return null;
 	}
 	
 	void addCoverageField(ClassNode classNode) {
