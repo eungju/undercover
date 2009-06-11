@@ -335,7 +335,7 @@ $itemStatistics(source)$
 		</tr>
 		$each.methods:{ method |
 		<tr>
-			<td colspan="4">$method.displayName:html()$</td>
+			<td colspan="4">$i$. $method.displayName:html()$</td>
 			<td class="complexity">$method.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(method)$</td>
 			<td class="coverage">$coverageBar(method)$</td>
