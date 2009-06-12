@@ -7,11 +7,7 @@ public class ExclusionSet implements Exclusion {
 	private final Exclusion[] exclusions = new Exclusion[] {
 			new BridgeMethodExclusion(),
 			new NestedClassExclusion(),
-			new JavaEnumExclusion(),
-			new ScalaClassObjectExclusion(),
-			new ScalaTagExclusion(),
-			new ScalaFunctionExclusion(),
-			new ScalaCaseClassExclusion()
+			new EnumExclusion()
 	};
 
 	public boolean exclude(ClassNode classNode) {

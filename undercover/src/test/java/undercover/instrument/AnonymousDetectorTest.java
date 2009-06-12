@@ -58,15 +58,4 @@ public class AnonymousDetectorTest {
 		assertTrue(outer.isMethod());
 		assertEquals(cw.outerMethod + cw.outerMethodDesc, outer.methodName);
 	}
-	
-	@Test public void scalaFunctionLiteral() {
-		ClassNode cw = new ClassNode();
-		cw.visit(V1_5, ACC_PUBLIC + ACC_FINAL + ACC_SUPER + ACC_SYNTHETIC, "net/me2day/scala/XmlResultParser$$anonfun$tags$1", null, "java/lang/Object", new String[] { "scala/Function1", "scala/ScalaObject" });
-		cw.visitSource("XmlResultParser.scala", null);
-		// ATTRIBUTE Scala
-		cw.visitInnerClass("net/me2day/scala/XmlResultParser$$anonfun$tags$1", "net/me2day/scala/XmlResultParser", "$anonfun$tags$1", ACC_PUBLIC + ACC_FINAL + ACC_SYNCHRONIZED + ACC_SYNTHETIC);
-		ClassMeta.Outer outer = dut.inspect(cw);
-		assertEquals("net/me2day/scala/XmlResultParser", outer.className);
-		assertFalse(outer.isMethod());
-	}
 }

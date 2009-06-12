@@ -8,12 +8,12 @@ import org.junit.Test;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class JavaEnumExclusionTest {
-	private JavaEnumExclusion dut;
+public class EnumExclusionTest {
+	private EnumExclusion dut;
 	private ClassNode classNode;
 	
 	@Before public void beforeEach() {
-		dut = new JavaEnumExclusion();
+		dut = new EnumExclusion();
 		classNode = new ClassNode();
 		classNode.visit(V1_5, ACC_ENUM, "tokyotyrant/protocol/CommandState", "Ljava/lang/Enum<Ltokyotyrant/protocol/CommandState;>;", "java/lang/Enum", null);
 	}
