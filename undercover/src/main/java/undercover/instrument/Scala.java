@@ -14,7 +14,15 @@ public class Scala {
 		return false;
 	}
 	
+	public static boolean isClass(ClassNode classNode) {
+		return classNode.interfaces.contains("scala/ScalaObject");
+	}
+	
 	public static boolean isFunctionClass(ClassNode classNode) {
-		return classNode.interfaces.contains("scala/ScalaObject") && containsMatching(classNode.interfaces, "scala/Function\\d");
+		return isClass(classNode) && containsMatching(classNode.interfaces, "scala/Function\\d+");
+	}
+
+	public static boolean isCaseClass(ClassNode classNode) {
+		return isClass(classNode) && classNode.interfaces.contains("scala/Product");
 	}
 }

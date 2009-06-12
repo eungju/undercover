@@ -9,7 +9,8 @@ public class ExclusionSet implements Exclusion {
 			new JavaEnumExclusion(),
 			new ScalaClassObjectExclusion(),
 			new ScalaTagExclusion(),
-			new ScalaFunctionExclusion()
+			new ScalaFunctionExclusion(),
+			new ScalaCaseClassExclusion()
 	};
 
 	public boolean exclude(ClassNode classNode) {

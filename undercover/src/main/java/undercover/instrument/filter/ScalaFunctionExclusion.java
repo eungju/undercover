@@ -1,5 +1,7 @@
 package undercover.instrument.filter;
 
+import static undercover.instrument.filter.ExclusionUtils.*;
+
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -15,14 +17,6 @@ public class ScalaFunctionExclusion extends NoExclusion {
 				isCurryMethod(methodNode));
 	}
 
-	boolean matchMethod(MethodNode methodNode, String name, String desc) {
-		return (methodNode.name.equals(name) && methodNode.desc.equals(desc));
-	}
-	
-	boolean isToStringMethod(MethodNode methodNode) {
-		return matchMethod(methodNode, "toString", "()Ljava/lang/String;");
-	}
-	
 	boolean isComposeMethod(MethodNode methodNode) {
 		return matchMethod(methodNode, "compose", "(Lscala/Function1;)Lscala/Function1;");
 	}
