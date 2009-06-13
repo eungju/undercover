@@ -13,7 +13,7 @@ public class MethodItemTest {
 	@Test public void normalMethod() {
 		MethodItem methodItem = new MethodItem(new MethodMeta("m", "()V", 0, Collections.<BlockMeta>emptyList()), 1);
 		assertEquals("m()V", methodItem.getName());
-		assertEquals("m()V", methodItem.getDisplayName());
+		assertEquals("m() : void", methodItem.getDisplayName());
 	}
 	
 	@Test public void isExecutable() {

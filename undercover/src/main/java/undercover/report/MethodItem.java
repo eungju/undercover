@@ -29,7 +29,19 @@ public class MethodItem implements Item {
 	}
 
 	public String getDisplayName() {
-		return name.replaceAll("/", ".");
+		int descPos = name.indexOf('(');
+		StringBuffer result = new StringBuffer(name.substring(0, descPos)).append('(');
+		String desc = name.substring(descPos);
+		int i = 0;
+		for (Type type : Type.getArgumentTypes(desc)) {
+			if (i > 0) {
+				result.append(", ");
+			}
+			result.append(type.getSimpleClassName());
+			i++;
+		}
+		result.append(") : ").append(Type.getReturnType(desc).getSimpleClassName());
+		return result.toString();
 	}
 	
 	public String getLinkName() {
