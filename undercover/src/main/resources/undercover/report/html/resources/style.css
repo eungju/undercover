@@ -41,8 +41,13 @@ table.item-children th, table.item-children td {
 	padding: 4px;
 }
 
-table.item-children th {
+table.item-children thead th {
 	background: #D0F0D0;
+}
+
+table.item-children tbody th {
+	text-align: left;
+	background: #F0FFF0;
 }
 
 div.coverageBarNegative {

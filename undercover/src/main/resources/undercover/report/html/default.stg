@@ -156,7 +156,7 @@ $itemStatistics(project)$
 	<colgroup>
 		<col width="*" />
 		<col width="80" />
-		<col width="100" />
+		<col width="150" />
 		<col width="150" />
 		<col width="70" />
 		<col width="60" />
@@ -325,7 +325,7 @@ $itemStatistics(source)$
 	<tbody>
 		$source.classes:{ each |
 		<tr>
-			<td>$each.displayName$</td>
+			<th>$each.displayName$</th>
 			<td class="number">$each.methodMetrics.count$</td>
 			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
 			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
@@ -335,7 +335,7 @@ $itemStatistics(source)$
 		</tr>
 		$each.methods:{ method |
 		<tr>
-			<td colspan="4">$i$. $method.displayName:html()$</td>
+			<td colspan="4">$method.displayName:html()$</td>
 			<td class="complexity">$method.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(method)$</td>
 			<td class="coverage">$coverageBar(method)$</td>
