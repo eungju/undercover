@@ -8,7 +8,6 @@ import java.util.List;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -34,11 +33,7 @@ public class ClassAnalyzer {
 		ClassMeta.Outer outer = anonymousDetector.inspect(classNode);
 		
 		List<MethodMeta> methodMetas = new ArrayList<MethodMeta>();
-		MethodNode clinitMethod = null;
 		for (MethodNode each : (List<MethodNode>) classNode.methods) {
-			if (each.name.equals("<clinit>")) {
-				clinitMethod = each;
-			}
 			if (exclusion.exclude(classNode, each)) {
 				continue;
 			}
@@ -51,7 +46,7 @@ public class ClassAnalyzer {
 		ClassMeta classMeta = new ClassMeta(classNode.name, classNode.sourceFile, methodMetas, outer);
 		
 		addCoverageField(classNode);
-		addClinitMethod(classNode, clinitMethod, methodMetas);
+		addCoverageFieldInitializer(classNode, methodMetas);
 		
 		return classMeta;
 	}
@@ -61,7 +56,7 @@ public class ClassAnalyzer {
 		classNode.fields.add(new FieldNode(ACC_SYNTHETIC | ACC_PUBLIC | ACC_FINAL | ACC_STATIC, Instrument.COVERAGE_FIELD_NAME, "[[I", null, null));
 	}
 
-	void addClinitMethod(ClassNode classNode, MethodNode clinitMethod, List<MethodMeta> methodMetas) {
+	void addCoverageFieldInitializer(ClassNode classNode, List<MethodMeta> methodMetas) {
 		InsnList code = new InsnList();
 		code.add(new IntInsnNode(SIPUSH, methodMetas.size()));
 		code.add(new TypeInsnNode(ANEWARRAY, "[I"));
@@ -80,6 +75,7 @@ public class ClassAnalyzer {
 		code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.COVERAGE_FIELD_NAME, "[[I"));
 		code.add(new MethodInsnNode(INVOKEVIRTUAL, "undercover/runtime/Probe", "register", "(Ljava/lang/String;[[I)V"));
 
+		MethodNode clinitMethod = findClassInitializer(classNode);
 		if (clinitMethod == null) {
 			clinitMethod = new MethodNode(ACC_SYNTHETIC | ACC_STATIC, "<clinit>", "()V", null, null);
 			classNode.methods.add(clinitMethod);
@@ -88,5 +84,14 @@ public class ClassAnalyzer {
 		
 		clinitMethod.instructions.insert(code);
 		clinitMethod.maxStack += 4;
+	}
+
+	MethodNode findClassInitializer(ClassNode classNode) {
+		for (MethodNode each : (List<MethodNode>) classNode.methods) {
+			if (each.name.equals("<clinit>")) {
+				return each;
+			}
+		}
+		return null;
 	}
 }
