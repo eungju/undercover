@@ -17,7 +17,7 @@ function drawCoverageDistributionGraph(graph, tooltip, data) {
 	
 	$.plot(graph,
 		[
-			{data: data, bars: { show: true, barWidth: 10, fill: true }}
+			{data: data, bars: { show: true, barWidth: 9, fill: true }}
 		],
 		{
 			colors: ["#3b3"],
