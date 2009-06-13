@@ -1,6 +1,5 @@
 package undercover.runtime;
 
-import undercover.UndercoverSettings;
 import undercover.data.CoverageData;
 
 public class Probe {

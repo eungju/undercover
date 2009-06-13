@@ -3,7 +3,6 @@ package undercover.runtime;
 import org.junit.Before;
 import org.junit.Test;
 
-import undercover.UndercoverSettings;
 
 public class ProbeTest {
 	private Probe dut;

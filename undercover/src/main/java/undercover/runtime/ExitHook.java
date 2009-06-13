@@ -2,7 +2,6 @@ package undercover.runtime;
 
 import java.io.IOException;
 
-import undercover.UndercoverSettings;
 import undercover.data.CoverageData;
 
 public class ExitHook extends Thread {

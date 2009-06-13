@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import undercover.UndercoverSettings;
+import undercover.runtime.UndercoverSettings;
 
 public class OfflineInstrument {
 	private Instrument instrument;

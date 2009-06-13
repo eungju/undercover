@@ -1,4 +1,4 @@
-package undercover;
+package undercover.runtime;
 
 import static org.junit.Assert.*;
 

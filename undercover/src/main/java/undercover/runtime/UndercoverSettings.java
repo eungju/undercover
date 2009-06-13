@@ -1,4 +1,4 @@
-package undercover;
+package undercover.runtime;
 
 import java.io.File;
 import java.io.FileOutputStream;

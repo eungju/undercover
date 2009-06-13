@@ -117,21 +117,14 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitLeave(MethodMeta methodMeta) {
-		int coveredBlockCount = 0;
-		if (classCoverage != null) {
-			for (int each : classCoverage.blocks[methodIndex]) {
-				if (each > 0) {
-					coveredBlockCount++;
-				}
-			}
-		}
+		int coveredBlockCount = classCoverage == null ? 0 : classCoverage.countCoveredBlocks(methodIndex);
 		methodItem = new MethodItem(methodMeta, coveredBlockCount);
 		classItem.addMethod(methodItem);
 		methodIndex++;
 	}
 
 	public void visit(BlockMeta blockMeta) {
-		int executionCount = classCoverage == null ? 0 : classCoverage.blocks[methodIndex][blockIndex];
+		int executionCount = classCoverage == null ? 0 : classCoverage.countExecution(methodIndex, blockIndex);
 		sourceItem.addBlock(blockMeta, executionCount);
 		blockIndex++;
 	}
