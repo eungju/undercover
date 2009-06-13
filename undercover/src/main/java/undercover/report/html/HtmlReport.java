@@ -132,49 +132,43 @@ public class HtmlReport {
 		template.setAttribute("coverageDistribution", coverageDistribution);
 		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
 		template.setAttribute("coverageComplexity", coverageComplexity);
-		template.setAttribute("mostRiskyClasses", mostRisky(20, reportData.getAllClasses()));
-		template.setAttribute("mostComplexClasses", mostComplex(10, reportData.getAllClasses()));
-		template.setAttribute("leastCoveredClasses", leastCovered(10, reportData.getAllClasses()));
+		template.setAttribute("mostRiskyClasses", mostRisky(reportData.getAllClasses(), 20));
+		template.setAttribute("mostComplexClasses", mostComplex(reportData.getAllClasses(), 10));
+		template.setAttribute("leastCoveredClasses", leastCovered(reportData.getAllClasses(), 10));
 		output.write("project-dashboard.html", template.toString());
 	}
 
-	public <T extends Item> List<T> mostRisky(int max, Collection<T> candidates) {
+	<T extends Item> List<T> takeTopN(Collection<T> candidates, Comparator<T> comparator, int max) {
 		List<T> items = new ArrayList<T>(candidates);
-		Collections.sort(items, new Comparator<T>() {
+		Collections.sort(items, comparator);
+		if (items.size() > max) {
+			items = items.subList(0, max);
+		}
+		return items;
+	}
+
+	public <T extends Item> List<T> mostRisky(Collection<T> candidates, int max) {
+		return takeTopN(candidates, new Comparator<T>() {
 			public int compare(T a, T b) {
 				return (int) Math.signum((b.getBlockMetrics().getRisk() - a.getBlockMetrics().getRisk()));
 			}
-		});
-		if (items.size() > max) {
-			items = items.subList(0, max);
-		}
-		return items;
+		}, max);
 	}
 
-	public <T extends Item> List<T> mostComplex(int max, Collection<T> candidates) {
-		List<T> items = new ArrayList<T>(candidates);
-		Collections.sort(items, new Comparator<T>() {
+	public <T extends Item> List<T> mostComplex(Collection<T> candidates, int max) {
+		return takeTopN(candidates, new Comparator<T>() {
 			public int compare(T a, T b) {
 				return b.getBlockMetrics().getComplexity() - a.getBlockMetrics().getComplexity();
 			}
-		});
-		if (items.size() > max) {
-			items = items.subList(0, max);
-		}
-		return items;
+		}, max);
 	}
 
-	public <T extends Item> List<T> leastCovered(int max, Collection<T> candidates) {
-		List<T> items = new ArrayList<T>(candidates);
-		Collections.sort(items, new Comparator<T>() {
+	public <T extends Item> List<T> leastCovered(Collection<T> candidates, int max) {
+		return takeTopN(candidates, new Comparator<T>() {
 			public int compare(T a, T b) {
 				return (int) Math.signum(a.getBlockMetrics().getCoverageRate() - b.getBlockMetrics().getCoverageRate());
 			}
-		});
-		if (items.size() > max) {
-			items = items.subList(0, max);
-		}
-		return items;
+		}, max);
 	}
 
 	public StringTemplate getTemplate(String templateName) {
