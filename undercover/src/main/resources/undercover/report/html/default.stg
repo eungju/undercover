@@ -114,6 +114,7 @@ itemStatistics(item) ::= <<
 						<th>Packages</th><td>$item.packageMetrics.count$</td>
 						<th>Avg. Complexity</th><td>$item.packageMetrics.averageComplexity$</td>	
 						<th>Max. Complexity</th><td>$item.packageMetrics.maximumComplexity$</td>
+						<th>S.D. for Complexity</th><td>$item.packageMetrics.standardDeviation$</td>	
 					</tr>
 					$endif$
 					$if(item.classMetrics)$
@@ -121,12 +122,14 @@ itemStatistics(item) ::= <<
 						<th>Classes</th><td>$item.classMetrics.count$</td>
 						<th>Avg. Complexity</th><td>$item.classMetrics.averageComplexity$</td>	
 						<th>Max. Complexity</th><td>$item.classMetrics.maximumComplexity$</td>	
+						<th>S.D. for Complexity</th><td>$item.classMetrics.standardDeviation$</td>	
 					</tr>
 					$endif$
 					<tr>
 						<th>Methods</th><td>$item.methodMetrics.count$</td>
 						<th>Avg. Complexity</th><td>$item.methodMetrics.averageComplexity$</td>	
 						<th>Max. Complexity</th><td>$item.methodMetrics.maximumComplexity$</td>	
+						<th>S.D. for Complexity</th><td>$item.methodMetrics.standardDeviation$</td>	
 					</tr>
 				</table>
 			</td>
