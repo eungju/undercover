@@ -109,27 +109,37 @@ itemStatistics(item) ::= <<
 			<td>
 				
 				<table>
+					<tr>
+						<th></th>
+						<th>Count</th>
+						<th>Avg. Complexity</th>
+						<th>Max. Complexity</th>
+						<th>S.D. of Complexity</th>
+					</tr>
 					$if(item.packageMetrics)$
 					<tr>
-						<th>Packages</th><td>$item.packageMetrics.count$</td>
-						<th>Avg. Complexity</th><td>$item.packageMetrics.averageComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.packageMetrics.maximumComplexity$</td>
-						<th>S.D. of Complexity</th><td>$item.packageMetrics.standardDeviation$</td>	
+						<th>Packages</th>
+						<td class="number">$item.packageMetrics.count$</td>
+						<td class="complexity">$item.packageMetrics.averageComplexity$</td>	
+						<td class="complexity">$item.packageMetrics.maximumComplexity$</td>
+						<td class="complexity">$item.packageMetrics.standardDeviation$</td>	
 					</tr>
 					$endif$
 					$if(item.classMetrics)$
 					<tr>
-						<th>Classes</th><td>$item.classMetrics.count$</td>
-						<th>Avg. Complexity</th><td>$item.classMetrics.averageComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.classMetrics.maximumComplexity$</td>	
-						<th>S.D. of Complexity</th><td>$item.classMetrics.standardDeviation$</td>	
+						<th>Classes</th>
+						<td class="number">$item.classMetrics.count$</td>
+						<td class="complexity">$item.classMetrics.averageComplexity$</td>	
+						<td class="complexity">$item.classMetrics.maximumComplexity$</td>	
+						<td class="complexity">$item.classMetrics.standardDeviation$</td>	
 					</tr>
 					$endif$
 					<tr>
-						<th>Methods</th><td>$item.methodMetrics.count$</td>
-						<th>Avg. Complexity</th><td>$item.methodMetrics.averageComplexity$</td>	
-						<th>Max. Complexity</th><td>$item.methodMetrics.maximumComplexity$</td>	
-						<th>S.D. of Complexity</th><td>$item.methodMetrics.standardDeviation$</td>	
+						<th>Methods</th>
+						<td class="number">$item.methodMetrics.count$</td>
+						<td class="complexity">$item.methodMetrics.averageComplexity$</td>	
+						<td class="complexity">$item.methodMetrics.maximumComplexity$</td>	
+						<td class="complexity">$item.methodMetrics.standardDeviation$</td>	
 					</tr>
 				</table>
 			</td>
