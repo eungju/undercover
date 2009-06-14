@@ -51,7 +51,8 @@ public class ReportDataTest {
 		dut.classCoverage = new Coverage("p/c", new int[][] { {1, 0} });
 
 		SourceFile sourceFile = new SourceFile("c.java");
-		dut.classItem = new ClassItem("p/c", sourceFile);
+		dut.classItem = new ClassItem("p/c");
+		dut.classItem.setSourceFile(sourceFile);
 		dut.sourceItem = new SourceItem(sourceFile);
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockMetrics().getBlockCount());

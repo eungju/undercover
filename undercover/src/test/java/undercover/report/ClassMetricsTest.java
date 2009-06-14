@@ -16,10 +16,10 @@ public class ClassMetricsTest {
 	private ClassItem c2;
 
 	@Before public void beforeEach() {
-		c1 = new ClassItem("p/c1", null);
+		c1 = new ClassItem("p/c1");
 		c1.addMethod(new MethodItem("m1()V", 1, 4, 2));
 		
-		c2 = new ClassItem("p/c2", null);
+		c2 = new ClassItem("p/c2");
 		c2.addMethod(new MethodItem("m2()V", 2, 2, 2));
 		
 		classes = Arrays.asList(c1, c2);

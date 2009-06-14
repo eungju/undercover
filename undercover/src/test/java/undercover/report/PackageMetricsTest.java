@@ -17,12 +17,12 @@ public class PackageMetricsTest {
 
 	@Before public void beforeEach() {
 		p1 = new PackageItem("p1");
-		ClassItem c1 = new ClassItem("p1/c1", null);
+		ClassItem c1 = new ClassItem("p1/c1");
 		c1.addMethod(new MethodItem("m1()V", 1, 4, 2));
 		p1.addClass(c1);
 		
 		p2 = new PackageItem("p2");
-		ClassItem c2 = new ClassItem("p2/c2", null);
+		ClassItem c2 = new ClassItem("p2/c2");
 		c2.addMethod(new MethodItem("m2()V", 2, 2, 2));
 		p2.addClass(c2);
 		
