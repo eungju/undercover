@@ -1,13 +1,12 @@
 package undercover.report;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import undercover.data.BlockMeta;
@@ -39,10 +38,6 @@ public class SourceItem implements Item {
 	public String getLinkName() {
 		return getName().replaceAll("/", ".");
 	}
-	
-	public String getLanguage() {
-		return FilenameUtils.getExtension(sourceFile.path);
-	}
 
 	public void addClass(ClassItem classItem) {
 		classes.add(classItem);
@@ -55,11 +50,15 @@ public class SourceItem implements Item {
 	public List<SourceLine> getLines() {
 		List<SourceLine> lines = new ArrayList<SourceLine>();
 		if (sourceFile.isExist()) {
-			Reader input = null;
+			BufferedReader input = null;
 			try {
-				input = sourceFile.openReader();
+				input = new BufferedReader(sourceFile.openReader());
 				int lineNumber = 1;
-				for (String each : (List<String>) IOUtils.readLines(input)) {
+				while (true) {
+					String each = input.readLine();
+					if (each == null) {
+						break;
+					}
 					lines.add(new SourceLine(lineNumber, each, lineCoverageAnalysis.getLine(lineNumber)));
 					lineNumber++;
 				}
