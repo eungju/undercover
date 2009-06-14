@@ -1,6 +1,11 @@
-body {
-	font-family: Helvetica, Arial, sans-serif;
+/* General */
+
+body, th, td {
+	font-family: arial, sans-serif;
 	font-size: 9pt;
+}
+
+body {
 	margin: 8px;
 }
 
@@ -12,9 +17,11 @@ ul, ol {
 	margin: 8px 0px 8px 0px;
 }	
 
-th, td {
-	font-size: 9pt;
+table.layout td, table.layout th {
+	vertical-align: baseline;
 }
+
+/* Item */
 
 table.item-statistics {
     margin: 4px;
@@ -138,7 +145,6 @@ div.navigation ul.package-list > li {
 table.source {
     margin: 4px;
 	border-collapse: collapse;
-	width: 100%;
 }
 
 table.source td {
@@ -172,20 +178,8 @@ table.source td.line-text {
 	font-family: Courier New, serif;
 }
 
-/* Dashboard */
-
-.left {
-	float: left;
-	margin: 12px 24px 12px 12px;
-}
-
-.right {
-	float: right;
-	margin: 12px;
-	margin: 12px 24px 12px 12px;
-}
-
 /* Copyright */
+
 div.copyright {
 	margin: 24px 8px 24px 8px;
 	border-top: 1px dotted #bbb;
