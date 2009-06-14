@@ -10,8 +10,6 @@ public class ClassItemTest {
 
 	@Before public void beforeEach() {
 		dut = new ClassItem("p/c", new SourceFile("p/c.java"));
-		dut.addMethod(new MethodItem("m1()V", 1, 2, 2));
-		dut.addMethod(new MethodItem("m2()V", 2, 2, 1));
 	}
 	
 	@Test public void getDisplayName() {
@@ -26,27 +24,10 @@ public class ClassItemTest {
 		assertEquals("c", dut.getSimpleName());
 	}
 
-	@Test public void getComplexity() {
-		assertEquals(3, dut.getBlockMetrics().getComplexity());
-	}
-
-	@Test public void getBlockCount() {
-		assertEquals(4, dut.getBlockMetrics().getBlockCount());
-	}
-
-	@Test public void getCoveredBlockCount() {
-		assertEquals(3, dut.getBlockMetrics().getCoveredBlockCount());
-	}
-	
-	@Test public void getMethodCount() {
-		assertEquals(2, dut.getMethodMetrics().getCount());
-	}
-
-	@Test public void getAverageMethodComplexity() {
-		assertEquals(1.5, dut.getMethodMetrics().getAverageComplexity(), 0.01);
-	}
-
-	@Test public void getMaximumMethodComplexity() {
-		assertEquals(2, dut.getMethodMetrics().getMaximumComplexity());
+	@Test public void metrics() {
+		assertNotNull(dut.getBlockMetrics());
+		assertNotNull(dut.getMethodMetrics());
+		assertNull(dut.getClassMetrics());
+		assertNull(dut.getPackageMetrics());
 	}
 }

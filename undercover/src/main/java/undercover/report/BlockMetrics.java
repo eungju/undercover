@@ -1,6 +1,7 @@
 package undercover.report;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class BlockMetrics {
 	private final int complexity_;
@@ -12,6 +13,10 @@ public class BlockMetrics {
 
 	public BlockMetrics(Collection<? extends Item> children) {
 		this(0, 0, 0, children);
+	}
+	
+	public BlockMetrics(int complexity, int blockCount, int coveredBlockCount) {
+		this(complexity, blockCount, coveredBlockCount, Collections.<Item>emptyList());
 	}
 	
 	public BlockMetrics(int complexity, int blockCount, int coveredBlockCount, Collection<? extends Item> children) {

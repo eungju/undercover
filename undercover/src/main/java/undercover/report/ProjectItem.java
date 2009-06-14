@@ -27,10 +27,6 @@ public class ProjectItem implements Item {
 	public String getDisplayName() {
 		return displayName;
 	}
-	
-	public String getLinkName() {
-		throw new UnsupportedOperationException();
-	}
 
 	public BlockMetrics getBlockMetrics() {
 		return blockMetrics;

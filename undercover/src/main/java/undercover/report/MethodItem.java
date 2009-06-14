@@ -43,10 +43,6 @@ public class MethodItem implements Item {
 		result.append(") : ").append(Type.getReturnType(desc).getSimpleClassName());
 		return result.toString();
 	}
-	
-	public String getLinkName() {
-		throw new UnsupportedOperationException();
-	}
 
 	public BlockMetrics getBlockMetrics() {
 		return blockMetrics;
