@@ -2,20 +2,18 @@ package undercover.report;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import undercover.support.LazyValue;
 
 public class MethodMetrics {
-	private final LazyMethodCount methodCount;
-	private final LazyMaximumMethodComplexity maximumMethodComplexity;
 	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<MethodItem>> methods;
+	private final LazyValue<Integer> maximumComplexity;
 
 	public MethodMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
 		this.blockMetrics = blockMetrics;
-		methodCount = new LazyMethodCount(children);
-		maximumMethodComplexity = new LazyMaximumMethodComplexity(children);
 		methods = new LazyValue<List<MethodItem>>() {
 			protected List<MethodItem> calculate() {
 				List<MethodItem> result = new ArrayList<MethodItem>();
@@ -29,14 +27,19 @@ public class MethodMetrics {
 				return result;
 			}
 		};
+		maximumComplexity = new LazyValue<Integer>() {
+			protected Integer calculate() {
+				return getCount() == 0 ? 0 : Collections.max(methods.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
+			}
+		};
 	}
 
 	public int getCount() {
-		return methodCount.value();
+		return methods.value().size();
 	}
 	
 	public int getMaximumComplexity() {
-		return maximumMethodComplexity.value();
+		return maximumComplexity.value();
 	}
 	
 	public double getAverageComplexity() {

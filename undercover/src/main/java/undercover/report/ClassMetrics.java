@@ -2,34 +2,18 @@ package undercover.report;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import undercover.support.LazyValue;
 
 public class ClassMetrics {
-	private final LazyClassCount classCount;
 	private final BlockMetrics blockMetrics;
-	private final LazyValue<Integer> maximumComplexity;
 	private final LazyValue<List<ClassItem>> classes;
+	private final LazyValue<Integer> maximumComplexity;
 	
 	public ClassMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
 		this.blockMetrics = blockMetrics;
-		classCount = new LazyClassCount(children);
-		maximumComplexity = new LazyValue<Integer>() {
-			protected Integer calculate() {
-				int result = 0;
-				for (Item each : children) {
-					int complexity;
-					if (each instanceof ClassItem) {
-						complexity = each.getBlockMetrics().getComplexity();
-					} else {
-						complexity = each.getClassMetrics().getMaximumComplexity();
-					}
-					result = Math.max(result, complexity);
-				}
-				return result;
-			}
-		};
 		classes = new LazyValue<List<ClassItem>>() {
 			protected List<ClassItem> calculate() {
 				List<ClassItem> result = new ArrayList<ClassItem>();
@@ -43,10 +27,15 @@ public class ClassMetrics {
 				return result;
 			}
 		};
+		maximumComplexity = new LazyValue<Integer>() {
+			protected Integer calculate() {
+				return getCount() == 0 ? 0 : Collections.max(classes.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
+			}
+		};
 	}
-	
+
 	public int getCount() {
-		return classCount.value();
+		return classes.value().size();
 	}
 	
 	public int getMaximumComplexity() {
