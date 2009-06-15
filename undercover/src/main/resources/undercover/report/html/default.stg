@@ -338,7 +338,7 @@ $itemStatistics(source)$
 	<tbody>
 		$source.classes:{ each |
 		<tr>
-			<th>$each.displayName$</th>
+			<th>$each.simpleName:html()$</th>
 			<td class="number">$each.methodMetrics.count$</td>
 			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
 			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
