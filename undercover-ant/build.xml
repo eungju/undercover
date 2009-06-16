@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="undercover-ant" default="default" basedir=".">
+    <description>Undercover Ant Tasks</description>
+	
+	<property name="source" value="src/main/java" />
+   	<property name="test-source" value="src/test/java" />
+	
+	<property name="output" value="target" />
+	<property name="classes" value="${output}/classes" />
+	<property name="test-classes" value="${output}/test-classes" />
+	
+	<path id="compile.classpath" >
+		<pathelement location="${basedir}/../undercover/target/classes" />
+		<pathelement location="${classes}" />
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.classpath" >
+		<path refid="compile.classpath" />
+		<pathelement location="${test-classes}" />
+	</path>
+
+    <target name="default" depends="coverage">
+    </target>
+
+    <target name="depends">
+	</target>
+	
+	<target name="compile" depends="depends">
+		<mkdir dir="${classes}" />
+		<javac srcdir="${source}" destdir="${classes}" source="1.5" target="1.5">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+	
+	<target name="test-compile" depends="compile">
+		<mkdir dir="${test-classes}" />
+		<javac srcdir="${test-source}" destdir="${test-classes}" source="1.5" target="1.5">
+		</javac>
+	</target>
+	
+	<target name="coverage" depends="test-compile">
+    	<taskdef name="undercover" classname="undercover.ant.UndercoverTask">
+    		<classpath refid="compile.classpath" />
+    	</taskdef>
+		
+		<undercover>
+			<instrument />
+		</undercover>
+		
+		<junit fork="yes">
+			<classpath refid="test.classpath" />
+			<batchtest>
+				<fileset dir="${test-classes}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		
+		<undercover>
+			<report />
+		</undercover>
+	</target>
+
+	<target name="clean">
+		<delete dir="target" />
+	</target>
+
+</project>
