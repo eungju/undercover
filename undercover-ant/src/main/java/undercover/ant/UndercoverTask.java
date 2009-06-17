@@ -1,11 +1,15 @@
 package undercover.ant;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import undercover.instrument.OfflineInstrument;
-
 public class UndercoverTask extends Task {
-    public void execute() {
+	private List<Task> tasks = new ArrayList<Task>();
+	
+    public void execute() throws BuildException {
         // use of the reference to Project-instance
         String message = getProject().getProperty("ant.project.name");
 
@@ -14,14 +18,27 @@ public class UndercoverTask extends Task {
 
         // where this task is used?
         log("I am used in: " +  getLocation() );
+        
+        for (Task each : tasks) {
+        	each.execute();
+        }
     }
     
-    public String createInstrument() {
-    	new OfflineInstrument();
-    	return "instrument";
+    public Task createInstrument() {
+    	return addTask(new InstrumentTask(), "instrument");
     }
     
-    public String createReport() {
-    	return "report";
+    public Task createReport() {
+    	return addTask(new ReportTask(), "report");
     }
+
+	Task addTask(Task task, String name) {
+		//task.setTaskName(getTaskName() + "-" + name);
+		task.setProject(getProject());
+		task.setLocation(getLocation());
+		task.setOwningTarget(getOwningTarget());
+		task.init();
+    	tasks.add(task);
+    	return task;
+	}
 }
