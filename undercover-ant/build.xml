@@ -14,68 +14,95 @@
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
-	<path id="compile.classpath" >
-		<pathelement location="${classes}" />
-		<pathelement location="${resources}" />
+	<path id="compile.dependency.classpath" >
 		<pathelement location="${basedir}/../undercover/target/classes" />
 		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
 		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
 		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
 		<pathelement location="${M2_REPO}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
 		<pathelement location="${M2_REPO}/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
-		<fileset dir="lib">
-			<include name="*.jar" />
-		</fileset>
+	</path>
+
+	<path id="compile.classpath">
+		<pathelement location="${classes}" />
+		<pathelement location="${resources}" />
+		<path refid="compile.dependency.classpath" />
+	</path>
+
+	<path id="test.dependency.classpath" >
+		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
+		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
 	</path>
 
 	<path id="test.classpath" >
-		<path refid="compile.classpath" />
 		<pathelement location="${test-classes}" />
 		<pathelement location="${test-resources}" />
-		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
-		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
+		<path refid="test.dependency.classpath" />
+		<path refid="compile.classpath" />		
 	</path>
 
     <target name="default" depends="coverage">
     </target>
 
-    <target name="depends">
-	</target>
-	
-	<target name="compile" depends="depends">
+	<target name="compile">
 		<mkdir dir="${classes}" />
-		<javac srcdir="${source}" destdir="${classes}" encoding="UTF-8" source="1.5" target="1.5" classpathref="compile.classpath" />
+		<javac srcdir="${source}" destdir="${classes}" encoding="UTF-8" source="1.5" target="1.5" classpathref="compile.classpath" debug="on" />
 	</target>
 	
 	<target name="test-compile" depends="compile">
 		<mkdir dir="${test-classes}" />
-		<javac srcdir="${test-source}" destdir="${test-classes}" encoding="UTF-8" source="1.5" target="1.5" classpathref="test.classpath" />
+		<javac srcdir="${test-source}" destdir="${test-classes}" encoding="UTF-8" source="1.5" target="1.5" classpathref="test.classpath" debug="on" />
 	</target>
 	
-	<target name="coverage" depends="test-compile">
-    	<taskdef name="undercover" classname="undercover.ant.UndercoverTask" classpathref="compile.classpath" />
-		
-		<undercover>
-			<instrument destdir="${output}/undercover">
-				<instrumentPath>
-					<pathelement location="${classes}" />
-				</instrumentPath>
-			</instrument>
-		</undercover>
-		
-		<junit fork="yes" printsummary="true">
+	<target name="test" depends="test-compile">
+		<mkdir dir="${output}/test-report" />
+		<junit fork="yes" forkMode="once">
 			<classpath refid="test.classpath" />
-			<batchtest>
+			<formatter type="plain" usefile="false" />
+			<batchtest todir="${output}/test-report">
+				<fileset dir="${test-source}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="coverage" depends="test">
+    	<taskdef name="undercover-instrument" classname="undercover.ant.InstrumentTask" classpathref="compile.classpath" />
+    	<taskdef name="undercover-report" classname="undercover.ant.ReportTask" classpathref="compile.classpath" />
+		
+		<undercover-instrument destdir="${output}/undercover">
+			<instrumentPath>
+				<pathelement location="${classes}" />
+			</instrumentPath>
+		</undercover-instrument>
+		
+		<mkdir dir="${output}/undercover/test-report" />
+		<junit fork="yes" forkMode="once">
+			<classpath>
+				<pathelement location="${output}/undercover/classes" />
+				<pathelement location="${test-classes}" />
+				<pathelement location="${test-resources}" />
+				<path refid="test.dependency.classpath" />
+				<path refid="compile.dependency.classpath" />		
+			</classpath>
+			<formatter type="plain" />
+			<batchtest todir="${output}/undercover/test-report">
 				<fileset dir="${test-source}">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
 		</junit>
 		
-		<undercover>
-			<report>
-			</report>
-		</undercover>
+		<undercover-report
+			metaDataFile="${output}/undercover/undercover.md"
+			coverageDataFile="${output}/undercover/undercover.cd"
+			destDir="${output}/site/undercover"
+			sourceEncoding="UTF-8">
+			<sourcepath>
+				<pathelement location="${source}" />
+			</sourcepath>
+		</undercover-report>
 	</target>
 
 	<target name="clean">
