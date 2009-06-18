@@ -6,20 +6,23 @@
 	<property file="build.properties" />
 	
 	<property name="source" value="src/main/java" />
+	<property name="resources" value="src/main/resources" />
    	<property name="test-source" value="src/test/java" />
-	
+   	<property name="test-resources" value="src/test/resources" />
+
 	<property name="output" value="target" />
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
 	<path id="compile.classpath" >
+		<pathelement location="${classes}" />
+		<pathelement location="${resources}" />
 		<pathelement location="${basedir}/../undercover/target/classes" />
 		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
 		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
 		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
 		<pathelement location="${M2_REPO}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
 		<pathelement location="${M2_REPO}/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
-		<pathelement location="${classes}" />
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
@@ -28,6 +31,9 @@
 	<path id="test.classpath" >
 		<path refid="compile.classpath" />
 		<pathelement location="${test-classes}" />
+		<pathelement location="${test-resources}" />
+		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
+		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
 	</path>
 
     <target name="default" depends="coverage">
@@ -50,20 +56,25 @@
     	<taskdef name="undercover" classname="undercover.ant.UndercoverTask" classpathref="compile.classpath" />
 		
 		<undercover>
-			<instrument />
+			<instrument destdir="${output}/undercover">
+				<instrumentPath>
+					<pathelement location="${classes}" />
+				</instrumentPath>
+			</instrument>
 		</undercover>
 		
-		<junit fork="yes">
+		<junit fork="yes" printsummary="true">
 			<classpath refid="test.classpath" />
 			<batchtest>
-				<fileset dir="${test-classes}">
+				<fileset dir="${test-source}">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
 		</junit>
 		
 		<undercover>
-			<report />
+			<report>
+			</report>
 		</undercover>
 	</target>
 
