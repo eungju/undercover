@@ -80,9 +80,9 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
     	try {
 	    	OfflineInstrument instrument = new OfflineInstrument();
 	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
-	    	instrument.setOutputDirectory(new File(outputDirectory, "classes"));
+	    	instrument.setOutputDirectory(outputDirectory);
 	    	instrument.setMetaDataFile(metaDataFile);
-	    	instrument.run();
+	    	instrument.fullcopy();
 
 			UndercoverSettings settings = new UndercoverSettings();
 			settings.setCoverageSaveOnExit(true);

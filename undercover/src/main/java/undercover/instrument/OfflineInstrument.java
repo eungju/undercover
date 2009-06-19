@@ -29,9 +29,9 @@ public class OfflineInstrument {
 		this.metaDataFile = metaDataFile;
 	}
 
-	public void run() throws Exception {
+	public void fullcopy() throws Exception {
 		instrument = new Instrument();
-		instrumentDirs(instrumentPaths, outputDirectory);
+		instrumentDirs(instrumentPaths, new File(outputDirectory, "classes"));
 		instrument.getMetaData().save(metaDataFile);
 	}
 	

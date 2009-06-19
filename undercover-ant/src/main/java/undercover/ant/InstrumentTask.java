@@ -81,9 +81,9 @@ public class InstrumentTask extends UndercoverTask {
         checkParameters();
     	try {
     		instrument.setInstrumentPaths(instrumentPaths);
-    		instrument.setOutputDirectory(new File(destDir, "classes"));
+    		instrument.setOutputDirectory(destDir);
     		instrument.setMetaDataFile(metaDataFile);
-			instrument.run();
+			instrument.fullcopy();
 			
 			UndercoverSettings settings = new UndercoverSettings();
 			settings.setCoverageSaveOnExit(true);

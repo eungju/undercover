@@ -78,7 +78,8 @@
 		
 		<undercover-instrument
 			destdir="${output}/undercover"
-			metadatafile="${output}/undercover/undercover.md">
+			metadatafile="${output}/undercover/undercover.md"
+			coveragedatafile="${output}/undercover/undercover.cd">
 			<instrumentpath>
 				<pathelement location="${classes}" />
 			</instrumentpath>
