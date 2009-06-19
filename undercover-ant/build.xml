@@ -76,7 +76,9 @@
     	<taskdef name="undercover-instrument" classname="undercover.ant.InstrumentTask" classpathref="compile.classpath" />
     	<taskdef name="undercover-report" classname="undercover.ant.ReportTask" classpathref="compile.classpath" />
 		
-		<undercover-instrument destdir="${output}/undercover">
+		<undercover-instrument
+			destdir="${output}/undercover"
+			metadatafile="${output}/undercover/undercover.md">
 			<instrumentpath>
 				<pathelement location="${classes}" />
 			</instrumentpath>
@@ -100,13 +102,14 @@
 		</junit>
 		
 		<undercover-report
-			metaDataFile="${output}/undercover/undercover.md"
-			coverageDataFile="${output}/undercover/undercover.cd"
-			destDir="${output}/site/undercover"
-			sourceEncoding="UTF-8">
+			metadatafile="${output}/undercover/undercover.md"
+			coveragedatafile="${output}/undercover/undercover.cd"
+			sourceencoding="UTF-8">
 			<sourcepath>
 				<pathelement location="${source}" />
 			</sourcepath>
+			
+			<html dest="${output}/site/undercover" />
 		</undercover-report>
 	</target>
 
