@@ -6,38 +6,78 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Reference;
 
 import undercover.instrument.OfflineInstrument;
 
 public class InstrumentTask extends UndercoverTask {
-	private Path instrumentPath;
-	private File destDir;
+	Path instrumentPath;
+	File destDir;
+	
+	OfflineInstrument instrument;
+	List<File> instrumentPaths;
+	
+	/**
+	 * instrumentpath attribute.
+	 */
+	public void setInstrumentPath(Path path) {
+		if (instrumentPath == null)
+			instrumentPath = path;
+		else
+			instrumentPath.append(path);
+	}
 
-	public void addInstrumentPath(Path path) {
-		instrumentPath = path;
+	/**
+	 * instrumentpathref attribute.
+	 */
+	public void setInstrumentPathRef(Reference ref) {
+		createInstrumentPath().setRefid(ref);
+	}
+
+	/**
+	 * instrumentpath element.
+	 */
+	public Path createInstrumentPath() {
+		if (instrumentPath == null) {
+			instrumentPath = new Path(getProject());
+		}
+		return instrumentPath.createPath();
 	}
 
 	public void setDestDir(File destDir) {
 		this.destDir = destDir;
 	}
 	
-	public void execute() throws BuildException {
-        log("Instrumenting...");
-
-        if (metaDataFile == null) {
-			metaDataFile = new File(destDir, "undercover.md");
+	void checkParameters() {
+		if (instrumentPath == null) {
+			throw new BuildException("Instrument path is not specified. Must specify at least one instrument path.");
 		}
-		if (coverageDataFile == null) {
-			coverageDataFile = new File(destDir, "undercover.cd");
-		}
-
-		List<File> instrumentPaths = new ArrayList<File>();
+		instrumentPaths = new ArrayList<File>();
 		for (String each : (String[]) instrumentPath.list()) {
-			log("Add instrument path: " + each);
+			log("Instrument path: " + each);
 			instrumentPaths.add(new File(each));
 		}
 		
-    	OfflineInstrument instrument = new OfflineInstrument();
+		if (destDir == null) {
+			throw new BuildException("Destination directory is not specified.");
+		}
+
+		if (metaDataFile == null) {
+			metaDataFile = new File(destDir, "undercover.md");
+		}
+		
+		if (coverageDataFile == null) {
+			coverageDataFile = new File(destDir, "undercover.cd");
+		}
+		
+		if (instrument == null) {
+			instrument = new OfflineInstrument();
+		}
+	}
+	
+	public void execute() throws BuildException {
+        log("Instrumenting...");
+        checkParameters();
     	try {
     		instrument.setInputPaths(instrumentPaths.toArray(new File[instrumentPaths.size()]));
     		instrument.setOutputDirectory(new File(destDir, "classes"));
