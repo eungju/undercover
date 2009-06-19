@@ -6,21 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import undercover.runtime.UndercoverSettings;
-
 public class OfflineInstrument {
 	private Instrument instrument;
-	private File[] inputPaths;
+	private List<File> instrumentPaths;
 	private File outputDirectory;
 	private File metaDataFile;
-	private File coverageDataFile;
 	
-	public void setInputPaths(File[] inputPaths) {
-		this.inputPaths = inputPaths;
+	public void setInstrumentPaths(List<File> instrumentPaths) {
+		this.instrumentPaths = instrumentPaths;
 	}
 	
 	public void setOutputDirectory(File outputDirectory) {
@@ -31,22 +29,13 @@ public class OfflineInstrument {
 		this.metaDataFile = metaDataFile;
 	}
 
-	public void setCoverageDataFile(File coverageDataFile) {
-		this.coverageDataFile = coverageDataFile;
-	}
-	
 	public void run() throws Exception {
 		instrument = new Instrument();
-		instrumentDirs(inputPaths, outputDirectory);
+		instrumentDirs(instrumentPaths, outputDirectory);
 		instrument.getMetaData().save(metaDataFile);
-    	
-		UndercoverSettings settings = new UndercoverSettings();
-		settings.setCoverageSaveOnExit(true);
-		settings.setCoverageFile(coverageDataFile);
-		settings.save(new File(outputDirectory, "undercover.properties"));
 	}
 	
-	public void instrumentDirs(File[] inputDirs, File outputDir) throws IOException {
+	public void instrumentDirs(List<File> inputDirs, File outputDir) throws IOException {
 		outputDir.mkdirs();
 		for (File each : inputDirs) {
 			instrumentDir(each, outputDir);

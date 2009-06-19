@@ -15,6 +15,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import undercover.instrument.OfflineInstrument;
+import undercover.runtime.UndercoverSettings;
 
 /**
  * Offline class instrumentor.
@@ -78,11 +79,15 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
     protected void doExecute() throws MojoExecutionException {
     	try {
 	    	OfflineInstrument instrument = new OfflineInstrument();
-	    	instrument.setInputPaths(instrumentationPaths);
+	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
 	    	instrument.setOutputDirectory(new File(outputDirectory, "classes"));
 	    	instrument.setMetaDataFile(metaDataFile);
-	    	instrument.setCoverageDataFile(coverageDataFile);
 	    	instrument.run();
+
+			UndercoverSettings settings = new UndercoverSettings();
+			settings.setCoverageSaveOnExit(true);
+			settings.setCoverageFile(coverageDataFile);
+			settings.save(new File(outputDirectory, "classes/undercover.properties"));
     	} catch (Exception e) {
     		throw new MojoExecutionException("Failed to instrument", e);
     	}
