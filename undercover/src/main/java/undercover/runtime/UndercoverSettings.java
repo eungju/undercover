@@ -11,13 +11,14 @@ import org.apache.commons.io.IOUtils;
 
 public class UndercoverSettings {
 	private static final String LOCATION = "/undercover.properties";
-	private static final String COVERAGE_SAVE_ON_EXIT = "coverage.saveOnExit";
-	private static final String COVERAGE_FILE = "coverage.file";
+	private static final String COVERAGEDATA_SAVE_ON_EXIT = "undercover.coveragedata.saveOnExit";
+	private static final String COVERAGEDATA_FILE = "undercover.coveragedata.file";
 	
 	private final Properties properties;
 
 	public static UndercoverSettings load() {
-		Properties properties = new Properties();
+		Properties systemProperties = System.getProperties();
+		Properties properties = new Properties(systemProperties);
 		InputStream input = null;
 		try {
 			input = UndercoverSettings.class.getResourceAsStream(LOCATION);
@@ -67,18 +68,18 @@ public class UndercoverSettings {
 	}
 
 	public boolean isCoverageSaveOnExit() {
-		return getProperty(COVERAGE_SAVE_ON_EXIT, false);
+		return getProperty(COVERAGEDATA_SAVE_ON_EXIT, false);
 	}
 	
 	public void setCoverageSaveOnExit(boolean coverageSaveOnExit) {
-		properties.setProperty(COVERAGE_SAVE_ON_EXIT, Boolean.toString(coverageSaveOnExit));
+		properties.setProperty(COVERAGEDATA_SAVE_ON_EXIT, Boolean.toString(coverageSaveOnExit));
 	}
 	
 	public File getCoverageFile() {
-		return getProperty(COVERAGE_FILE, null);
+		return getProperty(COVERAGEDATA_FILE, null);
 	}
 
 	public void setCoverageFile(File file) {
-		properties.setProperty(COVERAGE_FILE, file.getAbsolutePath());
+		properties.setProperty(COVERAGEDATA_FILE, file.getAbsolutePath());
 	}
 }

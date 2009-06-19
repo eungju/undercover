@@ -9,7 +9,6 @@ import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
 import undercover.instrument.OfflineInstrument;
-import undercover.runtime.UndercoverSettings;
 
 public class InstrumentTask extends UndercoverTask {
 	Path instrumentPath;
@@ -84,11 +83,6 @@ public class InstrumentTask extends UndercoverTask {
     		instrument.setOutputDirectory(destDir);
     		instrument.setMetaDataFile(metaDataFile);
 			instrument.fullcopy();
-			
-			UndercoverSettings settings = new UndercoverSettings();
-			settings.setCoverageSaveOnExit(true);
-			settings.setCoverageFile(coverageDataFile);
-			settings.save(new File(destDir, "/classes/undercover.properties"));
 		} catch (Exception e) {
 			throw new BuildException(e);
 		}
