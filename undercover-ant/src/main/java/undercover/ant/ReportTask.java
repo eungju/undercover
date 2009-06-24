@@ -90,14 +90,19 @@ public class ReportTask extends UndercoverTask {
     
     public static abstract class ReportFormat {
 		protected ReportData reportData;
-    	protected File dest;
+    	protected File output;
+    	protected String encoding;
     	
     	public void setReportData(ReportData reportData) {
     		this.reportData = reportData;
     	}
     	
-    	public void setDest(File dest) {
-    		this.dest = dest;
+    	public void setOutput(File output) {
+    		this.output = output;
+    	}
+    	
+    	public void setEncoding(String encoding) {
+    		this.encoding = encoding;
     	}
     		
     	public abstract void generate() throws IOException ;
@@ -105,11 +110,17 @@ public class ReportTask extends UndercoverTask {
     
     public static class HtmlFormat extends ReportFormat {
 		public void generate() throws IOException {
-			ReportOutput output = new ReportOutput(dest);
+			checkEncoding();
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
-			report.setOutput(output);
+			report.setOutput(new ReportOutput(output, encoding));
 			report.generate();
+		}
+		
+		void checkEncoding() {
+			if (encoding == null) {
+				encoding = "UTF-8";
+			}
 		}
     }
 }

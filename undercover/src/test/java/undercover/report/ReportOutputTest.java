@@ -17,7 +17,7 @@ public class ReportOutputTest {
 	@Before public void beforeEach() throws IOException {
 		directory = File.createTempFile("undercover", "");
 		directory.delete();
-		dut = new ReportOutput(directory);
+		dut = new ReportOutput(directory, "UTF-8");
 	}
 	
 	@Test public void writeInputStream() throws IOException {

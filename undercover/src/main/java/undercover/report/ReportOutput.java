@@ -16,8 +16,12 @@ public class ReportOutput {
 	private final String encoding;
 	
 	public ReportOutput(File directory) {
+		this(directory, "UTF-8");
+	}
+	
+	public ReportOutput(File directory, String encoding) {
 		this.directory = directory;
-		this.encoding = "UTF-8";
+		this.encoding = encoding;
 		directory.mkdirs();
 	}
 	

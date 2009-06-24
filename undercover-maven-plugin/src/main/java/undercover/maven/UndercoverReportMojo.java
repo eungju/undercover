@@ -111,11 +111,9 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 			MetaData.load(metaDataFile).accept(builder);
 			ReportData reportData = builder.getReportData();
 			
-			ReportOutput output = new ReportOutput(outputDirectory);
-			
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
-			report.setOutput(output);
+			report.setOutput(new ReportOutput(outputDirectory, "UTF-8"));
 			report.generate();
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);

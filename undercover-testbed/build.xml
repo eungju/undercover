@@ -109,7 +109,7 @@
 				<pathelement location="${source}" />
 			</sourcepath>
 			
-			<html dest="${output}/site/undercover" />
+			<html output="${output}/site/undercover" />
 		</undercover-report>
 	</target>
 
