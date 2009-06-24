@@ -11,8 +11,20 @@ public abstract class UndercoverTask extends Task {
 	public void setMetaDataFile(File metaDataFile) {
 		this.metaDataFile = metaDataFile;
 	}
-	
+
+	protected void checkMetaDataFile() {
+		if (metaDataFile == null) {
+			metaDataFile = new File("undercover.md");
+		}
+	}
+
 	public void setCoverageDataFile(File coverageDataFile) {
 		this.coverageDataFile = coverageDataFile;
+	}
+
+	protected void checkCoverageDataFile() {
+		if (coverageDataFile == null) {
+			coverageDataFile = new File("undercover.cd");
+		}
 	}
 }

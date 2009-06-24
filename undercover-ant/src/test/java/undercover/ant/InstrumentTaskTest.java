@@ -1,8 +1,12 @@
 package undercover.ant;
 
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.Path;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -20,23 +24,34 @@ public class InstrumentTaskTest {
 		setImposteriser(ClassImposteriser.INSTANCE);
 	}};
 	private OfflineInstrument instrument;
-	private Project project;
 
 	@Before public void beforeEach() {
 		dut = new InstrumentTask();
 		instrument = mockery.mock(OfflineInstrument.class);
 		dut.instrument = instrument;
-		project = new Project();
 	}
 	
 	@Test(expected=BuildException.class)
-	public void checkInstrumentPath() {
-		dut.checkParameters();
+	public void instrumentPathIsRequired() {
+		dut.checkInstrumentPath();
+	}
+	
+	@Test public void instrumentPath() throws IOException {
+		File dir = File.createTempFile("classes", "");
+		dut.createInstrumentPath().createPathElement().setLocation(dir);
+		dut.checkInstrumentPath();
+		assertEquals(Arrays.asList(dir), dut.instrumentPaths);
 	}
 
+	@Test public void destDir() throws IOException {
+		File dir = File.createTempFile("undercover", "");
+		dut.setDestDir(dir);
+		dut.checkDestDir();
+		assertEquals(dir, dut.destDir);
+	}
+	
 	@Test(expected=BuildException.class)
-	public void checkDestDir() {
-		dut.setInstrumentPath(new Path(project));
-		dut.checkParameters();
+	public void destDirIsRequired() {
+		dut.checkDestDir();
 	}
 }

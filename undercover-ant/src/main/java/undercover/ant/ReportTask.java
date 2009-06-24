@@ -2,6 +2,7 @@ package undercover.ant;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,20 @@ import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 
 public class ReportTask extends UndercoverTask {
-	private Path sourcePath;
-	private String sourceEncoding;
-	private List<ReportFormat> formats = new ArrayList<ReportFormat>();
+	Path sourcePath;
+	String sourceEncoding;
+	List<ReportFormat> formats = new ArrayList<ReportFormat>();
 	
-	public void addSourcePath(Path path) {
-		sourcePath = path;
+	List<File> sourcePaths;
+	
+	/**
+	 * sourcepath element.
+	 */
+	public Path createSourcePath() {
+		if (sourcePath == null) {
+			sourcePath = new Path(getProject());
+		}
+		return sourcePath.createPath();
 	}
 	
 	public void setSourceEncoding(String sourceEncoding) {
@@ -34,16 +43,34 @@ public class ReportTask extends UndercoverTask {
 		formats.add(format);
 		return format;
 	}
+	
+	void checkParameters() {
+		checkMetaDataFile();
+		checkCoverageDataFile();
+		checkSourcePath();
+    	checkSourceEncoding();
+	}
+
+	void checkSourcePath() {
+    	sourcePaths = new ArrayList<File>();
+    	if (sourcePath != null) {
+	    	for (String each : sourcePath.list()) {
+	    		sourcePaths.add(new File(each));
+	    	}
+    	}
+		log("Source path: " + sourcePaths);
+	}
+	
+	void checkSourceEncoding() {
+		if (sourceEncoding == null) {
+			sourceEncoding = Charset.defaultCharset().name();
+		}
+	}
 
     public void execute() throws BuildException {
     	log("Reporting...");
-    	
-    	List<File> sourcePaths = new ArrayList<File>();
-    	for (String each : sourcePath.list()) {
-    		sourcePaths.add(new File(each));
-    	}
+    	checkParameters();
 		SourceFinder sourceFinder = new SourceFinder(sourcePaths, sourceEncoding);
-		
 		try {
 			CoverageData coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
 			ReportDataBuilder builder = new ReportDataBuilder(coverageData);

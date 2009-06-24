@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
 
 import undercover.instrument.OfflineInstrument;
 
@@ -17,23 +16,6 @@ public class InstrumentTask extends UndercoverTask {
 	OfflineInstrument instrument;
 	List<File> instrumentPaths;
 	
-	/**
-	 * instrumentpath attribute.
-	 */
-	public void setInstrumentPath(Path path) {
-		if (instrumentPath == null)
-			instrumentPath = path;
-		else
-			instrumentPath.append(path);
-	}
-
-	/**
-	 * instrumentpathref attribute.
-	 */
-	public void setInstrumentPathRef(Reference ref) {
-		createInstrumentPath().setRefid(ref);
-	}
-
 	/**
 	 * instrumentpath element.
 	 */
@@ -49,29 +31,31 @@ public class InstrumentTask extends UndercoverTask {
 	}
 	
 	void checkParameters() {
-		if (instrumentPath == null) {
-			throw new BuildException("Instrument path is not specified. Must specify at least one instrument path.");
-		}
-		instrumentPaths = new ArrayList<File>();
-		for (String each : (String[]) instrumentPath.list()) {
-			log("Instrument path: " + each);
-			instrumentPaths.add(new File(each));
-		}
-		
-		if (destDir == null) {
-			throw new BuildException("Destination directory is not specified.");
-		}
-
-		if (metaDataFile == null) {
-			metaDataFile = new File(destDir, "undercover.md");
-		}
-		
-		if (coverageDataFile == null) {
-			coverageDataFile = new File(destDir, "undercover.cd");
-		}
+		checkInstrumentPath();
+		checkDestDir();
+		checkMetaDataFile();
+		checkCoverageDataFile();
 		
 		if (instrument == null) {
 			instrument = new OfflineInstrument();
+		}
+	}
+
+	void checkInstrumentPath() {
+		if (instrumentPath == null) {
+			throw new BuildException("Instrument path is not specified. Must specify at least one instrument path.");
+		}
+
+		instrumentPaths = new ArrayList<File>();
+		for (String each : (String[]) instrumentPath.list()) {
+			instrumentPaths.add(new File(each));
+		}
+		log("Instrument path: " + instrumentPaths);
+	}
+
+	void checkDestDir() {
+		if (destDir == null) {
+			throw new BuildException("Destination directory is not specified.");
 		}
 	}
 	

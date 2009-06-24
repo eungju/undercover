@@ -8,6 +8,7 @@
 	<property name="source" value="src/main/java" />
 	<property name="resources" value="src/main/resources" />
    	<property name="test-source" value="src/test/java" />
+	<property name="test-resources" value="src/test/resources" />
 
 	<property name="output" value="target" />
 	<property name="classes" value="${output}/classes" />
@@ -20,7 +21,6 @@
 
 	<path id="compile.classpath">
 		<pathelement location="${classes}" />
-		<pathelement location="${resources}" />
 		<path refid="compile.dependencies" />
 	</path>
 
