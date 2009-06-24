@@ -73,8 +73,7 @@
 	</target>
 	
 	<target name="coverage" depends="test">
-    	<taskdef name="undercover-instrument" classname="undercover.ant.InstrumentTask" classpathref="compile.classpath" />
-    	<taskdef name="undercover-report" classname="undercover.ant.ReportTask" classpathref="compile.classpath" />
+    	<taskdef resource="undercover-ant.properties" classpathref="compile.classpath" />
 		
 		<undercover-instrument
 			destdir="${output}/undercover"
