@@ -158,7 +158,7 @@ public class BasicBlockAnalyzer {
 
     static void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
        	InsnList ecode = new InsnList();
-       	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.COVERAGE_FIELD_NAME, "[[I"));
+       	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I"));
        	ecode.add(new IntInsnNode(SIPUSH, methodIndex));
        	ecode.add(new InsnNode(AALOAD));
        	ecode.add(new IntInsnNode(SIPUSH, blockIndex));

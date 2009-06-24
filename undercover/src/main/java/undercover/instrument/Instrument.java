@@ -13,8 +13,7 @@ import undercover.instrument.filter.Exclusion;
 import undercover.instrument.filter.ExclusionSet;
 
 public class Instrument {
-	static final String COVERAGE_FIELD_NAME = "$undercover$coverage";
-	static final String PRE_CLINIT_METHOD_NAME = "$undercover$preClinit";
+	static final String BLOCK_COVERAGE_FIELD_NAME = "$undercover$blockCoverage";
 	private final Exclusion exclusion;
 	private final MetaData metaData;
 	private final ClassAnalyzer classAnalyzer;
