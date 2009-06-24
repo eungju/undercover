@@ -13,6 +13,8 @@
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
+	<property name="undercover.version" value="0.4-SNAPSHOT" />
+	
 	<path id="compile.dependencies" >
 	</path>
 
@@ -34,8 +36,8 @@
 	</path>
 		
 	<path id="undercover.lib">
-		<pathelement location="${M2_REPO}/undercover/undercover-ant/0.4-SNAPSHOT/undercover-ant-0.4-SNAPSHOT.jar" />
-		<pathelement location="${M2_REPO}/undercover/undercover/0.4-SNAPSHOT/undercover-0.4-SNAPSHOT.jar" />
+		<pathelement location="${M2_REPO}/undercover/undercover-ant/${undercover.version}/undercover-ant-${undercover.version}.jar" />
+		<pathelement location="${M2_REPO}/undercover/undercover/${undercover.version}/undercover-${undercover.version}.jar" />
 		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
 		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
 		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
