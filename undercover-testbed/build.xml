@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="undercover-ant" default="default" basedir=".">
-    <description>Undercover Ant Tasks</description>
+<project name="undercover-testbed" default="default" basedir=".">
+    <description>Undercover Testbed</description>
 	
 	<!-- Developer specific properties -->
 	<property file="build.properties" />
@@ -8,42 +8,39 @@
 	<property name="source" value="src/main/java" />
 	<property name="resources" value="src/main/resources" />
    	<property name="test-source" value="src/test/java" />
-   	<property name="test-resources" value="src/test/resources" />
 
 	<property name="output" value="target" />
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
-	<path id="compile.dependency.classpath" >
-		<pathelement location="${basedir}/../undercover/target/classes" />
-		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
-		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
-		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
-		<pathelement location="${M2_REPO}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
-		<pathelement location="${M2_REPO}/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
+	<path id="compile.dependencies" >
 	</path>
 
 	<path id="compile.classpath">
 		<pathelement location="${classes}" />
 		<pathelement location="${resources}" />
-		<path refid="compile.dependency.classpath" />
+		<path refid="compile.dependencies" />
 	</path>
 
-	<path id="test.dependency.classpath" >
+	<path id="test.dependencies" >
 		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
 		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock/2.5.1/jmock-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock-junit4/2.5.1/jmock-junit4-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock-legacy/2.5.1/jmock-legacy-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar" />
-		<pathelement location="${M2_REPO}/org/objenesis/objenesis/1.0/objenesis-1.0.jar" />
 	</path>
 
 	<path id="test.classpath" >
 		<pathelement location="${test-classes}" />
-		<pathelement location="${test-resources}" />
-		<path refid="test.dependency.classpath" />
+		<path refid="test.dependencies" />
 		<path refid="compile.classpath" />		
+	</path>
+		
+	<path id="undercover.lib">
+		<pathelement location="${M2_REPO}/undercover/undercover-ant/0.4-SNAPSHOT/undercover-ant-0.4-SNAPSHOT.jar" />
+		<pathelement location="${M2_REPO}/undercover/undercover/0.4-SNAPSHOT/undercover-0.4-SNAPSHOT.jar" />
+		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
+		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
+		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
+		<pathelement location="${M2_REPO}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
+		<pathelement location="${M2_REPO}/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
 	</path>
 
     <target name="default" depends="coverage">
@@ -73,7 +70,7 @@
 	</target>
 	
 	<target name="coverage" depends="test">
-    	<taskdef resource="undercover-ant.properties" classpathref="compile.classpath" />
+    	<taskdef resource="undercover-ant.properties" classpathref="undercover.lib" />
 		
 		<undercover-instrument
 			destdir="${output}/undercover"
@@ -85,21 +82,21 @@
 		
 		<mkdir dir="${output}/undercover/test-report" />
 		<junit fork="yes" forkMode="once">
-			<sysproperty key="undercover.coveragedata.saveOnExit" value="true" />
-			<sysproperty key="undercover.coveragedata.file" value="${output}/undercover/undercover.cd" />
+			<formatter type="plain" />
 			<classpath>
 				<pathelement location="${output}/undercover/classes" />
 				<pathelement location="${test-classes}" />
-				<pathelement location="${test-resources}" />
-				<path refid="test.dependency.classpath" />
-				<path refid="compile.dependency.classpath" />		
+				<path refid="test.dependencies" />
+				<path refid="compile.dependencies" />
+				<path refid="undercover.lib" />
 			</classpath>
-			<formatter type="plain" />
 			<batchtest todir="${output}/undercover/test-report">
 				<fileset dir="${test-source}">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
+			<sysproperty key="undercover.coveragedata.saveOnExit" value="true" />
+			<sysproperty key="undercover.coveragedata.file" value="${output}/undercover/undercover.cd" />
 		</junit>
 		
 		<undercover-report
@@ -115,7 +112,7 @@
 	</target>
 
 	<target name="clean">
-		<delete dir="target" />
+		<delete dir="${output}" />
 	</target>
 
 </project>
