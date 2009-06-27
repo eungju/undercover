@@ -9,19 +9,21 @@ import org.objectweb.asm.tree.ClassNode;
 
 import undercover.data.ClassMeta;
 import undercover.data.MetaData;
-import undercover.instrument.filter.Exclusion;
 import undercover.instrument.filter.ExclusionSet;
+import undercover.instrument.filter.GlobExclusion;
+import undercover.instrument.filter.GlobFilter;
 
 public class Instrument {
 	static final String BLOCK_COVERAGE_FIELD_NAME = "$undercover$blockCoverage";
-	private final Exclusion exclusion;
+	private final ExclusionSet exclusionSet;
 	private final MetaData metaData;
 	private final ClassAnalyzer classAnalyzer;
 	
-	public Instrument() {
-		exclusion = new ExclusionSet();
+	public Instrument(GlobFilter filter) {
+		exclusionSet = ExclusionSet.withDefault();
+		exclusionSet.add(new GlobExclusion(filter));
 		metaData = new MetaData();
-		classAnalyzer = new ClassAnalyzer(exclusion);
+		classAnalyzer = new ClassAnalyzer(exclusionSet);
 	}
 	
 	public MetaData getMetaData() {
@@ -44,7 +46,7 @@ public class Instrument {
 		ClassWriter classWriter = new ClassWriter(classReader, 0);
 		ClassNode classNode = new ClassNode();
 		classReader.accept(classNode, 0);
-		if (!exclusion.exclude(classNode)) {
+		if (!exclusionSet.exclude(classNode)) {
 			ClassMeta classMeta = classAnalyzer.instrument(classNode);
 			metaData.addClass(classMeta);
 		}

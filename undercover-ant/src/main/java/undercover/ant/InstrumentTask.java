@@ -6,15 +6,19 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.PatternSet;
 
 import undercover.instrument.OfflineInstrument;
+import undercover.instrument.filter.GlobFilter;
 
 public class InstrumentTask extends UndercoverTask {
 	Path instrumentPath;
 	File destDir;
+	PatternSet filterPatternSet;
 	
 	OfflineInstrument instrument;
 	List<File> instrumentPaths;
+	GlobFilter filter;
 	
 	/**
 	 * instrumentpath element.
@@ -30,11 +34,17 @@ public class InstrumentTask extends UndercoverTask {
 		this.destDir = destDir;
 	}
 	
+	public PatternSet createFilter() {
+		filterPatternSet = new PatternSet();
+		return filterPatternSet;
+	}
+	
 	void checkParameters() {
 		checkInstrumentPath();
 		checkDestDir();
 		checkMetaDataFile();
 		checkCoverageDataFile();
+		checkFilter();
 		
 		if (instrument == null) {
 			instrument = new OfflineInstrument();
@@ -59,6 +69,18 @@ public class InstrumentTask extends UndercoverTask {
 		}
 	}
 	
+	void checkFilter() {
+		String[] includes = filterPatternSet.getIncludePatterns(getProject());
+		if (includes == null) {
+			includes = new String[0];
+		}
+		String[] excludes = filterPatternSet.getExcludePatterns(getProject());
+		if (excludes == null) {
+			excludes = new String[0];
+		}
+		filter = new GlobFilter(includes, excludes);
+	}
+	
 	public void execute() throws BuildException {
         log("Instrumenting...");
         checkParameters();
@@ -66,6 +88,7 @@ public class InstrumentTask extends UndercoverTask {
     		instrument.setInstrumentPaths(instrumentPaths);
     		instrument.setOutputDirectory(destDir);
     		instrument.setMetaDataFile(metaDataFile);
+    		instrument.setFilter(filter);
 			instrument.fullcopy();
 		} catch (Exception e) {
 			throw new BuildException(e);

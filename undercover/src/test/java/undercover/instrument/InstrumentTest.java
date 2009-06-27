@@ -11,6 +11,7 @@ import org.junit.Test;
 import undercover.data.ClassMeta;
 import undercover.data.MetaData;
 import undercover.data.MethodMeta;
+import undercover.instrument.filter.GlobFilter;
 
 //FIXME: How to test instrumented bytecode?
 public class InstrumentTest {
@@ -18,7 +19,7 @@ public class InstrumentTest {
 	private ClassMeta classMeta;
 	
 	@Before public void beforeEach() throws IOException {
-		dut = new Instrument();
+		dut = new Instrument(new GlobFilter());
 		byte[] original = IOUtils.toByteArray(getClass().getResourceAsStream("HelloWorld.class"));
 		MetaData metaData = dut.getMetaData();
 		dut.instrument(original);

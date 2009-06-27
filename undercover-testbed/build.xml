@@ -14,7 +14,7 @@
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
-	<property name="undercover.version" value="0.4-SNAPSHOT" />
+	<property name="undercover.version" value="0.5-SNAPSHOT" />
 	
 	<path id="compile.dependencies" >
 	</path>
@@ -80,6 +80,9 @@
 			<instrumentpath>
 				<pathelement location="${classes}" />
 			</instrumentpath>
+			<filter>
+				<exclude name="**/ISample" />
+			</filter>
 		</undercover-instrument>
 		
 		<mkdir dir="${output}/undercover/test-report" />

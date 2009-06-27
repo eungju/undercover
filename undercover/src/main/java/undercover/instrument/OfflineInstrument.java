@@ -11,11 +11,14 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+import undercover.instrument.filter.GlobFilter;
+
 public class OfflineInstrument {
 	private Instrument instrument;
 	private List<File> instrumentPaths;
 	private File outputDirectory;
 	private File metaDataFile;
+	private GlobFilter filter;
 	
 	public void setInstrumentPaths(List<File> instrumentPaths) {
 		this.instrumentPaths = instrumentPaths;
@@ -28,10 +31,15 @@ public class OfflineInstrument {
 	public void setMetaDataFile(File metaDataFile) {
 		this.metaDataFile = metaDataFile;
 	}
+	
+	public void setFilter(GlobFilter filter) {
+		this.filter = filter;
+	}
 
 	public void fullcopy() throws Exception {
-		instrument = new Instrument();
-		instrumentDirs(instrumentPaths, new File(outputDirectory, "classes"));
+		File classesDir = new File(outputDirectory, "classes");
+		instrument = new Instrument(filter);
+		instrumentDirs(instrumentPaths, classesDir);
 		instrument.getMetaData().save(metaDataFile);
 	}
 	
@@ -45,9 +53,10 @@ public class OfflineInstrument {
 	public void instrumentDir(File inputDir, File outputDir) throws IOException {
 		outputDir.mkdir();
 		for (File each : inputDir.listFiles()) {
+			String name = each.getName();
 			if (each.isDirectory()) {
 				instrumentDir(each, new File(outputDir, each.getName()));
-			} else if (each.getName().endsWith(".class")) {
+			} else if (name.endsWith(".class")) {
 				instrumentFile(each, new File(outputDir, each.getName()));
 			} else {
 				copyFile(each, new File(outputDir, each.getName()));

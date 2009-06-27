@@ -60,6 +60,11 @@
 			<plugin>
 				<groupId>undercover</groupId>
 				<artifactId>undercover-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/ISample</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

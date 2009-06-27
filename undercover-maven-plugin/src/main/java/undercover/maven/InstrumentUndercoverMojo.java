@@ -15,6 +15,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import undercover.instrument.OfflineInstrument;
+import undercover.instrument.filter.GlobFilter;
 import undercover.runtime.UndercoverSettings;
 
 /**
@@ -46,6 +47,20 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
     protected File coverageDataFile;
     
     /**
+     * Inclusion class name patterns.
+     * 
+     * @parameter
+     */
+    protected String[] includes;
+    
+    /**
+     * Exclusion class name patterns.
+     * 
+     * @parameter
+     */
+    protected String[] excludes;
+    
+    /**
      * Artifact factory.
      *
      * @component
@@ -74,6 +89,13 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 		if (coverageDataFile == null) {
 			 coverageDataFile = new File(outputDirectory, "undercover.cd");
 		}
+		
+		if (includes == null) {
+			includes = new String[0];
+		}
+		if (excludes == null) {
+			excludes = new String[0];
+		}
 	}
 
     protected void doExecute() throws MojoExecutionException {
@@ -82,6 +104,7 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
 	    	instrument.setOutputDirectory(outputDirectory);
 	    	instrument.setMetaDataFile(metaDataFile);
+    		instrument.setFilter(new GlobFilter(Arrays.asList(includes), Arrays.asList(excludes)));
 	    	instrument.fullcopy();
 
 			UndercoverSettings settings = new UndercoverSettings();
