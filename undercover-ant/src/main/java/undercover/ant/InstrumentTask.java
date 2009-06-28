@@ -35,7 +35,9 @@ public class InstrumentTask extends UndercoverTask {
 	}
 	
 	public PatternSet createFilter() {
-		filterPatternSet = new PatternSet();
+		if (filterPatternSet == null) {
+			filterPatternSet = new PatternSet();
+		}
 		return filterPatternSet;
 	}
 	
@@ -70,11 +72,15 @@ public class InstrumentTask extends UndercoverTask {
 	}
 	
 	void checkFilter() {
-		String[] includes = filterPatternSet.getIncludePatterns(getProject());
+		String[] includes = null;
+		String[] excludes = null;
+		if (filterPatternSet != null) {
+			includes = filterPatternSet.getIncludePatterns(getProject());
+			excludes = filterPatternSet.getExcludePatterns(getProject());
+		}
 		if (includes == null) {
 			includes = new String[0];
 		}
-		String[] excludes = filterPatternSet.getExcludePatterns(getProject());
 		if (excludes == null) {
 			excludes = new String[0];
 		}
