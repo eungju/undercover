@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
- * Ant style glob pattern matching.
+ * Ant style <a href="http://ant.apache.org/manual/dirtasks.html#patterns">glob pattern matching</a>.
  */
 public class GlobPattern {
 	final Pattern pattern;

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Folows <a href="http://emma.sourceforge.net/reference/ch02s06s02.html">Emma inclusion/exclusion matching algorithm</a>.
+ */
 public class GlobFilter {
 	private Collection<GlobPattern> includePatterns;
 	private Collection<GlobPattern> excludePatterns;
