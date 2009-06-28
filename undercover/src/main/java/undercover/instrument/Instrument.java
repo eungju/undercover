@@ -19,11 +19,14 @@ public class Instrument {
 	private final MetaData metaData;
 	private final ClassAnalyzer classAnalyzer;
 	
-	public Instrument(GlobFilter filter) {
+	public Instrument() {
 		exclusionSet = ExclusionSet.withDefault();
-		exclusionSet.add(new GlobExclusion(filter));
 		metaData = new MetaData();
 		classAnalyzer = new ClassAnalyzer(exclusionSet);
+	}
+	
+	public void addFilter(GlobFilter filter) {
+		exclusionSet.add(new GlobExclusion(filter));
 	}
 	
 	public MetaData getMetaData() {

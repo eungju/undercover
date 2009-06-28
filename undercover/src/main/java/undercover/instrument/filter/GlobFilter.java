@@ -11,11 +11,6 @@ public class GlobFilter {
 	private final Collection<GlobPattern> includePatterns;
 	private final Collection<GlobPattern> excludePatterns;
 	
-	public GlobFilter() {
-		includePatterns = new ArrayList<GlobPattern>();
-		excludePatterns = new ArrayList<GlobPattern>();
-	}
-	
 	public GlobFilter(String[] includes, String[] excludes) {
 		includePatterns = patterns(Arrays.asList(includes));
 		excludePatterns = patterns(Arrays.asList(excludes));

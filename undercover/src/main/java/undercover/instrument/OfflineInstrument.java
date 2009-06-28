@@ -38,7 +38,8 @@ public class OfflineInstrument {
 
 	public void fullcopy() throws Exception {
 		File classesDir = new File(outputDirectory, "classes");
-		instrument = new Instrument(filter);
+		instrument = new Instrument();
+		instrument.addFilter(filter);
 		instrumentDirs(instrumentPaths, classesDir);
 		instrument.getMetaData().save(metaDataFile);
 	}
