@@ -1,14 +1,12 @@
 package undercover.instrument.filter;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
  * Ant style <a href="http://ant.apache.org/manual/dirtasks.html#patterns">glob pattern matching</a>.
  */
 public class GlobPattern {
-	final Pattern pattern;
+	private final Pattern pattern;
 	
 	public GlobPattern(String expression) {
 		pattern = Pattern.compile(toRegex(expression));
@@ -44,13 +42,5 @@ public class GlobPattern {
 			index++;
 		}
 		return regex.toString();
-	}
-
-	public static Collection<GlobPattern> compile(Collection<String> expression) {
-		Collection<GlobPattern> result = new ArrayList<GlobPattern>();
-		for (String each : expression) {
-			result.add(new GlobPattern(each));
-		}
-		return result;
 	}
 }

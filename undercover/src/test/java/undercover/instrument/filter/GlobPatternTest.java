@@ -30,7 +30,6 @@ public class GlobPatternTest {
 	
 	@Test public void doubleStarsFollowedBySeparatorMatchesZeroOrMoreDirectories() {
 		GlobPattern dut = new GlobPattern("pkg/**/class");
-		System.out.println(dut.pattern.pattern());
 		assertTrue(dut.match("pkg/class"));
 	}
 

@@ -104,7 +104,7 @@ public class InstrumentUndercoverMojo extends UndercoverMojo {
 	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
 	    	instrument.setOutputDirectory(outputDirectory);
 	    	instrument.setMetaDataFile(metaDataFile);
-    		instrument.setFilter(new GlobFilter(Arrays.asList(includes), Arrays.asList(excludes)));
+    		instrument.setFilter(new GlobFilter(includes, excludes));
 	    	instrument.fullcopy();
 
 			UndercoverSettings settings = new UndercoverSettings();

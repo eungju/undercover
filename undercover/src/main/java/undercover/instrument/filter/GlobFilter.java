@@ -8,32 +8,19 @@ import java.util.Collection;
  * Folows <a href="http://emma.sourceforge.net/reference/ch02s06s02.html">Emma inclusion/exclusion matching algorithm</a>.
  */
 public class GlobFilter {
-	private Collection<GlobPattern> includePatterns;
-	private Collection<GlobPattern> excludePatterns;
+	private final Collection<GlobPattern> includePatterns;
+	private final Collection<GlobPattern> excludePatterns;
 	
 	public GlobFilter() {
 		includePatterns = new ArrayList<GlobPattern>();
 		excludePatterns = new ArrayList<GlobPattern>();
 	}
 	
-	public GlobFilter(Collection<String> includes, Collection<String> excludes) {
-		includePatterns = GlobPattern.compile(includes);
-		excludePatterns = GlobPattern.compile(excludes);
-	}
-
 	public GlobFilter(String[] includes, String[] excludes) {
-		includePatterns = GlobPattern.compile(Arrays.asList(includes));
-		excludePatterns = GlobPattern.compile(Arrays.asList(excludes));
-	}
-
-	public void addInclude(GlobPattern pattern) {
-		includePatterns.add(pattern);
+		includePatterns = patterns(Arrays.asList(includes));
+		excludePatterns = patterns(Arrays.asList(excludes));
 	}
 	
-	public void addExclude(GlobPattern pattern) {
-		excludePatterns.add(pattern);
-	}
-
 	public boolean accept(String name) {
 		if (!includePatterns.isEmpty()) {
 			boolean included = false;
@@ -55,5 +42,13 @@ public class GlobFilter {
 			}
 		}
 		return true;
+	}
+
+	static Collection<GlobPattern> patterns(Collection<String> expression) {
+		Collection<GlobPattern> result = new ArrayList<GlobPattern>();
+		for (String each : expression) {
+			result.add(new GlobPattern(each));
+		}
+		return result;
 	}
 }
