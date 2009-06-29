@@ -1,16 +1,17 @@
 package undercover.report.html;
 
 import org.antlr.stringtemplate.AttributeRenderer;
-import org.apache.commons.lang.StringEscapeUtils;
+
+import undercover.support.HtmlUtils;
 
 public class StringRenderer implements AttributeRenderer {
-	public String toString(Object o) {
-		return o.toString();
+	public String toString(Object value) {
+		return value.toString();
 	}
 
-	public String toString(Object o, String formatName) {
+	public String toString(Object value, String formatName) {
 		if ("html".equals(formatName)) {
-			return StringEscapeUtils.escapeHtml((String) o);
+			return HtmlUtils.escape((String) value);
 		}
 		throw new IllegalArgumentException("Unsupported format name " + formatName);
 	}
