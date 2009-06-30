@@ -75,12 +75,7 @@
 	<reporting>
 		<plugins>
 			<plugin>
-				<groupId>org.sonatype.maven.plugin</groupId>
-				<artifactId>emma-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jdepend-maven-plugin</artifactId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -97,15 +92,30 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javancss-maven-plugin</artifactId>
-				<configuration>
-					<forceEncoding>${maven.compiler.encoding}</forceEncoding>
-				</configuration>
+				<artifactId>jdepend-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</reporting>
 
 	<profiles>
+		<profile>
+			<id>emma</id>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>sonatype.org</id>
+					<name>Public Sonatype Maven Repository</name>
+					<url>http://repository.sonatype.org/content/groups/public</url>
+				</pluginRepository>
+			</pluginRepositories>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.maven.plugin</groupId>
+						<artifactId>emma-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</reporting>	
+		</profile>
 		<profile>
 			<id>clover</id>
 			<properties>
@@ -147,14 +157,6 @@
 			</reporting>	
 		</profile>
 	</profiles>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>sonatype.org</id>
-			<name>Public Sonatype Maven Repository</name>
-			<url>http://repository.sonatype.org/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<distributionManagement>
 		<repository>
