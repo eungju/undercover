@@ -19,6 +19,7 @@ import undercover.report.ReportDataBuilder;
 import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
+import undercover.report.xml.CoberturaXmlReport;
 
 /**
  * Instruments, tests, and generates an Undercover report.
@@ -50,7 +51,7 @@ public class UndercoverReportMojo extends AbstractMavenReport {
      */
     protected File outputDirectory;
 
-    /**
+	/**
      * Source locations.
      *
      * @parameter
@@ -63,7 +64,22 @@ public class UndercoverReportMojo extends AbstractMavenReport {
      * @parameter expression="${undercover.report.source.encoding}" default-value="UTF-8"
      */
     protected String sourceEncoding;
-
+    
+    /**
+     * Report formats.
+     *
+     * @parameter
+     */
+    protected String[] formats;
+    
+    /**
+     * Output directory for the cobertura compatible report.
+     *
+     * @parameter default-value="${project.reporting.outputDirectory}/cobertura"
+     * @required
+     */
+	protected File coberturaOutputDirectory;
+	
     /**
      * Site renderer.
      *
@@ -97,6 +113,10 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 			getLog().info("Source paths: " + paths);
 			sourcePaths = paths.toArray(new File[paths.size()]);
 		}
+        
+        if (formats == null) {
+        	formats = new String[] { "html" };
+        }
     }
     
 	protected void executeReport(Locale locale) throws MavenReportException {
@@ -111,10 +131,22 @@ public class UndercoverReportMojo extends AbstractMavenReport {
 			MetaData.load(metaDataFile).accept(builder);
 			ReportData reportData = builder.getReportData();
 			
-			HtmlReport report = new HtmlReport();
-			report.setReportData(reportData);
-			report.setOutput(new ReportOutput(outputDirectory, "UTF-8"));
-			report.generate();
+			for (String format : formats) {
+				getLog().info("Generating " + format + " report");
+				if ("html".equals(format)) {
+					HtmlReport report = new HtmlReport();
+					report.setReportData(reportData);
+					report.setOutput(new ReportOutput(outputDirectory, "UTF-8"));
+					report.generate();
+				} else if ("coberturaxml".equals(format)) {
+					CoberturaXmlReport report = new CoberturaXmlReport();
+					report.setReportData(reportData);
+					report.setOutput(new File(coberturaOutputDirectory, "coverage.xml"));
+					report.generate();
+				} else {
+					getLog().warn("Unknown report format " + format);
+				}
+			}
 		} catch (IOException e) {
 			throw new MavenReportException("Failed to generate report", e);
 		}
