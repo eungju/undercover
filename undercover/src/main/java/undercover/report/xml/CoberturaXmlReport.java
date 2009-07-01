@@ -18,7 +18,8 @@ import undercover.support.HtmlUtils;
 public class CoberturaXmlReport {
 	private ReportData reportData;
 	private File output;
-
+	private String encoding = "UTF-8";
+	
 	public void setReportData(ReportData reportData) {
 		this.reportData = reportData;
 	}
@@ -33,7 +34,7 @@ public class CoberturaXmlReport {
 		Writer writer = null;
 		try {
 			output.getParentFile().mkdirs();
-			writer = new OutputStreamWriter(new FileOutputStream(output), "UTF-8");
+			writer = new OutputStreamWriter(new FileOutputStream(output), encoding);
 			writer.write(builder.toString());
 		} finally {
 			writer.close();
@@ -42,7 +43,9 @@ public class CoberturaXmlReport {
 
 	void writeCoverage(StringBuilder builder, ReportData reportData) {
 		ProjectItem item = reportData.getProject();
-		builder.append("<?xml version=\"1.0\"?>\n");
+		builder.append("<?xml version=\"1.0\"")
+				.append(" encoding=\"").append(encoding).append("\"")
+				.append("?>\n");
 		builder.append("<!DOCTYPE coverage SYSTEM \"http://cobertura.sourceforge.net/xml/coverage-04.dtd\">\n");
 		builder.append("<coverage")
 			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
