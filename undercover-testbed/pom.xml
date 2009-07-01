@@ -64,6 +64,10 @@
 					<excludes>
 						<exclude>**/ISample</exclude>
 					</excludes>
+					<formats>
+						<format>html</format>
+						<format>coberturaxml</format>
+					</formats>
 				</configuration>
 			</plugin>
 		</plugins>
