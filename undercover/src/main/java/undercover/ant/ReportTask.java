@@ -16,6 +16,7 @@ import undercover.report.ReportDataBuilder;
 import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
+import undercover.report.xml.CoberturaXmlReport;
 
 public class ReportTask extends UndercoverTask {
 	Path sourcePath;
@@ -40,6 +41,12 @@ public class ReportTask extends UndercoverTask {
 	
 	public ReportFormat createHtml() {
 		ReportFormat format = new HtmlFormat();
+		formats.add(format);
+		return format;
+	}
+	
+	public ReportFormat createCoberturaXml() {
+		ReportFormat format = new CoberturaXmlFormat();
 		formats.add(format);
 		return format;
 	}
@@ -114,6 +121,22 @@ public class ReportTask extends UndercoverTask {
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
 			report.setOutput(new ReportOutput(output, encoding));
+			report.generate();
+		}
+		
+		void checkEncoding() {
+			if (encoding == null) {
+				encoding = "UTF-8";
+			}
+		}
+    }
+
+    public static class CoberturaXmlFormat extends ReportFormat {
+		public void generate() throws IOException {
+			checkEncoding();
+			CoberturaXmlReport report = new CoberturaXmlReport();
+			report.setReportData(reportData);
+			report.setOutput(output);
 			report.generate();
 		}
 		

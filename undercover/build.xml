@@ -118,6 +118,7 @@
 			</sourcepath>
 			
 			<html output="${output}/site/undercover" />
+			<coberturaxml output="${output}/cobertura/coverage.xml" />
 		</undercover-report>
 	</target>
 
