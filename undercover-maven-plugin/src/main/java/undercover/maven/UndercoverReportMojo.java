@@ -121,14 +121,20 @@ public class UndercoverReportMojo extends AbstractMavenReport {
     
 	protected void executeReport(Locale locale) throws MavenReportException {
 		checkParameters();
+
+		if (!metaDataFile.exists()) {
+			getLog().warn("Meta data is not exist");
+			return;
+		}
 		
 		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
 		try {
+			MetaData metaData = MetaData.load(metaDataFile);
 			CoverageData coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
 			ReportDataBuilder builder = new ReportDataBuilder(coverageData);
 			builder.setProjectName(project.getName());
 			builder.setSourceFinder(sourceFinder);
-			MetaData.load(metaDataFile).accept(builder);
+			metaData.accept(builder);
 			ReportData reportData = builder.getReportData();
 			
 			for (String format : formats) {

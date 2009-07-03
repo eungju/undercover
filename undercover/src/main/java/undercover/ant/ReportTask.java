@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
 
 import undercover.data.CoverageData;
@@ -77,13 +78,20 @@ public class ReportTask extends UndercoverTask {
     public void execute() throws BuildException {
     	log("Reporting...");
     	checkParameters();
+    	
+		if (!metaDataFile.exists()) {
+			log("Meta data is not exist", Project.MSG_WARN);
+			return;
+		}
+
 		SourceFinder sourceFinder = new SourceFinder(sourcePaths, sourceEncoding);
 		try {
+			MetaData metaData = MetaData.load(metaDataFile);
 			CoverageData coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
 			ReportDataBuilder builder = new ReportDataBuilder(coverageData);
 			builder.setProjectName(getProject().getName());
 			builder.setSourceFinder(sourceFinder);
-			MetaData.load(metaDataFile).accept(builder);
+			metaData.accept(builder);
 			ReportData reportData = builder.getReportData();
 			
 			for (ReportFormat each : formats) {
