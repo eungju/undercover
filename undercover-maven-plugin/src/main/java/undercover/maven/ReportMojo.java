@@ -28,7 +28,7 @@ import undercover.report.xml.CoberturaXmlReport;
  * @execute phase="test" lifecycle="undercover"
  * @requiresDependencyResolution test
  */
-public class UndercoverReportMojo extends AbstractMavenReport {
+public class ReportMojo extends AbstractMavenReport {
     /**
      * Location to store class coverage metadata.
      *

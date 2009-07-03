@@ -24,7 +24,7 @@ import undercover.runtime.UndercoverSettings;
  * @goal instrument
  * @requiresDependencyResolution test
  */
-public class InstrumentUndercoverMojo extends UndercoverMojo {
+public class InstrumentMojo extends UndercoverMojo {
     /**
      * Specifies the instrumentation paths to use.
      *
