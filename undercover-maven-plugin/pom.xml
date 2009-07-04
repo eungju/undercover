@@ -61,6 +61,7 @@
 						<format>html</format>
 						<format>coberturaxml</format>
 					</formats>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
