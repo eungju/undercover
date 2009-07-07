@@ -11,6 +11,8 @@ public class MethodMetrics {
 	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<MethodItem>> methods;
 	private final LazyValue<Integer> maximumComplexity;
+	private final LazyValue<Integer> executableCount;
+	private final LazyValue<Integer> coveredCount;
 
 	public MethodMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
 		this.blockMetrics = blockMetrics;
@@ -30,6 +32,30 @@ public class MethodMetrics {
 		maximumComplexity = new LazyValue<Integer>() {
 			protected Integer calculate() {
 				return getCount() == 0 ? 0 : Collections.max(methods.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
+			}
+		};
+		executableCount = new LazyValue<Integer>() {
+			@Override
+			protected Integer calculate() {
+				int result = 0;
+				for (MethodItem each : methods.value()) {
+					if (each.getBlockMetrics().getBlockCount() > 0) {
+						result++;
+					}
+				}
+				return result;
+			}
+		};
+		coveredCount = new LazyValue<Integer>() {
+			@Override
+			protected Integer calculate() {
+				int result = 0;
+				for (MethodItem each : methods.value()) {
+					if (each.getBlockMetrics().getCoveredBlockCount() > 0) {
+						result++;
+					}
+				}
+				return result;
 			}
 		};
 	}
@@ -59,5 +85,13 @@ public class MethodMetrics {
 	
 	public double getStandardDeviation() {
 		return Math.sqrt(getVariance());
+	}
+
+	public int getExecutableCount() {
+		return executableCount.value();
+	}
+
+	public int getCoveredCount() {
+		return coveredCount.value();
 	}
 }
