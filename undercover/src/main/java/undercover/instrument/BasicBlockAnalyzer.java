@@ -29,7 +29,6 @@ import undercover.data.MethodMeta;
 
 public class BasicBlockAnalyzer {
 	public List<BasicBlock> blocks = new ArrayList<BasicBlock>();
-	public int complexity = 1;
 	
 	private Set<Label> targetLabels = new HashSet<Label>();
 	private BasicBlock basicBlock = null;
@@ -54,20 +53,26 @@ public class BasicBlockAnalyzer {
 					addBasicBlock(offset + 1);
 				}
 			} else if (each.getType() == AbstractInsnNode.JUMP_INSN) {
-				addBasicBlock(offset + 1);
 				if (isConditionalBranch(each.getOpcode())) {
-					complexity++;
+					basicBlock.conditionals++;
 				}
+				addBasicBlock(offset + 1);
 			} else if (each.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
 				TableSwitchInsnNode node = (TableSwitchInsnNode) each;
+				basicBlock.conditionals += node.labels.size();
 				addBasicBlock(offset + 1);
-				complexity += node.labels.size();
 			} else if (each.getType() == AbstractInsnNode.LOOKUPSWITCH_INSN) {
 				LookupSwitchInsnNode node = (LookupSwitchInsnNode) each;
+				basicBlock.conditionals += node.labels.size();
 				addBasicBlock(offset + 1);
-				complexity += node.labels.size();
 			} else if (each.getType() == AbstractInsnNode.LABEL) {
 				LabelNode node = (LabelNode) each;
+				//TODO: make it faster
+				for (TryCatchBlockNode tryCatch : (Collection<TryCatchBlockNode>) methodNode.tryCatchBlocks) {
+					if (tryCatch.type != null && node.getLabel() == tryCatch.end.getLabel()) {
+						basicBlock.conditionals++;
+					}
+				}
 				if (targetLabels.contains(node.getLabel()) && basicBlock.start < offset) {
 					addBasicBlock(offset);
 				}
@@ -92,16 +97,9 @@ public class BasicBlockAnalyzer {
 		basicBlock = new BasicBlock(nextOffset);
 	}
 	
-	boolean isCatchClause(TryCatchBlockNode node) {
-		return node.type != null;
-	}
-
 	void scanJumpTargets(MethodNode methodNode) {
 		for (TryCatchBlockNode each : (Collection<TryCatchBlockNode>) methodNode.tryCatchBlocks) {
 			targetLabels.add(each.handler.getLabel());
-			if (isCatchClause(each)) {
-				complexity++;
-			}
 		}
 		for (Iterator<AbstractInsnNode> i = methodNode.instructions.iterator(); i.hasNext(); ) {
 			AbstractInsnNode each = i.next();
@@ -153,7 +151,15 @@ public class BasicBlockAnalyzer {
 		
 		methodNode.maxStack += 4;
 		
-		return new MethodMeta(methodNode.name, methodNode.desc, complexity, blockMetas);
+		return new MethodMeta(methodNode.name, methodNode.desc, complexity(), blockMetas);
+	}
+	
+	int complexity() {
+		int result = 1;
+		for (BasicBlock each : blocks) {
+			result += each.conditionals;
+		}
+		return result;
 	}
 
     static void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {

@@ -33,7 +33,6 @@ public class BasicBlockTest implements Opcodes {
 		
 		dut.analyze(mv);
 		assertEquals(Arrays.<BasicBlock>asList(), dut.blocks);
-		assertEquals(1, dut.complexity);
 	}
 	
 	@Test public void returnInstructionsAreEdges() {
@@ -52,8 +51,7 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 		
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 1, set(11))), dut.blocks);
-		assertEquals(1, dut.complexity);
+		assertEquals(Arrays.asList(new BasicBlock(0, 1, 0, set(11))), dut.blocks);
 	}
 	
 	@Test public void throwInstructionsAreEdges() {
@@ -75,8 +73,7 @@ public class BasicBlockTest implements Opcodes {
 		mv.visitEnd();
 		
 		dut.analyze(mv);
-		assertEquals(Arrays.asList(new BasicBlock(0, 4, set(97))), dut.blocks);
-		assertEquals(1, dut.complexity);
+		assertEquals(Arrays.asList(new BasicBlock(0, 4, 0, set(97))), dut.blocks);
 	}
 	
 	@Test public void jumpInstructionsAndTargetLabelsAreEdges() {
@@ -110,11 +107,10 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 3, set(43)),
-						new BasicBlock(3, 6, set(44)),
-						new BasicBlock(6, 7, set(46))),
+				Arrays.asList(new BasicBlock(0, 3, 1, set(43)),
+						new BasicBlock(3, 6, 0, set(44)),
+						new BasicBlock(6, 7, 0, set(46))),
 				dut.blocks);
-		assertEquals(2, dut.complexity);
 	}
 	
 	@Test public void tryCatchBlockHandlersAreEdges() {
@@ -157,11 +153,10 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 4, set(62)),
-						new BasicBlock(4, 8, set(63, 64)),
-						new BasicBlock(8, 9, set(66))),
+				Arrays.asList(new BasicBlock(0, 4, 1, set(62)),
+						new BasicBlock(4, 8, 0, set(63, 64)),
+						new BasicBlock(8, 9, 0, set(66))),
 				dut.blocks);
-		assertEquals(2, dut.complexity);
 	}
 	
 	@Test public void backwardJumpTargetsAreEdges() {
@@ -209,12 +204,11 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 3, set(101)),
-						new BasicBlock(3, 7, set(102, 101)),
-						new BasicBlock(7, 10, set(101)),
-						new BasicBlock(10, 11, set(104))),
+				Arrays.asList(new BasicBlock(0, 3, 0, set(101)),
+						new BasicBlock(3, 7, 0, set(102, 101)),
+						new BasicBlock(7, 10, 1, set(101)),
+						new BasicBlock(10, 11, 0, set(104))),
 				dut.blocks);
-		assertEquals(2, dut.complexity);
 	}
 	
 	@Test public void tableSwitchTargetsAreEdges() {
@@ -259,12 +253,11 @@ public class BasicBlockTest implements Opcodes {
 		
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 2, set(107)),
-						new BasicBlock(2, 6, set(109, 110)),
-						new BasicBlock(6, 9, set(112)),
-						new BasicBlock(9, 10, set(114))),
+				Arrays.asList(new BasicBlock(0, 2, 2, set(107)),
+						new BasicBlock(2, 6, 0, set(109, 110)),
+						new BasicBlock(6, 9, 0, set(112)),
+						new BasicBlock(9, 10, 0, set(114))),
 				dut.blocks);
-		assertEquals(3, dut.complexity);
 	}
 	
 	@Test public void lookupSwitchTargetsAreEdges() {
@@ -309,12 +302,11 @@ public class BasicBlockTest implements Opcodes {
 		
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 2, set(117)),
-						new BasicBlock(2, 6, set(119, 120)),
-						new BasicBlock(6, 9, set(122)),
-						new BasicBlock(9, 10, set(124))),
+				Arrays.asList(new BasicBlock(0, 2, 2, set(117)),
+						new BasicBlock(2, 6, 0, set(119, 120)),
+						new BasicBlock(6, 9, 0, set(122)),
+						new BasicBlock(9, 10, 0, set(124))),
 				dut.blocks);
-		assertEquals(3, dut.complexity);
 	}
 	
 	@Test public void retInstructionsAreEdges() {
@@ -394,15 +386,14 @@ public class BasicBlockTest implements Opcodes {
 
 		dut.analyze(mv);
 		assertEquals(
-				Arrays.asList(new BasicBlock(0, 4, set(78, 79)),
-						new BasicBlock(4, 5, set(83)),
-						new BasicBlock(5, 10, set(79, 80, 81)),
-						new BasicBlock(10, 11, set(83)),
-						new BasicBlock(11, 13, set(82)),
-						new BasicBlock(13, 15, set(82)),
-						new BasicBlock(15, 20, set(82)),
-						new BasicBlock(20, 21, set(84))),
+				Arrays.asList(new BasicBlock(0, 4, 1, set(78, 79)),
+						new BasicBlock(4, 5, 0, set(83)),
+						new BasicBlock(5, 10, 0, set(79, 80, 81)),
+						new BasicBlock(10, 11, 0, set(83)),
+						new BasicBlock(11, 13, 0, set(82)),
+						new BasicBlock(13, 15, 0, set(82)),
+						new BasicBlock(15, 20, 0, set(82)),
+						new BasicBlock(20, 21, 0, set(84))),
 				dut.blocks);
-		assertEquals(2, dut.complexity);
 	}
 }
