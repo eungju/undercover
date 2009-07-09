@@ -82,24 +82,24 @@ public class HtmlReport {
 	
 	void generateProjectPackages() throws IOException {
 		StringTemplate template = getTemplate("projectPackages");
-		template.setAttribute("project", reportData.getProject());
+		template.setAttribute("project", reportData);
 		output.write("project-packages.html", template.toString());
 	}
 	
 	void generateProjectSummary() throws IOException {
 		StringTemplate template = getTemplate("projectSummary");
-		template.setAttribute("project", reportData.getProject());
+		template.setAttribute("project", reportData);
 		output.write("project-summary.html", template.toString());
 	}
 
 	void generateProjectClasses() throws IOException {
 		StringTemplate template = getTemplate("projectClasses");
-		template.setAttribute("classes", reportData.getAllClasses());
+		template.setAttribute("classes", reportData.getClasses());
 		output.write("project-classes.html", template.toString());
 	}
 
 	void generatePackageReports() throws IOException {
-		for (PackageItem each : reportData.getProject().packages) {
+		for (PackageItem each : reportData.getPackages()) {
 			generatePackageSummary(each);
 			generatePackageClasses(each);
 		}
@@ -118,7 +118,7 @@ public class HtmlReport {
 	}
 
 	void generateSourceReports() throws IOException {
-		for (SourceItem each : reportData.getAllSources()) {
+		for (SourceItem each : reportData.getSources()) {
 			StringTemplate st = getTemplate("sourceSummary");
 			st.setAttribute("source", each);
 			output.write("source-" + each.getLinkName() + ".html", st.toString());
@@ -127,14 +127,14 @@ public class HtmlReport {
 	
 	void generateDashboardReport() throws IOException {
 		StringTemplate template = getTemplate("dashboard");
-		template.setAttribute("project", reportData.getProject());
-		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getAllClasses());
+		template.setAttribute("project", reportData);
+		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getClasses());
 		template.setAttribute("coverageDistribution", coverageDistribution);
-		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getAllClasses());
+		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getClasses());
 		template.setAttribute("coverageComplexity", coverageComplexity);
-		template.setAttribute("mostRiskyClasses", mostRisky(reportData.getAllClasses(), 20));
-		template.setAttribute("mostComplexClasses", mostComplex(reportData.getAllClasses(), 10));
-		template.setAttribute("leastCoveredClasses", leastCovered(reportData.getAllClasses(), 10));
+		template.setAttribute("mostRiskyClasses", mostRisky(reportData.getClasses(), 20));
+		template.setAttribute("mostComplexClasses", mostComplex(reportData.getClasses(), 10));
+		template.setAttribute("leastCoveredClasses", leastCovered(reportData.getClasses(), 10));
 		output.write("project-dashboard.html", template.toString());
 	}
 

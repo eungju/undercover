@@ -26,7 +26,6 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	final List<ClassMeta> anonymousClasses = new ArrayList<ClassMeta>();
 
 	ReportData reportData;
-	ProjectItem projectItem;
 	PackageItem packageItem;
 	SourceItem sourceItem;
 	ClassItem classItem;
@@ -52,7 +51,6 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(MetaData metaData) {
-		projectItem = new ProjectItem(projectName);
 	}
 
 	public void visitLeave(MetaData metaData) {
@@ -69,7 +67,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 			namedClassItems.remove(each.name);
 		}
 		
-		reportData = new ReportData(projectItem, namedClassItems, sourceItems);
+		reportData = new ReportData(projectName, packageItems.values(), namedClassItems.values(), sourceItems.values());
 	}
 
 	public void visitEnter(ClassMeta classMeta) {
@@ -103,7 +101,6 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		
 		if (!packageItems.containsKey(packageItem.getName())) {
 			packageItems.put(packageItem.getName(), packageItem);
-			projectItem.addPackage(packageItem);
 		}
 
 		if (!sourceItems.containsKey(sourceItem.getName())) {

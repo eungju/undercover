@@ -87,10 +87,4 @@ public class ClassItem implements Item {
 			return a.getSimpleName().compareTo(b.getSimpleName());
 		}
 	};
-
-	public static final Comparator<String> NAME_ORDER_BY_SIMPLE_NAME = new Comparator<String>() {
-		public int compare(String a, String b) {
-			return getSimpleName(a).compareTo(getSimpleName(b));
-		}
-	};
 }

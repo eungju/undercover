@@ -21,7 +21,7 @@ import undercover.data.MethodMeta;
 import undercover.support.UndercoverMockery;
 
 @RunWith(JMock.class)
-public class ReportDataTest {
+public class ReportDataBuilderTest {
 	private ReportDataBuilder dut;
 	private CoverageData coverageData;
 	private Mockery mockery = new UndercoverMockery();
@@ -37,7 +37,6 @@ public class ReportDataTest {
 	}
 	
 	@Test public void visitClass() {
-		dut.projectItem = new ProjectItem("prj");
 		ClassMeta classMeta = new ClassMeta("pkg/cls", "cls.java");
 		classMeta.accept(dut);
 		assertNotNull(dut.classItems.get(classMeta.name));

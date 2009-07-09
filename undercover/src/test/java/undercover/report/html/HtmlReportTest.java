@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.jmock.Expectations;
@@ -15,7 +16,7 @@ import org.junit.runner.RunWith;
 
 import undercover.report.ClassItem;
 import undercover.report.MethodItem;
-import undercover.report.ProjectItem;
+import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
@@ -38,7 +39,7 @@ public class HtmlReportTest {
 			one(output).write(with(equal("project-summary.html")), with(any(String.class)));
 		}});
 	
-		ReportData data = new ReportData(new ProjectItem("xyz"), new HashMap<String, ClassItem>(), new HashMap<String, SourceItem>());
+		ReportData data = new ReportData("xyz", Collections.<PackageItem>emptySet(), Collections.<ClassItem>emptySet(), Collections.<SourceItem>emptySet());
 		dut.setReportData(data);
 		dut.generateProjectSummary();
 	}

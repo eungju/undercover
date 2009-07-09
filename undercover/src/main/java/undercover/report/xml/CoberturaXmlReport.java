@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Collection;
-import java.util.SortedSet;
 
 import undercover.report.ClassItem;
 import undercover.report.MethodItem;
 import undercover.report.PackageItem;
-import undercover.report.ProjectItem;
 import undercover.report.ReportData;
 import undercover.support.HtmlUtils;
 
@@ -42,7 +40,7 @@ public class CoberturaXmlReport {
 	}
 
 	void writeCoverage(StringBuilder builder, ReportData reportData) {
-		ProjectItem item = reportData.getProject();
+		ReportData item = reportData;
 		builder.append("<?xml version=\"1.0\"")
 				.append(" encoding=\"").append(encoding).append("\"")
 				.append("?>\n");
@@ -58,11 +56,11 @@ public class CoberturaXmlReport {
 			.append(" version=\"").append("1.9.2").append("\"")
 			.append(" timestamp=\"").append(System.currentTimeMillis()).append("\"")
 			.append(">\n");
-		writePackages(builder, reportData.getProject().packages);
+		writePackages(builder, reportData.getPackages());
 		builder.append("</coverage>\n");
 	}
 
-	void writePackages(StringBuilder builder, SortedSet<PackageItem> items) {
+	void writePackages(StringBuilder builder, Collection<PackageItem> items) {
 		builder.append("<packages>\n");
 		for (PackageItem each : items) {
 			writePackage(builder, each);

@@ -2,14 +2,16 @@ package undercover.report;
 
 import static org.junit.Assert.*;
 
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class ProjectItemTest {
-	private ProjectItem dut;
+public class ProjectDataTest {
+	private ReportData dut;
 
 	@Before public void beforeEach() {
-		dut = new ProjectItem("Project name");
+		dut = new ReportData("Project name", Collections.<PackageItem>emptySet(), Collections.<ClassItem>emptySet(), Collections.<SourceItem>emptySet());
 	}
 	
 	@Test public void getDisplayName() {
