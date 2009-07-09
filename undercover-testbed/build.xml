@@ -14,7 +14,7 @@
 	<property name="classes" value="${output}/classes" />
 	<property name="test-classes" value="${output}/test-classes" />
 	
-	<property name="undercover.version" value="0.5-SNAPSHOT" />
+	<property name="undercover.version" value="0.6-SNAPSHOT" />
 	
 	<path id="compile.dependencies" >
 	</path>
@@ -113,6 +113,7 @@
 			
 			<html output="${output}/site/undercover" />
 			<coberturaxml output="${output}/site/cobertura/coverage.xml" />
+			<emmaxml output="${output}/site/emma/coverage.xml" />
 		</undercover-report>
 	</target>
 

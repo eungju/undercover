@@ -38,6 +38,11 @@ public class SourceItem implements Item {
 	public String getLinkName() {
 		return getName().replaceAll("/", ".");
 	}
+	
+	public String getSimpleName() {
+		int pos = sourceFile.path.lastIndexOf('/');
+		return pos < 0 ? sourceFile.path : sourceFile.path.substring(pos + 1); 
+	}
 
 	public void addClass(ClassItem classItem) {
 		classes.add(classItem);

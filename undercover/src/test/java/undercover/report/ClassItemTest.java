@@ -10,7 +10,7 @@ public class ClassItemTest {
 
 	@Before public void beforeEach() {
 		dut = new ClassItem("p/c");
-		dut.setSourceFile(new SourceFile("p/c.java"));
+		dut.setSource(new SourceItem(new SourceFile("p/c.java")));
 	}
 	
 	@Test public void getDisplayName() {

@@ -20,6 +20,7 @@ import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
+import undercover.report.xml.EmmaXmlReport;
 
 /**
  * Instruments, tests, and generates an Undercover report.
@@ -79,6 +80,14 @@ public class ReportMojo extends AbstractMavenReport {
      * @required
      */
 	protected File coberturaOutputDirectory;
+
+	/**
+     * Output directory for the Emma compatible report.
+     *
+     * @parameter default-value="${project.reporting.outputDirectory}/emma"
+     * @required
+     */
+	protected File emmaOutputDirectory;
 	
     /**
      * Site renderer.
@@ -148,6 +157,11 @@ public class ReportMojo extends AbstractMavenReport {
 					CoberturaXmlReport report = new CoberturaXmlReport();
 					report.setReportData(reportData);
 					report.setOutput(new File(coberturaOutputDirectory, "coverage.xml"));
+					report.generate();
+				} else if ("emmaxml".equals(format)) {
+					EmmaXmlReport report = new EmmaXmlReport();
+					report.setReportData(reportData);
+					report.setOutput(new File(emmaOutputDirectory, "coverage.xml"));
 					report.generate();
 				} else {
 					getLog().warn("Unknown report format " + format);

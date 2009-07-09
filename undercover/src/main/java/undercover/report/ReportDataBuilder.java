@@ -88,7 +88,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		}
 
 		classItem = new ClassItem(classMeta.name);
-		classItem.setSourceFile(sourceFile);
+		classItem.setSource(sourceItem);
 		classCoverage = coverageData.getCoverage(classMeta.name);
 		methodIndex = 0;
 	}

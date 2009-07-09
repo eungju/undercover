@@ -51,8 +51,8 @@ public class ReportDataBuilderTest {
 
 		SourceFile sourceFile = new SourceFile("c.java");
 		dut.classItem = new ClassItem("p/c");
-		dut.classItem.setSourceFile(sourceFile);
 		dut.sourceItem = new SourceItem(sourceFile);
+		dut.classItem.setSource(dut.sourceItem);
 		methodMeta.accept(dut);
 		assertEquals(2, dut.methodItem.getBlockMetrics().getBlockCount());
 		assertEquals(1, dut.methodItem.getBlockMetrics().getCoveredBlockCount());

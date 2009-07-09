@@ -119,6 +119,7 @@
 			
 			<html output="${output}/site/undercover" />
 			<coberturaxml output="${output}/site/cobertura/coverage.xml" />
+			<emmaxml output="${output}/site/emma/coverage.xml" />
 		</undercover-report>
 	</target>
 

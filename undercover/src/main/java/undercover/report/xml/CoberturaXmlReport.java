@@ -90,7 +90,7 @@ public class CoberturaXmlReport {
 	void writeClass(StringBuilder builder, ClassItem item) {
 		builder.append("<class")
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
-			.append(" filename=\"").append(item.sourceFile.path).append("\"")
+			.append(" filename=\"").append(item.source.getName()).append("\"")
 			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
 			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
 			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")

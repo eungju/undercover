@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ClassItem implements Item {
 	private final String name;
-	public SourceFile sourceFile;
+	public SourceItem source;
 	public final List<Item> children;
 	public final List<MethodItem> methods;
 	public final List<ClassItem> classes;
@@ -40,11 +40,15 @@ public class ClassItem implements Item {
 	}
 	
 	public String getLinkName() {
-		return sourceFile.path.replaceAll("/", ".");
+		return source.getName().replaceAll("/", ".");
 	}
 	
-	public void setSourceFile(SourceFile sourceFile) {
-		this.sourceFile = sourceFile;
+	public void setSource(SourceItem source) {
+		this.source = source;
+	}
+
+	public SourceItem getSource() {
+		return source;
 	}
 	
 	public void addMethod(MethodItem methodItem) {

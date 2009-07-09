@@ -67,6 +67,7 @@
 					<formats>
 						<format>html</format>
 						<format>coberturaxml</format>
+						<format>emmaxml</format>
 					</formats>
 				</configuration>
 			</plugin>

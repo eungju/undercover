@@ -18,6 +18,7 @@ import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
+import undercover.report.xml.EmmaXmlReport;
 
 public class ReportTask extends UndercoverTask {
 	Path sourcePath;
@@ -51,6 +52,12 @@ public class ReportTask extends UndercoverTask {
 		formats.add(format);
 		return format;
 	}
+	
+	public ReportFormat createEmmaXml() {
+		ReportFormat format = new EmmaXmlFormat();
+		formats.add(format);
+		return format;
+	}	
 	
 	void checkParameters() {
 		checkMetaDataFile();
@@ -143,6 +150,22 @@ public class ReportTask extends UndercoverTask {
 		public void generate() throws IOException {
 			checkEncoding();
 			CoberturaXmlReport report = new CoberturaXmlReport();
+			report.setReportData(reportData);
+			report.setOutput(output);
+			report.generate();
+		}
+		
+		void checkEncoding() {
+			if (encoding == null) {
+				encoding = "UTF-8";
+			}
+		}
+    }
+
+    public static class EmmaXmlFormat extends ReportFormat {
+		public void generate() throws IOException {
+			checkEncoding();
+			EmmaXmlReport report = new EmmaXmlReport();
 			report.setReportData(reportData);
 			report.setOutput(output);
 			report.generate();
