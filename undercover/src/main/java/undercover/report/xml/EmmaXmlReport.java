@@ -13,6 +13,7 @@ import undercover.report.BlockMetrics;
 import undercover.report.ClassItem;
 import undercover.report.Item;
 import undercover.report.MethodItem;
+import undercover.report.MethodMetrics;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.SourceItem;
@@ -85,22 +86,46 @@ public class EmmaXmlReport {
 	void writeData(StringBuilder builder, ReportData reportData) {
 		builder.append("<data>\n");
 		builder.append("<all name=\"all classes\">\n");
-		writeCoverage(builder, reportData);
+		writeMethodCoverage(builder, reportData);
+		writeBlockCoverage(builder, reportData);
 		writePackages(builder, reportData.getPackages());
 		builder.append("</all>\n");
 		builder.append("</data>\n");
 	}
 	
-	void writeCoverage(StringBuilder builder, Item item) {
-		BlockMetrics blockMetrics = item.getBlockMetrics();
+	void writeBlockCoverage(StringBuilder builder, Item item) {
+		BlockMetrics metrics = item.getBlockMetrics();
 		builder.append("<coverage")
 			.append(" type=\"block,%\"")
 			.append(" value=\"")
-				.append(String.format("%.0f", blockMetrics.getCoverageRate() * 100)).append("%")
+				.append(String.format("%.0f", metrics.getCoverageRate() * 100)).append("%")
 				.append(" (")
-				.append(blockMetrics.getCoveredBlockCount())
+				.append(metrics.getCoveredBlockCount())
 				.append("/")
-				.append(blockMetrics.getBlockCount())
+				.append(metrics.getBlockCount())
+				.append(")\"")
+			.append(" />\n");
+	}
+
+	void writeMethodCoverage(StringBuilder builder, Item item) {
+		MethodMetrics metrics = item.getMethodMetrics();
+		int executable;
+		int covered;
+		if (item instanceof MethodItem) {
+			executable = 1;
+			covered = item.getBlockMetrics().getCoveredBlockCount() > 0 ? 1 : 0;
+		} else {
+			executable = metrics.getExecutableCount();
+			covered = metrics.getCoveredCount();
+		}
+		builder.append("<coverage")
+			.append(" type=\"method,%\"")
+			.append(" value=\"")
+				.append(String.format("%d", (covered * 100) / executable)).append("%")
+				.append(" (")
+				.append(covered)
+				.append("/")
+				.append(executable)
 				.append(")\"")
 			.append(" />\n");
 	}
@@ -118,7 +143,8 @@ public class EmmaXmlReport {
 		builder.append("<package")
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
 			.append(">\n");
-		writeCoverage(builder, item);
+		writeMethodCoverage(builder, item);
+		writeBlockCoverage(builder, item);
 		Set<SourceItem> sources = new HashSet<SourceItem>();
 		for (ClassItem each : item.classes) {
 			if (!each.getBlockMetrics().isExecutable()) {
@@ -140,7 +166,8 @@ public class EmmaXmlReport {
 		builder.append("<srcfile")
 			.append(" name=\"").append(item.getSimpleName()).append("\"")
 			.append(">\n");
-		writeCoverage(builder, item);
+		writeMethodCoverage(builder, item);
+		writeBlockCoverage(builder, item);
 		writeClasses(builder, item.classes);
 		builder.append("</srcfile>\n");
 	}
@@ -158,7 +185,8 @@ public class EmmaXmlReport {
 		builder.append("<class")
 			.append(" name=\"").append(item.getSimpleName()).append("\"")
 			.append(">\n");
-		writeCoverage(builder, item);
+		writeMethodCoverage(builder, item);
+		writeBlockCoverage(builder, item);
 		writeMethods(builder, item.methods);
 		builder.append("</class>\n");
 	}
@@ -176,7 +204,8 @@ public class EmmaXmlReport {
 		builder.append("<method")
 			.append(" name=\"").append(HtmlUtils.escape(item.getDisplayName())).append("\"")
 			.append(">\n");
-		writeCoverage(builder, item);
+		writeMethodCoverage(builder, item);
+		writeBlockCoverage(builder, item);
 		builder.append("</method>\n");
 	}
 }
