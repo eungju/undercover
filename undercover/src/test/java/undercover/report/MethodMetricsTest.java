@@ -44,10 +44,11 @@ public class MethodMetricsTest {
 		assertEquals(Math.sqrt(v), dut.getStandardDeviation(), 0.01);
 	}
 
-	@Test public void getCoveredCount() {
+	@Test public void coverage() {
 		MethodItem m3 = new MethodItem("m3()V", 1, 0, 0);
 		methods.add(m3);
 		assertEquals(2, dut.getExecutableCount());
 		assertEquals(1, dut.getCoveredCount());
+		assertEquals(0.5, dut.getCoverageRate(), 0);
 	}
 }

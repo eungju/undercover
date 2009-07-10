@@ -6,13 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import undercover.support.LazyValue;
+import undercover.support.Proportion;
 
 public class MethodMetrics {
 	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<MethodItem>> methods;
 	private final LazyValue<Integer> maximumComplexity;
-	private final LazyValue<Integer> executableCount;
-	private final LazyValue<Integer> coveredCount;
+	private final LazyValue<Proportion> coverage;
 
 	public MethodMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
 		this.blockMetrics = blockMetrics;
@@ -34,28 +34,20 @@ public class MethodMetrics {
 				return getCount() == 0 ? 0 : Collections.max(methods.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
 			}
 		};
-		executableCount = new LazyValue<Integer>() {
+		coverage = new LazyValue<Proportion>() {
 			@Override
-			protected Integer calculate() {
-				int result = 0;
+			protected Proportion calculate() {
+				int part = 0;
+				int whole = 0;
 				for (MethodItem each : methods.value()) {
 					if (each.getBlockMetrics().getBlockCount() > 0) {
-						result++;
+						whole++;
 					}
-				}
-				return result;
-			}
-		};
-		coveredCount = new LazyValue<Integer>() {
-			@Override
-			protected Integer calculate() {
-				int result = 0;
-				for (MethodItem each : methods.value()) {
 					if (each.getBlockMetrics().getCoveredBlockCount() > 0) {
-						result++;
+						part++;
 					}
 				}
-				return result;
+				return new Proportion(part, whole);
 			}
 		};
 	}
@@ -88,10 +80,14 @@ public class MethodMetrics {
 	}
 
 	public int getExecutableCount() {
-		return executableCount.value();
+		return coverage.value().whole;
 	}
 
 	public int getCoveredCount() {
-		return coveredCount.value();
+		return coverage.value().part;
+	}
+
+	public double getCoverageRate() {
+		return coverage.value().ratio();
 	}
 }
