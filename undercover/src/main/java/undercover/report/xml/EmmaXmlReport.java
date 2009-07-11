@@ -11,6 +11,7 @@ import java.util.Set;
 
 import undercover.report.BlockMetrics;
 import undercover.report.ClassItem;
+import undercover.report.ClassMetrics;
 import undercover.report.Item;
 import undercover.report.MethodItem;
 import undercover.report.MethodMetrics;
@@ -84,12 +85,13 @@ public class EmmaXmlReport {
 		return result;
 	}
 
-	void writeData(StringBuilder builder, ReportData reportData) {
+	void writeData(StringBuilder builder, ReportData item) {
 		builder.append("<data>\n");
 		builder.append("<all name=\"all classes\">\n");
-		writeMethodCoverage(builder, reportData);
-		writeBlockCoverage(builder, reportData);
-		writePackages(builder, reportData.getPackages());
+		writeClassCoverage(builder, item);
+		writeMethodCoverage(builder, item);
+		writeBlockCoverage(builder, item);
+		writePackages(builder, item.getPackages());
 		builder.append("</all>\n");
 		builder.append("</data>\n");
 	}
@@ -108,6 +110,17 @@ public class EmmaXmlReport {
 			coverage = metrics.getCoverage();
 		}
 		writeCoverage(builder, "method", coverage);
+	}
+
+	void writeClassCoverage(StringBuilder builder, Item item) {
+		ClassMetrics metrics = item.getClassMetrics();
+		Proportion coverage;
+		if (item instanceof ClassItem) {
+			coverage = new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1);
+		} else {
+			coverage = metrics.getCoverage();
+		}
+		writeCoverage(builder, "class", coverage);
 	}
 
 	void writeCoverage(StringBuilder builder, String type, Proportion coverage) {
@@ -136,6 +149,7 @@ public class EmmaXmlReport {
 		builder.append("<package")
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
 			.append(">\n");
+		writeClassCoverage(builder, item);
 		writeMethodCoverage(builder, item);
 		writeBlockCoverage(builder, item);
 		Set<SourceItem> sources = new HashSet<SourceItem>();
@@ -159,6 +173,7 @@ public class EmmaXmlReport {
 		builder.append("<srcfile")
 			.append(" name=\"").append(item.getSimpleName()).append("\"")
 			.append(">\n");
+		writeClassCoverage(builder, item);
 		writeMethodCoverage(builder, item);
 		writeBlockCoverage(builder, item);
 		writeClasses(builder, item.classes);
@@ -178,6 +193,7 @@ public class EmmaXmlReport {
 		builder.append("<class")
 			.append(" name=\"").append(item.getSimpleName()).append("\"")
 			.append(">\n");
+		writeClassCoverage(builder, item);
 		writeMethodCoverage(builder, item);
 		writeBlockCoverage(builder, item);
 		writeMethods(builder, item.methods);
