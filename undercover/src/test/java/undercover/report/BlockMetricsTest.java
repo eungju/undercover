@@ -6,20 +6,20 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import undercover.support.Proportion;
+
 public class BlockMetricsTest {
 	@Test public void executable() {
 		BlockMetrics dut = new BlockMetrics(1, 4, 2, Arrays.asList(new MethodItem("m()V", 1, 1, 1)));
 		assertEquals(1 + 1, dut.getComplexity());
-		assertEquals(4 + 1, dut.getBlockCount());
-		assertEquals(2 + 1, dut.getCoveredBlockCount());
+		assertEquals(new Proportion(2 + 1, 4 + 1), dut.getCoverage());
 		assertTrue(dut.isExecutable());
-		assertEquals((double) dut.getCoveredBlockCount() / dut.getBlockCount(), dut.getCoverageRate(), 0.01);
 	}
 	
 	@Test public void notExecutable() {
 		BlockMetrics dut = new BlockMetrics(1, 0, 0);
 		assertFalse(dut.isExecutable());
-		assertEquals(1.0, dut.getCoverageRate(), 0.01);
+		assertEquals(1.0, dut.getCoverage().getRatio(), 0);
 	}
 
 	@Test public void getRisk() {

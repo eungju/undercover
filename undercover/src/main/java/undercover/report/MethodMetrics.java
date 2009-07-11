@@ -40,10 +40,10 @@ public class MethodMetrics {
 				int part = 0;
 				int whole = 0;
 				for (MethodItem each : methods.value()) {
-					if (each.getBlockMetrics().getBlockCount() > 0) {
+					if (each.getBlockMetrics().isExecutable()) {
 						whole++;
 					}
-					if (each.getBlockMetrics().getCoveredBlockCount() > 0) {
+					if (each.getBlockMetrics().isExecuted()) {
 						part++;
 					}
 				}
@@ -79,15 +79,7 @@ public class MethodMetrics {
 		return Math.sqrt(getVariance());
 	}
 
-	public int getExecutableCount() {
-		return coverage.value().whole;
-	}
-
-	public int getCoveredCount() {
-		return coverage.value().part;
-	}
-
-	public double getCoverageRate() {
-		return coverage.value().ratio();
+	public Proportion getCoverage() {
+		return coverage.value();
 	}
 }

@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import undercover.support.Proportion;
+
 public class MethodMetricsTest {
 	private List<MethodItem> methods;
 	private BlockMetrics blockMetrics;
@@ -47,8 +49,6 @@ public class MethodMetricsTest {
 	@Test public void coverage() {
 		MethodItem m3 = new MethodItem("m3()V", 1, 0, 0);
 		methods.add(m3);
-		assertEquals(2, dut.getExecutableCount());
-		assertEquals(1, dut.getCoveredCount());
-		assertEquals(0.5, dut.getCoverageRate(), 0);
+		assertEquals(new Proportion(1, 2), dut.getCoverage());
 	}
 }

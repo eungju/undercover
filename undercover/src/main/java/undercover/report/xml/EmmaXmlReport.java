@@ -18,6 +18,7 @@ import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.SourceItem;
 import undercover.support.HtmlUtils;
+import undercover.support.Proportion;
 
 public class EmmaXmlReport {
 	private ReportData reportData;
@@ -95,41 +96,33 @@ public class EmmaXmlReport {
 	
 	void writeBlockCoverage(StringBuilder builder, Item item) {
 		BlockMetrics metrics = item.getBlockMetrics();
-		builder.append("<coverage")
-			.append(" type=\"block,%\"")
-			.append(" value=\"")
-				.append(String.format("%.0f", metrics.getCoverageRate() * 100)).append("%")
-				.append(" (")
-				.append(metrics.getCoveredBlockCount())
-				.append("/")
-				.append(metrics.getBlockCount())
-				.append(")\"")
-			.append(" />\n");
+		writeCoverage(builder, "block", metrics.getCoverage());
 	}
 
 	void writeMethodCoverage(StringBuilder builder, Item item) {
 		MethodMetrics metrics = item.getMethodMetrics();
-		int executable;
-		int covered;
+		Proportion coverage;
 		if (item instanceof MethodItem) {
-			executable = 1;
-			covered = item.getBlockMetrics().getCoveredBlockCount() > 0 ? 1 : 0;
+			coverage = new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1);
 		} else {
-			executable = metrics.getExecutableCount();
-			covered = metrics.getCoveredCount();
+			coverage = metrics.getCoverage();
 		}
-		builder.append("<coverage")
-			.append(" type=\"method,%\"")
-			.append(" value=\"")
-				.append(String.format("%d", (covered * 100) / executable)).append("%")
-				.append(" (")
-				.append(covered)
-				.append("/")
-				.append(executable)
-				.append(")\"")
-			.append(" />\n");
+		writeCoverage(builder, "method", coverage);
 	}
 
+	void writeCoverage(StringBuilder builder, String type, Proportion coverage) {
+		builder.append("<coverage")
+		.append(" type=\"").append(type).append(",%\"")
+		.append(" value=\"")
+			.append(String.format("%.0f", coverage.getRatio() * 100)).append("%")
+			.append(" (")
+			.append(coverage.part)
+			.append("/")
+			.append(coverage.whole)
+			.append(")\"")
+		.append(" />\n");
+	}
+	
 	void writePackages(StringBuilder builder, Collection<PackageItem> items) {
 		for (PackageItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {

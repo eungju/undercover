@@ -17,7 +17,7 @@ public class CoverageDistribution {
 	}
 
 	public void count(ClassItem item) {
-		counts[coverageInterval(item.getBlockMetrics().getCoverageRate())]++;
+		counts[coverageInterval(item.getBlockMetrics().getCoverage().getRatio())]++;
 	}
 	
 	public void countAll(Collection<ClassItem> items) {

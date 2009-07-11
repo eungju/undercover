@@ -36,7 +36,7 @@ $item.linkName$
 
 coveragePercent(item) ::= <<
 $if(item.blockMetrics.executable)$
-$item.blockMetrics.coverageRate; format="percent"$%
+$item.blockMetrics.coverage.ratio; format="percent"$%
 $else$
 N/A
 $endif$
@@ -44,8 +44,8 @@ $endif$
 
 blockCoverage(item) ::= <<
 $if(item.blockMetrics.executable)$
-$item.blockMetrics.coverageRate; format="percent"$%
-($item.blockMetrics.coveredBlockCount$/$item.blockMetrics.blockCount$)
+$item.blockMetrics.coverage.ratio; format="percent"$%
+($item.blockMetrics.coverage.part$/$item.blockMetrics.coverage.whole$)
 $else$
 N/A
 $endif$
@@ -54,7 +54,7 @@ $endif$
 coverageBar(item) ::= <<
 <div class="coverageBar">
 $if(item.blockMetrics.executable)$
-	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.blockMetrics.coverageRate; format="percent"$%;"></div> </div>
+	<div class="coverageBarNegative"> <div class="coverageBarPositive" style="width: $item.blockMetrics.coverage.ratio; format="percent"$%;"></div> </div>
 $else$
 	<div class="coverageBarNotAvailable"></div>
 $endif$
@@ -490,7 +490,7 @@ $itemStatistics(project)$
     drawCoverageComplexityGraph(
     	"#coverage-complexity div.graph",
     	"#coverage-complexity .tooltip",
-    	[$coverageComplexity.items:{ each | [$each.blockMetrics.coverageRate; format="percent"$, $each.blockMetrics.complexity$, "$each.simpleName$", "source-$each.linkName$.html"] }; separator=", "$]
+    	[$coverageComplexity.items:{ each | [$each.blockMetrics.coverage.ratio; format="percent"$, $each.blockMetrics.complexity$, "$each.simpleName$", "source-$each.linkName$.html"] }; separator=", "$]
     );
 });
 </script>

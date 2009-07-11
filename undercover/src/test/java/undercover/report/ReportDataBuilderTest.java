@@ -18,6 +18,7 @@ import undercover.data.Coverage;
 import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.data.MethodMeta;
+import undercover.support.Proportion;
 import undercover.support.UndercoverMockery;
 
 @RunWith(JMock.class)
@@ -54,8 +55,7 @@ public class ReportDataBuilderTest {
 		dut.sourceItem = new SourceItem(sourceFile);
 		dut.classItem.setSource(dut.sourceItem);
 		methodMeta.accept(dut);
-		assertEquals(2, dut.methodItem.getBlockMetrics().getBlockCount());
-		assertEquals(1, dut.methodItem.getBlockMetrics().getCoveredBlockCount());
+		assertEquals(new Proportion(1, 2), dut.methodItem.getBlockMetrics().getCoverage());
 	}
 	
 	@Test public void visitBlockWithoutClassCoverage() {

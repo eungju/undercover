@@ -6,6 +6,6 @@ import org.junit.Test;
 
 public class ProportionTest {
 	@Test public void ratio() {
-		assertEquals(0.5, new Proportion(1, 2).ratio(), 0);
+		assertEquals(0.5, new Proportion(1, 2).getRatio(), 0);
 	}
 }

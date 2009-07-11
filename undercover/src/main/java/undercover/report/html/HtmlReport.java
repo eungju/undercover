@@ -166,7 +166,7 @@ public class HtmlReport {
 	public <T extends Item> List<T> leastCovered(Collection<T> candidates, int max) {
 		return takeTopN(candidates, new Comparator<T>() {
 			public int compare(T a, T b) {
-				return (int) Math.signum(a.getBlockMetrics().getCoverageRate() - b.getBlockMetrics().getCoverageRate());
+				return (int) Math.signum(a.getBlockMetrics().getCoverage().getRatio() - b.getBlockMetrics().getCoverage().getRatio());
 			}
 		}, max);
 	}

@@ -46,12 +46,12 @@ public class CoberturaXmlReport {
 				.append("?>\n");
 		builder.append("<!DOCTYPE coverage SYSTEM \"http://cobertura.sourceforge.net/xml/coverage-04.dtd\">\n");
 		builder.append("<coverage")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
-			.append(" lines-covered=\"").append(item.getBlockMetrics().getCoveredBlockCount()).append("\"")
-			.append(" lines-valid=\"").append(item.getBlockMetrics().getBlockCount()).append("\"")
-			.append(" branches-covered=\"").append(item.getBlockMetrics().getCoveredBlockCount()).append("\"")
-			.append(" branches-valid=\"").append(item.getBlockMetrics().getBlockCount()).append("\"")
+			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
+			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
+			.append(" lines-covered=\"").append(item.getBlockMetrics().getCoverage().part).append("\"")
+			.append(" lines-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
+			.append(" branches-covered=\"").append(item.getBlockMetrics().getCoverage().part).append("\"")
+			.append(" branches-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
 			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
 			.append(" version=\"").append("1.9.2").append("\"")
 			.append(" timestamp=\"").append(System.currentTimeMillis()).append("\"")
@@ -71,8 +71,8 @@ public class CoberturaXmlReport {
 	void writePackage(StringBuilder builder, PackageItem item) {
 		builder.append("<package")
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
+			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
+			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
 			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
 			.append(">\n");
 		writeClasses(builder, item.classes);
@@ -91,8 +91,8 @@ public class CoberturaXmlReport {
 		builder.append("<class")
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
 			.append(" filename=\"").append(item.source.getName()).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
+			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
+			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
 			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
 			.append(">\n");
 		writeMethods(builder, item.methods);
@@ -114,8 +114,8 @@ public class CoberturaXmlReport {
 		builder.append("<method")
 			.append(" name=\"").append(HtmlUtils.escape(name)).append("\"")
 			.append(" signature=\"").append(desc).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverageRate()).append("\"")
+			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
+			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
 			.append(">\n");
 		writeLines(builder);
 		builder.append("</method>\n");

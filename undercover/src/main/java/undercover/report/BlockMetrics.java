@@ -3,52 +3,60 @@ package undercover.report;
 import java.util.Collection;
 import java.util.Collections;
 
+import undercover.support.LazyValue;
+import undercover.support.Proportion;
+
 public class BlockMetrics {
 	private final int complexity_;
-	private final int blockCount_;
-	private final int coveredBlockCount_;
+	private final int count_;
+	private final int coveredCount_;
 	private final LazyComplexity complexity;
-	private final LazyBlockCount blockCount;
-	private final LazyCoveredBlockCount coveredBlockCount;
+	private final LazyValue<Proportion> coverage;
 
 	public BlockMetrics(Collection<? extends Item> children) {
 		this(0, 0, 0, children);
 	}
 	
-	public BlockMetrics(int complexity, int blockCount, int coveredBlockCount) {
-		this(complexity, blockCount, coveredBlockCount, Collections.<Item>emptyList());
+	public BlockMetrics(int complexity, int count, int coveredCount) {
+		this(complexity, count, coveredCount, Collections.<Item>emptyList());
 	}
 	
-	public BlockMetrics(int complexity, int blockCount, int coveredBlockCount, Collection<? extends Item> children) {
+	public BlockMetrics(int complexity, int count, int coveredCount, final Collection<? extends Item> children) {
 		this.complexity_ = complexity;
-		this.blockCount_ = blockCount;
-		this.coveredBlockCount_ = coveredBlockCount;
+		this.count_ = count;
+		this.coveredCount_ = coveredCount;
 		this.complexity = new LazyComplexity(children);
-		this.blockCount = new LazyBlockCount(children);
-		this.coveredBlockCount = new LazyCoveredBlockCount(children);
+		this.coverage = new LazyValue<Proportion>() {
+			@Override
+			protected Proportion calculate() {
+				int whole = count_;
+				int part = coveredCount_;
+				for (Item each : children) {
+					whole += each.getBlockMetrics().getCoverage().whole;
+					part += each.getBlockMetrics().getCoverage().part;
+				}
+				return new Proportion(part, whole);
+			}
+		};
 	}
 
 	public int getComplexity() {
 		return complexity_ + complexity.value();
 	}
-
-	public int getBlockCount() {
-		return blockCount_ + blockCount.value();
-	}
-
-	public int getCoveredBlockCount() {
-		return coveredBlockCount_ + coveredBlockCount.value();
-	}
 	
+	public Proportion getCoverage() {
+		return coverage.value();
+	}
+
 	public boolean isExecutable() {
-		return getBlockCount() > 0;
+		return getCoverage().whole > 0;
 	}
 	
-	public double getCoverageRate() {
-		return getBlockCount() == 0 ? 1 : ((double) getCoveredBlockCount()) / getBlockCount();
+	public boolean isExecuted() {
+		return getCoverage().part > 0;
 	}
 	
 	public double getRisk() {
-		return getComplexity() + (getComplexity() * (1 - getCoverageRate()));
+		return getComplexity() + (getComplexity() * (1 - getCoverage().getRatio()));
 	}
 }
