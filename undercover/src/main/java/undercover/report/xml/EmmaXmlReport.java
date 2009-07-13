@@ -125,7 +125,7 @@ public class EmmaXmlReport {
 
 	void writeCoverage(StringBuilder builder, String type, Proportion coverage) {
 		builder.append("<coverage")
-		.append(" type=\"").append(type).append(",%\"")
+		.append(" type=\"").append(type).append(", %\"")
 		.append(" value=\"")
 			.append(String.format("%.0f", coverage.getRatio() * 100)).append("%")
 			.append(" (")
