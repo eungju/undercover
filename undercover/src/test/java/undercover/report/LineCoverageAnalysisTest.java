@@ -19,15 +19,15 @@ public class LineCoverageAnalysisTest {
 	@Test public void notCovered() {
 		BlockMeta blockMeta = new BlockMeta(Arrays.asList(1));
 		dut.analyze(blockMeta, 0);
-		assertEquals(1, dut.getLineCount());
-		assertEquals(0, dut.getCoveredLineCount());
+		assertFalse(dut.getLine(1).isCompletelyCovered());
+		assertFalse(dut.getLine(1).isPartialyCovered());
 	}
 
 	@Test public void completelyCovered() {
 		BlockMeta blockMeta = new BlockMeta(Arrays.asList(1));
 		dut.analyze(blockMeta, 1);
-		assertEquals(1, dut.getLineCount());
-		assertEquals(1, dut.getCoveredLineCount());
+		assertTrue(dut.getLine(1).isCompletelyCovered());
+		assertFalse(dut.getLine(1).isPartialyCovered());
 	}
 
 	@Test public void partialyCovered() {
@@ -35,8 +35,7 @@ public class LineCoverageAnalysisTest {
 		BlockMeta b2 = new BlockMeta(Arrays.asList(1));
 		dut.analyze(b1, 1);
 		dut.analyze(b2, 0);
-		assertEquals(1, dut.getLineCount());
-		assertEquals(0, dut.getCoveredLineCount());
+		assertFalse(dut.getLine(1).isCompletelyCovered());
 		assertTrue(dut.getLine(1).isPartialyCovered());
 	}
 }

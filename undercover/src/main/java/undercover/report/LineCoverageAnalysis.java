@@ -19,20 +19,6 @@ public class LineCoverageAnalysis {
 		}
 	}
 
-	public int getLineCount() {
-		return lines.size();
-	}
-
-	public int getCoveredLineCount() {
-		int result = 0;
-		for (LineCoverage each : lines.values()) {
-			if (each.isCompletelyCovered()) {
-				result = result + 1;
-			}
-		}
-		return result;
-	}
-	
 	public LineCoverage getLine(int lineNumber) {
 		return lines.get(lineNumber);
 	}
