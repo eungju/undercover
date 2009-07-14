@@ -7,10 +7,7 @@ import undercover.support.LazyValue;
 import undercover.support.Proportion;
 
 public class BlockMetrics {
-	private final int complexity_;
-	private final int count_;
-	private final int coveredCount_;
-	private final LazyComplexity complexity;
+	private final LazyValue<Integer> complexity;
 	private final LazyValue<Proportion> coverage;
 
 	public BlockMetrics(Collection<? extends Item> children) {
@@ -21,16 +18,22 @@ public class BlockMetrics {
 		this(complexity, count, coveredCount, Collections.<Item>emptyList());
 	}
 	
-	public BlockMetrics(int complexity, int count, int coveredCount, final Collection<? extends Item> children) {
-		this.complexity_ = complexity;
-		this.count_ = count;
-		this.coveredCount_ = coveredCount;
-		this.complexity = new LazyComplexity(children);
+	public BlockMetrics(final int complexity, final int count, final int coveredCount, final Collection<? extends Item> children) {
+		this.complexity = new LazyValue<Integer>() {
+			@Override
+			protected Integer calculate() {
+				int result = complexity;
+				for (Item each : children) {
+					result += each.getBlockMetrics().getComplexity();
+				}
+				return result;
+			}
+		};
 		this.coverage = new LazyValue<Proportion>() {
 			@Override
 			protected Proportion calculate() {
-				int whole = count_;
-				int part = coveredCount_;
+				int whole = count;
+				int part = coveredCount;
 				for (Item each : children) {
 					whole += each.getBlockMetrics().getCoverage().whole;
 					part += each.getBlockMetrics().getCoverage().part;
@@ -41,7 +44,7 @@ public class BlockMetrics {
 	}
 
 	public int getComplexity() {
-		return complexity_ + complexity.value();
+		return complexity.value();
 	}
 	
 	public Proportion getCoverage() {
