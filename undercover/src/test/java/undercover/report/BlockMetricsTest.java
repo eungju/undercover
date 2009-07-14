@@ -23,7 +23,7 @@ public class BlockMetricsTest {
 	}
 
 	@Test public void getRisk() {
-		assertEquals(1, new BlockMetrics(1, 2, 2).getRisk(), 0.01);
-		assertEquals(1 + 1, new BlockMetrics(1, 2, 0).getRisk(), 0.01);
+		assertEquals(1, new BlockMetrics(1, 2, 2).getRisk(), 0);
+		assertEquals(1 + 1, new BlockMetrics(1, 2, 0).getRisk(), 0);
 	}
 }

@@ -39,15 +39,15 @@ public class ClassMetricsTest {
 	}
 	
 	@Test public void getAverageComplexity() {
-		assertEquals((double) (c1.getBlockMetrics().getComplexity() + c2.getBlockMetrics().getComplexity()) / 2, dut.getAverageComplexity(), 0.01);
+		assertEquals((double) (c1.getBlockMetrics().getComplexity() + c2.getBlockMetrics().getComplexity()) / 2, dut.getAverageComplexity(), 0);
 	}
 
 	@Test public void getVariance() {
 		double v = Math.pow((c1.getBlockMetrics().getComplexity() - dut.getAverageComplexity()), 2);
 		v += Math.pow((c2.getBlockMetrics().getComplexity() - dut.getAverageComplexity()), 2);
 		v /= 2;
-		assertEquals(v, dut.getVariance(), 0.01);
-		assertEquals(Math.sqrt(v), dut.getStandardDeviation(), 0.01);
+		assertEquals(v, dut.getVariance(), 0);
+		assertEquals(Math.sqrt(v), dut.getStandardDeviation(), 0);
 	}
 	
 	@Test public void coverage() {
