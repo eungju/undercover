@@ -10,7 +10,6 @@ import undercover.support.LazyValue;
 public class PackageMetrics  {
 	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<PackageItem>> packages;
-	private final LazyValue<Integer> maximumComplexity;
 
 	public PackageMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
 		this.blockMetrics = blockMetrics;
@@ -27,11 +26,6 @@ public class PackageMetrics  {
 				return result;
 			}
 		};
-		maximumComplexity = new LazyValue<Integer>() {
-			protected Integer calculate() {
-				return getCount() == 0 ? 0 : Collections.max(packages.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
-			}
-		};
 	}
 
 	public int getCount() {
@@ -39,7 +33,7 @@ public class PackageMetrics  {
 	}
 	
 	public int getMaximumComplexity() {
-		return maximumComplexity.value();
+		return getCount() == 0 ? 0 : Collections.max(packages.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
 	}
 
 	public double getAverageComplexity() {

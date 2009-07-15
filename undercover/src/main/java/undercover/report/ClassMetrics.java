@@ -11,7 +11,6 @@ import undercover.support.Proportion;
 public class ClassMetrics {
 	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<ClassItem>> classes;
-	private final LazyValue<Integer> maximumComplexity;
 	private final LazyValue<Proportion> coverage;
 	
 	public ClassMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
@@ -27,11 +26,6 @@ public class ClassMetrics {
 					}
 				}
 				return result;
-			}
-		};
-		maximumComplexity = new LazyValue<Integer>() {
-			protected Integer calculate() {
-				return getCount() == 0 ? 0 : Collections.max(classes.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
 			}
 		};
 		coverage = new LazyValue<Proportion>() {
@@ -57,7 +51,7 @@ public class ClassMetrics {
 	}
 	
 	public int getMaximumComplexity() {
-		return maximumComplexity.value();
+		return getCount() == 0 ? 0 : Collections.max(classes.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
 	}
 
 	public double getAverageComplexity() {
