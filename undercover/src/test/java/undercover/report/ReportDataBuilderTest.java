@@ -1,16 +1,13 @@
 package undercover.report;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import undercover.data.BlockMeta;
 import undercover.data.ClassMeta;
@@ -19,13 +16,10 @@ import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.data.MethodMeta;
 import undercover.support.Proportion;
-import undercover.support.UndercoverMockery;
 
-@RunWith(JMock.class)
 public class ReportDataBuilderTest {
 	private ReportDataBuilder dut;
 	private CoverageData coverageData;
-	private Mockery mockery = new UndercoverMockery();
 
 	@Before public void beforeEach() {
 		coverageData = new CoverageData();
@@ -60,24 +54,20 @@ public class ReportDataBuilderTest {
 	
 	@Test public void visitBlockWithoutClassCoverage() {
 		final BlockMeta block = new BlockMeta(Arrays.asList(1, 2, 3));
-		dut.sourceItem = mockery.mock(SourceItem.class);
+		dut.sourceItem = mock(SourceItem.class);
 		
-		mockery.checking(new Expectations() {{
-			one(dut.sourceItem).addBlock(block, 0);
-		}});
-
 		block.accept(dut);
+
+		verify(dut.sourceItem).addBlock(block, 0);
 	}
 
 	@Test public void visitBlockWithClassCoverage() {
 		final BlockMeta block = new BlockMeta(Arrays.asList(1, 2, 3));
-		dut.sourceItem = mockery.mock(SourceItem.class);
+		dut.sourceItem = mock(SourceItem.class);
 		dut.classCoverage = new Coverage("", new int[][] { {1} });
 
-		mockery.checking(new Expectations() {{
-			one(dut.sourceItem).addBlock(block, 1);
-		}});
-
 		block.accept(dut);
+
+		verify(dut.sourceItem).addBlock(block, 1);
 	}
 }

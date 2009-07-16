@@ -29,12 +29,8 @@
 
 	<path id="test.dependencies" >
 		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
+		<pathelement location="${M2_REPO}/org/mockito/mockito-core/1.7/mockito-core-1.7.jar" />
 		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
-		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock/2.5.1/jmock-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock-junit4/2.5.1/jmock-junit4-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/org/jmock/jmock-legacy/2.5.1/jmock-legacy-2.5.1.jar" />
-		<pathelement location="${M2_REPO}/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar" />
 		<pathelement location="${M2_REPO}/org/objenesis/objenesis/1.0/objenesis-1.0.jar" />
 	</path>
 

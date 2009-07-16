@@ -1,33 +1,25 @@
 package undercover.ant;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.tools.ant.BuildException;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import undercover.instrument.OfflineInstrument;
 
-@RunWith(JMock.class)
 public class InstrumentTaskTest {
 	private InstrumentTask dut;
-	private Mockery mockery = new JUnit4Mockery() {{
-		setImposteriser(ClassImposteriser.INSTANCE);
-	}};
 	private OfflineInstrument instrument;
 
 	@Before public void beforeEach() {
 		dut = new InstrumentTask();
-		instrument = mockery.mock(OfflineInstrument.class);
+		instrument = mock(OfflineInstrument.class);
 		dut.instrument = instrument;
 	}
 	
