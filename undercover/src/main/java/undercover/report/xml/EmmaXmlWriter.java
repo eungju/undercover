@@ -13,6 +13,10 @@ public class EmmaXmlWriter {
 		this.out = out;
 		indentDepth = 0;
 	}
+	
+	public void close() {
+		out.close();
+	}
 
 	private void indent() {
 		for (int i = 0; i < indentDepth; i++) {

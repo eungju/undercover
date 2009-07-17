@@ -3,6 +3,7 @@ package undercover.report.xml;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,10 @@ public class EmmaXmlWriterTest {
 	@Before public void beforeEach() {
 		buffer = new StringWriter();
 		dut = new EmmaXmlWriter(new PrintWriter(buffer));
+	}
+	
+	@After public void afterEach() {
+		dut.close();
 	}
 
 	@Test public void reportElement() {
