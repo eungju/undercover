@@ -165,10 +165,8 @@ public class ReportTask extends UndercoverTask {
     public static class EmmaXmlFormat extends ReportFormat {
 		public void generate() throws IOException {
 			checkEncoding();
-			EmmaXmlReport report = new EmmaXmlReport();
-			report.setReportData(reportData);
-			report.setOutput(output);
-			report.generate();
+			
+			new EmmaXmlReport().with(reportData).writeTo(output, encoding);
 		}
 		
 		void checkEncoding() {

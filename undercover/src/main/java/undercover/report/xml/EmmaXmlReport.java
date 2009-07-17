@@ -16,33 +16,33 @@ import undercover.support.Proportion;
 
 public class EmmaXmlReport {
 	private ReportData reportData;
-	private File output;
-	private String encoding = "UTF-8";
-	private EmmaXmlWriter writer;
+	EmmaXmlWriter writer;
 	
-	public void setReportData(ReportData reportData) {
+	public EmmaXmlReport with(ReportData reportData) {
 		this.reportData = reportData;
+		return this;
 	}
 	
-	public void setOutput(File output) {
-		this.output = output;
-	}
-
-	public void generate() throws IOException {
-		writer = null;
+	public void writeTo(File file, String encoding) throws IOException {
+		EmmaXmlWriter writer = null;
 		try {
-			output.getParentFile().mkdirs();
-			writer = new EmmaXmlWriter(new PrintWriter(output, encoding));
-			writeReport(reportData);
+			file.getParentFile().mkdirs();
+			writer = new EmmaXmlWriter(new PrintWriter(file, encoding), encoding);
+			writeTo(writer);
 		} finally {
 			if (writer != null) {
 				writer.close();
 			}
 		}
 	}
+	
+	public void writeTo(EmmaXmlWriter writer) {
+		this.writer = writer;
+		writeReport(reportData);		
+	}
 
 	void writeReport(ReportData reportData) {
-		writer.document(encoding).report();
+		writer.document().report();
 		writeStats(reportData);
 		writeData(reportData);
 		writer.endReport().endDocument();
@@ -71,13 +71,17 @@ public class EmmaXmlReport {
 			.coverage("class", item.getClassMetrics().getCoverage())
 			.coverage("method", item.getMethodMetrics().getCoverage())
 			.coverage("block", item.getBlockMetrics().getCoverage());
-		for (PackageItem each : item.getPackages()) {
+		writePackages(item.getPackages());
+		writer.endAll().endData();
+	}
+
+	void writePackages(Collection<PackageItem> items) {
+		for (PackageItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
 			writePackage(each);
 		}
-		writer.endAll().endData();
 	}
 	
 	void writePackage(PackageItem item) {
@@ -87,15 +91,19 @@ public class EmmaXmlReport {
 			.coverage("block", item.getBlockMetrics().getCoverage());
 		Set<SourceItem> sources = new HashSet<SourceItem>();
 		for (ClassItem each : item.classes) {
+			sources.add(each.getSource());
+		}
+		writeSources(sources);
+		writer.endPackage();
+	}
+	
+	void writeSources(Collection<SourceItem> items) {
+		for (SourceItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
-			sources.add(each.getSource());
-		}
-		for (SourceItem each : sources) {
 			writeSource(each);
 		}
-		writer.endPackage();
 	}
 
 	void writeSource(SourceItem item) {
@@ -103,13 +111,17 @@ public class EmmaXmlReport {
 			.coverage("class", item.getClassMetrics().getCoverage())
 			.coverage("method", item.getMethodMetrics().getCoverage())
 			.coverage("block", item.getBlockMetrics().getCoverage());
-		for (ClassItem each : item.classes) {
+		writeClasses(item.classes);
+		writer.endSourceFile();
+	}
+	
+	void writeClasses(Collection<ClassItem> items) {
+		for (ClassItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
 			writeClass(each);
 		}
-		writer.endSourceFile();
 	}
 
 	void writeClass(ClassItem item) {
@@ -117,13 +129,17 @@ public class EmmaXmlReport {
 			.coverage("class", new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1))
 			.coverage("method", item.getMethodMetrics().getCoverage())
 			.coverage("block", item.getBlockMetrics().getCoverage());
-		for (MethodItem each : item.methods) {
+		writeMethods(item.methods);
+		writer.endClass();
+	}
+	
+	void writeMethods(Collection<MethodItem> items) {
+		for (MethodItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
 			writeMethod(each);
 		}
-		writer.endClass();
 	}
 
 	void writeMethod(MethodItem item) {

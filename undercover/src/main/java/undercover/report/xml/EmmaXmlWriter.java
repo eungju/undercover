@@ -6,11 +6,13 @@ import undercover.support.HtmlUtils;
 import undercover.support.Proportion;
 
 public class EmmaXmlWriter {
-	private PrintWriter out;
+	private final PrintWriter out;
+	private final String encoding;
 	private int indentDepth;
 	
-	public EmmaXmlWriter(PrintWriter out) {
+	public EmmaXmlWriter(PrintWriter out, String encoding) {
 		this.out = out;
+		this.encoding = encoding;
 		indentDepth = 0;
 	}
 	
@@ -18,7 +20,7 @@ public class EmmaXmlWriter {
 		out.close();
 	}
 
-	private void indent() {
+	void indent() {
 		for (int i = 0; i < indentDepth; i++) {
 			out.print('\t');
 		}
@@ -174,7 +176,7 @@ public class EmmaXmlWriter {
 		return this;
 	}
 
-	public EmmaXmlWriter document(String encoding) {
+	public EmmaXmlWriter document() {
 		out.format("<?xml version=\"1.0\" encoding=\"%s\" ?>", encoding).println();
 		return this;
 	}

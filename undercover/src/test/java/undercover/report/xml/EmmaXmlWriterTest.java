@@ -15,7 +15,7 @@ public class EmmaXmlWriterTest {
 
 	@Before public void beforeEach() {
 		buffer = new StringWriter();
-		dut = new EmmaXmlWriter(new PrintWriter(buffer));
+		dut = new EmmaXmlWriter(new PrintWriter(buffer), "UTF-8");
 	}
 	
 	@After public void afterEach() {
@@ -55,8 +55,6 @@ public class EmmaXmlWriterTest {
 	}
 
 	@Test public void coverageElement() {
-		StringWriter buffer = new StringWriter();
-		EmmaXmlWriter dut = new EmmaXmlWriter(new PrintWriter(buffer));
 		dut.coverage("block", new Proportion(1, 2));
 	}
 }

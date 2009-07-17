@@ -159,10 +159,7 @@ public class ReportMojo extends AbstractMavenReport {
 					report.setOutput(new File(coberturaOutputDirectory, "coverage.xml"));
 					report.generate();
 				} else if ("emmaxml".equals(format)) {
-					EmmaXmlReport report = new EmmaXmlReport();
-					report.setReportData(reportData);
-					report.setOutput(new File(emmaOutputDirectory, "coverage.xml"));
-					report.generate();
+					new EmmaXmlReport().with(reportData).writeTo(new File(emmaOutputDirectory, "coverage.xml"), "UTF-8");
 				} else {
 					getLog().warn("Unknown report format " + format);
 				}
