@@ -52,7 +52,7 @@ public class CoberturaXmlReport {
 			.append(" lines-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
 			.append(" branches-covered=\"").append(item.getBlockMetrics().getCoverage().part).append("\"")
 			.append(" branches-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
+			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
 			.append(" version=\"").append("1.9.2").append("\"")
 			.append(" timestamp=\"").append(System.currentTimeMillis()).append("\"")
 			.append(">\n");
@@ -73,7 +73,7 @@ public class CoberturaXmlReport {
 			.append(" name=\"").append(item.getDisplayName()).append("\"")
 			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
 			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
+			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
 			.append(">\n");
 		writeClasses(builder, item.classes);
 		builder.append("</package>\n");
@@ -93,7 +93,7 @@ public class CoberturaXmlReport {
 			.append(" filename=\"").append(item.source.getName()).append("\"")
 			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
 			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getAverageComplexity()).append("\"")
+			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
 			.append(">\n");
 		writeMethods(builder, item.methods);
 		builder.append("</class>\n");

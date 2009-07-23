@@ -2,19 +2,17 @@ package undercover.report;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import undercover.support.LazyValue;
 import undercover.support.Proportion;
 
 public class MethodMetrics {
-	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<MethodItem>> methods;
+	private final ComplexityStatistics complexity;
 	private final LazyValue<Proportion> coverage;
 
-	public MethodMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
-		this.blockMetrics = blockMetrics;
+	public MethodMetrics(final Collection<? extends Item> children) {
 		methods = new LazyValue<List<MethodItem>>() {
 			protected List<MethodItem> calculate() {
 				List<MethodItem> result = new ArrayList<MethodItem>();
@@ -28,6 +26,7 @@ public class MethodMetrics {
 				return result;
 			}
 		};
+		complexity = new ComplexityStatistics(methods);
 		coverage = new LazyValue<Proportion>() {
 			@Override
 			protected Proportion calculate() {
@@ -50,29 +49,10 @@ public class MethodMetrics {
 		return methods.value().size();
 	}
 	
-	public int getMaximumComplexity() {
-		return getCount() == 0 ? 0 : Collections.max(methods.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
+	public ComplexityStatistics getComplexity() {
+		return complexity;
 	}
 	
-	public double getAverageComplexity() {
-		return ((double) blockMetrics.getComplexity()) / getCount();
-	};
-
-	public double getVariance() {
-		List<MethodItem> elements = methods.value();
-		double avg = getAverageComplexity();
-		double v = 0;
-		for (Item each : elements) {
-			int x = each.getBlockMetrics().getComplexity();
-			v += Math.pow((x - avg), 2);
-		}
-		return v / elements.size();
-	}
-	
-	public double getStandardDeviation() {
-		return Math.sqrt(getVariance());
-	}
-
 	public Proportion getCoverage() {
 		return coverage.value();
 	}

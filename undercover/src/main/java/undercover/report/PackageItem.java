@@ -15,8 +15,8 @@ public class PackageItem implements Item {
 		this.name = name;
 		classes = new TreeSet<ClassItem>(ClassItem.ORDER_BY_SIMPLE_NAME);
 		blockMetrics = new BlockMetrics(classes);
-		methodMetrics = new MethodMetrics(classes, blockMetrics);
-		classMetrics = new ClassMetrics(classes, blockMetrics);
+		methodMetrics = new MethodMetrics(classes);
+		classMetrics = new ClassMetrics(classes);
 	}
 	
 	public void addClass(ClassItem child) {

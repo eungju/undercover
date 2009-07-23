@@ -19,7 +19,7 @@ public class ClassItem implements Item {
 		methods = new ArrayList<MethodItem>();
 		classes = new ArrayList<ClassItem>();
 		blockMetrics = new BlockMetrics(children);
-		methodMetrics = new MethodMetrics(children, blockMetrics);
+		methodMetrics = new MethodMetrics(children);
 	}
 
 	public String getName() {

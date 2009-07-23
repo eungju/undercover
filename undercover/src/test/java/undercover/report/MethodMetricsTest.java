@@ -13,7 +13,6 @@ import undercover.support.Proportion;
 
 public class MethodMetricsTest {
 	private List<MethodItem> methods;
-	private BlockMetrics blockMetrics;
 	private MethodMetrics dut;
 	private MethodItem m1;
 	private MethodItem m2;
@@ -22,31 +21,18 @@ public class MethodMetricsTest {
 		m1 = new MethodItem("m1()V", 1, 4, 0);
 		m2 = new MethodItem("m2()V", 2, 2, 2);
 		methods = new ArrayList<MethodItem>(Arrays.asList(m1, m2));
-		blockMetrics = new BlockMetrics(methods);
-		dut = new MethodMetrics(methods, blockMetrics);
+		dut = new MethodMetrics(methods);
 	}
 	
 	@Test public void getCount() {
 		assertEquals(2, dut.getCount());
 	}
 	
-	@Test public void getMaximumComplexity() {
-		assertEquals(m2.getBlockMetrics().getComplexity(), dut.getMaximumComplexity());
-	}
-	
-	@Test public void getAverageComplexity() {
-		assertEquals((double) (m1.getBlockMetrics().getComplexity() + m2.getBlockMetrics().getComplexity()) / 2, dut.getAverageComplexity(), 0);
+	@Test public void getComplexity() {
+		dut.getComplexity();
 	}
 
-	@Test public void getVariance() {
-		double v = Math.pow((m1.getBlockMetrics().getComplexity() - dut.getAverageComplexity()), 2);
-		v += Math.pow((m2.getBlockMetrics().getComplexity() - dut.getAverageComplexity()), 2);
-		v /= 2;
-		assertEquals(v, dut.getVariance(), 0);
-		assertEquals(Math.sqrt(v), dut.getStandardDeviation(), 0);
-	}
-
-	@Test public void coverage() {
+	@Test public void getCoverage() {
 		MethodItem m3 = new MethodItem("m3()V", 1, 0, 0);
 		methods.add(m3);
 		assertEquals(new Proportion(1, 2), dut.getCoverage());

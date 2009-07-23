@@ -120,26 +120,26 @@ itemStatistics(item) ::= <<
 					<tr>
 						<th>Packages</th>
 						<td class="number">$item.packageMetrics.count$</td>
-						<td class="complexity">$item.packageMetrics.averageComplexity$</td>	
-						<td class="complexity">$item.packageMetrics.maximumComplexity$</td>
-						<td class="complexity">$item.packageMetrics.standardDeviation$</td>	
+						<td class="complexity">$item.packageMetrics.complexity.average$</td>	
+						<td class="complexity">$item.packageMetrics.complexity.maximum$</td>
+						<td class="complexity">$item.packageMetrics.complexity.standardDeviation$</td>	
 					</tr>
 					$endif$
 					$if(item.classMetrics)$
 					<tr>
 						<th>Classes</th>
 						<td class="number">$item.classMetrics.count$</td>
-						<td class="complexity">$item.classMetrics.averageComplexity$</td>	
-						<td class="complexity">$item.classMetrics.maximumComplexity$</td>	
-						<td class="complexity">$item.classMetrics.standardDeviation$</td>	
+						<td class="complexity">$item.classMetrics.complexity.average$</td>	
+						<td class="complexity">$item.classMetrics.complexity.maximum$</td>	
+						<td class="complexity">$item.classMetrics.complexity.standardDeviation$</td>	
 					</tr>
 					$endif$
 					<tr>
 						<th>Methods</th>
 						<td class="number">$item.methodMetrics.count$</td>
-						<td class="complexity">$item.methodMetrics.averageComplexity$</td>	
-						<td class="complexity">$item.methodMetrics.maximumComplexity$</td>	
-						<td class="complexity">$item.methodMetrics.standardDeviation$</td>	
+						<td class="complexity">$item.methodMetrics.complexity.average$</td>	
+						<td class="complexity">$item.methodMetrics.complexity.maximum$</td>	
+						<td class="complexity">$item.methodMetrics.complexity.standardDeviation$</td>	
 					</tr>
 				</table>
 			</td>
@@ -192,8 +192,8 @@ $itemStatistics(project)$
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 			<td class="number">$each.classMetrics.count$</td>
-			<td class="complexity">$each.classMetrics.averageComplexity$</td>
-			<td class="complexity">$each.classMetrics.maximumComplexity$</td>
+			<td class="complexity">$each.classMetrics.complexity.average$</td>
+			<td class="complexity">$each.classMetrics.complexity.maximum$</td>
 		</tr>
 		}$
 	</tbody>
@@ -299,8 +299,8 @@ $itemStatistics(package)$
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>
 			<td class="number">$each.methodMetrics.count$</td>
-			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
-			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
+			<td class="complexity">$each.methodMetrics.complexity.average$</td>
+			<td class="complexity">$each.methodMetrics.complexity.maximum$</td>
 		</tr>
 		}$
 	</tbody>
@@ -340,8 +340,8 @@ $itemStatistics(source)$
 		<tr>
 			<th>$each.simpleName:html()$</th>
 			<td class="number">$each.methodMetrics.count$</td>
-			<td class="complexity">$each.methodMetrics.averageComplexity$</td>
-			<td class="complexity">$each.methodMetrics.maximumComplexity$</td>
+			<td class="complexity">$each.methodMetrics.complexity.average$</td>
+			<td class="complexity">$each.methodMetrics.complexity.maximum$</td>
 			<td class="complexity">$each.blockMetrics.complexity$</td>
 			<td class="coverage">$blockCoverage(each)$</td>
 			<td class="coverage">$coverageBar(each)$</td>

@@ -2,17 +2,15 @@ package undercover.report;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import undercover.support.LazyValue;
 
 public class PackageMetrics  {
-	private final BlockMetrics blockMetrics;
 	private final LazyValue<List<PackageItem>> packages;
+	private final ComplexityStatistics complexity;
 
-	public PackageMetrics(final Collection<? extends Item> children, BlockMetrics blockMetrics) {
-		this.blockMetrics = blockMetrics;
+	public PackageMetrics(final Collection<? extends Item> children) {
 		packages = new LazyValue<List<PackageItem>>() {
 			protected List<PackageItem> calculate() {
 				List<PackageItem> result = new ArrayList<PackageItem>();
@@ -26,32 +24,14 @@ public class PackageMetrics  {
 				return result;
 			}
 		};
+		complexity = new ComplexityStatistics(packages);
 	}
 
 	public int getCount() {
 		return packages.value().size();
 	}
-	
-	public int getMaximumComplexity() {
-		return getCount() == 0 ? 0 : Collections.max(packages.value(), new ItemComplexityAscending()).getBlockMetrics().getComplexity();
-	}
 
-	public double getAverageComplexity() {
-		return ((double) blockMetrics.getComplexity()) / getCount();
-	};
-	
-	public double getVariance() {
-		List<PackageItem> elements = packages.value();
-		double avg = getAverageComplexity();
-		double v = 0;
-		for (Item each : elements) {
-			int x = each.getBlockMetrics().getComplexity();
-			v += Math.pow((x - avg), 2);
-		}
-		return v / elements.size();
-	}
-	
-	public double getStandardDeviation() {
-		return Math.sqrt(getVariance());
+	public ComplexityStatistics getComplexity() {
+		return complexity;
 	}
 }

@@ -30,9 +30,9 @@ public class ReportData implements Item {
 		this.sources.addAll(sourceItems);
 		
 		blockMetrics = new BlockMetrics(packages);
-		methodMetrics = new MethodMetrics(packages, blockMetrics);
-		classMetrics = new ClassMetrics(packages, blockMetrics);
-		packageMetrics = new PackageMetrics(packages, blockMetrics);
+		methodMetrics = new MethodMetrics(packages);
+		classMetrics = new ClassMetrics(packages);
+		packageMetrics = new PackageMetrics(packages);
 	}
 	
 	public String getDisplayName() {

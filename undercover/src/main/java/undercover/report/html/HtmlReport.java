@@ -44,10 +44,12 @@ public class HtmlReport {
 	
 	public void generate() throws IOException {
 		copyResources();
+		long start = System.currentTimeMillis();
 		generateProjectReport();
 		generatePackageReports();
 		generateSourceReports();
 		generateDashboardReport();
+		System.out.println(System.currentTimeMillis() - start);
 	}
 
 	void copyResources() throws IOException {
