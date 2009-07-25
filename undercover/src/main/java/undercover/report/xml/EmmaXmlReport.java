@@ -2,6 +2,7 @@ package undercover.report.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import undercover.report.MethodItem;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.report.SourceItem;
+import undercover.support.FileUtils;
 import undercover.support.Proportion;
 
 public class EmmaXmlReport {
@@ -26,8 +28,7 @@ public class EmmaXmlReport {
 	public void writeTo(File file, String encoding) throws IOException {
 		EmmaXmlWriter writer = null;
 		try {
-			file.getParentFile().mkdirs();
-			writer = new EmmaXmlWriter(new PrintWriter(file, encoding), encoding);
+			writer = new EmmaXmlWriter(new PrintWriter(new OutputStreamWriter(FileUtils.openOutputStream(file), encoding)), encoding);
 			writeTo(writer);
 		} finally {
 			if (writer != null) {

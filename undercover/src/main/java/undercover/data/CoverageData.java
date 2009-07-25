@@ -10,8 +10,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
+import undercover.support.IOUtils;
 import undercover.support.ObjectSupport;
 
 public class CoverageData extends ObjectSupport implements Serializable {

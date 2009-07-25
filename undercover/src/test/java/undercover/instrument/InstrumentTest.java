@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import undercover.data.ClassMeta;
 import undercover.data.MetaData;
 import undercover.data.MethodMeta;
+import undercover.support.IOUtils;
 
 //FIXME: How to test instrumented bytecode?
 public class InstrumentTest {

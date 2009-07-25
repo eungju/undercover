@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
+import undercover.support.IOUtils;
 
 public class UndercoverSettings {
 	private static final String LOCATION = "/undercover.properties";

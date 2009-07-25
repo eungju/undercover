@@ -6,12 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import undercover.data.ClassMeta;
+import undercover.support.FileUtils;
 
 public class SourceFinderTest {
 	private SourceFinder dut;
@@ -20,7 +20,7 @@ public class SourceFinderTest {
 	@Before public void beforeEach() throws IOException {
 		src = File.createTempFile("src", "");
 		src.delete();
-		src.mkdir();
+		src.mkdirs();
 		dut = new SourceFinder(Arrays.asList(src));
 	}
 	

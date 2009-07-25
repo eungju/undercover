@@ -1,15 +1,14 @@
 package undercover.report;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.apache.commons.io.IOUtils;
+import undercover.support.FileUtils;
+import undercover.support.IOUtils;
 
 public class ReportOutput {
 	private final File directory;
@@ -26,7 +25,6 @@ public class ReportOutput {
 	}
 	
 	public void write(String path, InputStream input) throws IOException {
-		getOutputFile(path).getParentFile().mkdirs();
 		OutputStream output = null;
 		try {
 			output = openOutputStream(path);
@@ -45,8 +43,8 @@ public class ReportOutput {
 		}
 	}
 
-	OutputStream openOutputStream(String path) throws FileNotFoundException {
-		return new FileOutputStream(getOutputFile(path));
+	OutputStream openOutputStream(String path) throws IOException {
+		return FileUtils.openOutputStream(getOutputFile(path));
 	}
 
 	File getOutputFile(String path) {

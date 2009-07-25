@@ -1,7 +1,6 @@
 package undercover.report.xml;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -11,6 +10,7 @@ import undercover.report.ClassItem;
 import undercover.report.MethodItem;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
+import undercover.support.FileUtils;
 import undercover.support.HtmlUtils;
 
 public class CoberturaXmlReport {
@@ -31,8 +31,7 @@ public class CoberturaXmlReport {
 		writeCoverage(builder, reportData);
 		Writer writer = null;
 		try {
-			output.getParentFile().mkdirs();
-			writer = new OutputStreamWriter(new FileOutputStream(output), encoding);
+			writer = new OutputStreamWriter(FileUtils.openOutputStream(output), encoding);
 			writer.write(builder.toString());
 		} finally {
 			writer.close();

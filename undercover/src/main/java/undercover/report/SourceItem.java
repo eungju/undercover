@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.commons.io.IOUtils;
-
 import undercover.data.BlockMeta;
+import undercover.support.IOUtils;
 
 public class SourceItem implements Item {
 	private final SourceFile sourceFile;

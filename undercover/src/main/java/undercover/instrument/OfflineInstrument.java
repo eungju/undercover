@@ -8,10 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
 import undercover.instrument.filter.GlobFilter;
+import undercover.support.FileUtils;
+import undercover.support.IOUtils;
 
 public class OfflineInstrument {
 	private Instrument instrument;

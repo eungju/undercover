@@ -82,6 +82,8 @@
 			</instrumentpath>
 			<filter>
 				<exclude name="undercover/support/ObjectSupport" />
+				<exclude name="undercover/support/IOUtils" />
+				<exclude name="undercover/support/FileUtils" />
 				<exclude name="undercover/data/**" />
 				<exclude name="undercover/runtime/**" />
 			</filter>

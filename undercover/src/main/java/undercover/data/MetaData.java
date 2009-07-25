@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-
+import undercover.support.IOUtils;
 import undercover.support.ObjectSupport;
 
 public class MetaData extends ObjectSupport implements Serializable {
