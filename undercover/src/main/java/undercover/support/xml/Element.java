@@ -1,6 +1,7 @@
 package undercover.support.xml;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Element implements Node {
@@ -46,7 +47,12 @@ public class Element implements Node {
 		}
 		return this;
 	}
-	
+
+	public Element append(Collection<? extends Node> nodes) {
+		children.addAll(nodes);
+		return this;
+	}
+
 	public void accept(NodeVisitor visitor) {
 		visitor.enterElement(this);
 		for (Node each : children) {

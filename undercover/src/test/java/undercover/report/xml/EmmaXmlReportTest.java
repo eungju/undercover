@@ -1,7 +1,6 @@
 package undercover.report.xml;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 import java.util.Collections;
 
@@ -15,93 +14,66 @@ import undercover.report.ReportData;
 import undercover.report.SourceFile;
 import undercover.report.SourceItem;
 import undercover.support.Proportion;
+import undercover.support.xml.Element;
 
 public class EmmaXmlReportTest {
 	private EmmaXmlReport dut;
-	private EmmaXmlWriter writer;
 
 	@Before public void beforeEach() {
-		writer = mock(EmmaXmlWriter.class);
 		dut = new EmmaXmlReport(null);
-		dut.writer = writer;
-
-		when(writer.document()).thenReturn(writer);
-		when(writer.endDocument()).thenReturn(writer);
-		when(writer.report()).thenReturn(writer);
-		when(writer.endReport()).thenReturn(writer);
-		when(writer.stats()).thenReturn(writer);
-		when(writer.statsPackages(anyInt())).thenReturn(writer);
-		when(writer.statsClasses(anyInt())).thenReturn(writer);
-		when(writer.statsMethods(anyInt())).thenReturn(writer);
-		when(writer.statsSourceFiles(anyInt())).thenReturn(writer);
-		when(writer.statsSourceLines(anyInt())).thenReturn(writer);
-		when(writer.data()).thenReturn(writer);
-		when(writer.all()).thenReturn(writer);
-		when(writer.endAll()).thenReturn(writer);
-		when(writer.package_(anyString())).thenReturn(writer);
-		when(writer.sourceFile(anyString())).thenReturn(writer);
-		when(writer.class_(anyString())).thenReturn(writer);
-		when(writer.method(anyString())).thenReturn(writer);
-		when(writer.coverage(anyString(), any(Proportion.class))).thenReturn(writer);
 	}
 
-	@Test public void writeReport() {
+	@Test public void buildReport() {
 		ReportData item = new ReportData("cool product", Collections.<PackageItem>emptyList(), Collections.<ClassItem>emptyList(), Collections.<SourceItem>emptyList());
-		dut.writeReport(item);
-		
-		verify(writer).document();
-		verify(writer).report();
-		verify(writer).data();
-		verify(writer).all();
-		verify(writer).coverage("class", new Proportion(0, 0));
-		verify(writer).coverage("method", new Proportion(0, 0));
-		verify(writer).coverage("block", new Proportion(0, 0));
-		verify(writer).endAll();
-		verify(writer).endData();
-		verify(writer).endReport();
-		verify(writer).endDocument();
+		Element actual = dut.buildReport(item);
+		assertEquals("report", actual.name);
+		assertEquals("stats", ((Element) actual.children.get(0)).name);
+		assertEquals("data", ((Element) actual.children.get(1)).name);
 	}
 
-	@Test public void writePackage() {
+	@Test public void buildPackage() {
 		PackageItem item = new PackageItem("p");
-		dut.writePackage(item);
-		
-		verify(writer).package_(item.getDisplayName());
-		verify(writer).coverage("class", new Proportion(0, 0));
-		verify(writer).coverage("method", new Proportion(0, 0));
-		verify(writer).coverage("block", new Proportion(0, 0));
-		verify(writer).endPackage();
+		Element actual = dut.buildPackage(item);
+		assertEquals("package", actual.name);
+		assertEquals(item.getDisplayName(), actual.attr("name"));
+		assertEquals("coverage", ((Element) actual.children.get(0)).name);
+		assertEquals("coverage", ((Element) actual.children.get(1)).name);
+		assertEquals("coverage", ((Element) actual.children.get(2)).name);
 	}
 
-	@Test public void writeSourceFile() {
+	@Test public void buildSourceFile() {
 		SourceItem item = new SourceItem(new SourceFile("p/c.java"));
-		dut.writeSource(item);
-		
-		verify(writer).sourceFile(item.getSimpleName());
-		verify(writer).coverage("class", new Proportion(0, 0));
-		verify(writer).coverage("method", new Proportion(0, 0));
-		verify(writer).coverage("block", new Proportion(0, 0));
-		verify(writer).endSourceFile();
+		Element actual = dut.buildSource(item);
+		assertEquals("srcfile", actual.name);
+		assertEquals(item.getSimpleName(), actual.attr("name"));
+		assertEquals("coverage", ((Element) actual.children.get(0)).name);
+		assertEquals("coverage", ((Element) actual.children.get(1)).name);
+		assertEquals("coverage", ((Element) actual.children.get(2)).name);
 	}
 
-	@Test public void writeClass() {
+	@Test public void buildClass() {
 		ClassItem item = new ClassItem("p/c");
-		dut.writeClass(item);
-		
-		verify(writer).class_(item.getSimpleName());
-		verify(writer).coverage("class", new Proportion(0, 1));
-		verify(writer).coverage("method", new Proportion(0, 0));
-		verify(writer).coverage("block", new Proportion(0, 0));
-		verify(writer).endClass();
+		Element actual = dut.buildClass(item);
+		assertEquals("class", actual.name);
+		assertEquals(item.getSimpleName(), actual.attr("name"));
+		assertEquals("coverage", ((Element) actual.children.get(0)).name);
+		assertEquals("coverage", ((Element) actual.children.get(1)).name);
+		assertEquals("coverage", ((Element) actual.children.get(2)).name);
 	}
 	
-	@Test public void writeMethod() {
+	@Test public void buildMethod() {
 		MethodItem item = new MethodItem("m()V", 1, 2, 0);
-		dut.writeMethod(item);
-		
-		verify(writer).method("m() : void");
-		verify(writer).coverage("method", new Proportion(0, 1));
-		verify(writer).coverage("block", new Proportion(0, 2));
-		verify(writer).endMethod();
+		Element actual = dut.buildMethod(item);
+		assertEquals("method", actual.name);
+		assertEquals(item.getDisplayName(), actual.attr("name"));
+		assertEquals("coverage", ((Element) actual.children.get(0)).name);
+		assertEquals("coverage", ((Element) actual.children.get(1)).name);
+	}
+	
+	@Test public void buildCoverage() {
+		Element actual = dut.buildCoverage("block", new Proportion(1, 2));
+		assertEquals("coverage", actual.name);
+		assertEquals("block, %", actual.attr("type"));
+		assertEquals("50% (1/2)", actual.attr("value"));
 	}
 }

@@ -24,12 +24,20 @@ public class XmlWriter implements NodeVisitor {
 			out.append(' ').append(each.name);
 			out.append("=\"").append(HtmlUtils.escape(each.value)).append('"');
 		}
-		out.append(">");
-		onElement = true;
-		depth++;
+		if (node.children.isEmpty()) {
+			out.append(" />");
+		} else {
+			out.append(">");
+			onElement = true;
+			depth++;
+		}
 	}
 	
 	public void leaveElement(Element node) {
+		if (node.children.isEmpty()) {
+			return;
+		}
+		
 		depth--;
 		if (onElement) {
 			newline();

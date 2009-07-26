@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import undercover.report.ClassItem;
@@ -15,20 +17,21 @@ import undercover.report.ReportData;
 import undercover.report.SourceItem;
 import undercover.support.FileUtils;
 import undercover.support.Proportion;
+import undercover.support.xml.Element;
+import undercover.support.xml.XmlWriter;
 
 public class EmmaXmlReport {
 	private ReportData reportData;
-	EmmaXmlWriter writer;
 	
 	public EmmaXmlReport(ReportData reportData) {
 		this.reportData = reportData;
 	}
 	
 	public void writeTo(File file, String encoding) throws IOException {
-		EmmaXmlWriter writer = null;
+		PrintWriter writer = null;
 		try {
-			writer = new EmmaXmlWriter(new PrintWriter(new OutputStreamWriter(FileUtils.openOutputStream(file), encoding)), encoding);
-			writeTo(writer);
+			writer = new PrintWriter(new OutputStreamWriter(FileUtils.openOutputStream(file), encoding));
+			writeTo(writer, encoding);
 		} finally {
 			if (writer != null) {
 				writer.close();
@@ -36,26 +39,23 @@ public class EmmaXmlReport {
 		}
 	}
 	
-	public void writeTo(EmmaXmlWriter writer) {
-		this.writer = writer;
-		writeReport(reportData);		
+	public void writeTo(PrintWriter writer, String encoding) {
+		writer.format("<?xml version=\"1.0\" encoding=\"%s\" ?>", encoding).println();
+		buildReport(reportData).accept(new XmlWriter(writer));		
 	}
 
-	void writeReport(ReportData reportData) {
-		writer.document().report();
-		writeStats(reportData);
-		writeData(reportData);
-		writer.endReport().endDocument();
+	Element buildReport(ReportData reportData) {
+		return new Element("report")
+			.append(buildStats(reportData), buildData(reportData));
 	}
 
-	void writeStats(ReportData reportData) {
-		writer.stats()
-			.statsPackages(reportData.getPackageMetrics().getCount())
-			.statsClasses(reportData.getClassMetrics().getCount())
-			.statsMethods(reportData.getMethodMetrics().getCount())
-			.statsSourceFiles(reportData.getSources().size())
-			.statsSourceLines(countLines(reportData.getSources()))
-			.endStats();
+	Element buildStats(ReportData reportData) {
+		return new Element("stats")
+			.append(new Element("packages").attr("value", reportData.getPackageMetrics().getCount()))
+			.append(new Element("classes").attr("value", reportData.getClassMetrics().getCount()))
+			.append(new Element("methods").attr("value", reportData.getMethodMetrics().getCount()))
+			.append(new Element("srcfiles").attr("value", reportData.getSources().size()))
+			.append(new Element("srclines").attr("value", countLines(reportData.getSources())));
 	}
 
 	int countLines(Collection<SourceItem> sources) {
@@ -66,86 +66,98 @@ public class EmmaXmlReport {
 		return result;
 	}
 
-	void writeData(ReportData item) {
-		writer.data().all()
-			.coverage("class", item.getClassMetrics().getCoverage())
-			.coverage("method", item.getMethodMetrics().getCoverage())
-			.coverage("block", item.getBlockMetrics().getCoverage());
-		writePackages(item.getPackages());
-		writer.endAll().endData();
+	Element buildData(ReportData item) {
+		return new Element("data").append(new Element("all")
+			.append(buildCoverage("class", item.getClassMetrics().getCoverage()))
+			.append(buildCoverage("method", item.getMethodMetrics().getCoverage()))
+			.append(buildCoverage("block", item.getBlockMetrics().getCoverage()))
+			.append(buildPackages(item.getPackages())));
 	}
 
-	void writePackages(Collection<PackageItem> items) {
+	Element buildCoverage(String type, Proportion coverage) {
+		return new Element("coverage")
+			.attr("type", type + ", %")
+			.attr("value", String.format("%.0f%% (%d/%d)", coverage.getRatio() * 100, coverage.part, coverage.whole));
+	}
+
+	List<Element> buildPackages(Collection<PackageItem> items) {
+		List<Element> result = new ArrayList<Element>();
 		for (PackageItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
-			writePackage(each);
+			result.add(buildPackage(each));
 		}
+		return result;
 	}
 	
-	void writePackage(PackageItem item) {
-		writer.package_(item.getDisplayName())
-			.coverage("class", item.getClassMetrics().getCoverage())
-			.coverage("method", item.getMethodMetrics().getCoverage())
-			.coverage("block", item.getBlockMetrics().getCoverage());
+	Element buildPackage(PackageItem item) {
 		Set<SourceItem> sources = new HashSet<SourceItem>();
 		for (ClassItem each : item.classes) {
 			sources.add(each.getSource());
 		}
-		writeSources(sources);
-		writer.endPackage();
+		return new Element("package")
+			.attr("name", item.getDisplayName())
+			.append(buildCoverage("class", item.getClassMetrics().getCoverage()))
+			.append(buildCoverage("method", item.getMethodMetrics().getCoverage()))
+			.append(buildCoverage("block", item.getBlockMetrics().getCoverage()))
+			.append(buildSources(sources));
 	}
 	
-	void writeSources(Collection<SourceItem> items) {
+	List<Element> buildSources(Collection<SourceItem> items) {
+		List<Element> result = new ArrayList<Element>();
 		for (SourceItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
-			writeSource(each);
+			result.add(buildSource(each));
 		}
+		return result;
 	}
 
-	void writeSource(SourceItem item) {
-		writer.sourceFile(item.getSimpleName())
-			.coverage("class", item.getClassMetrics().getCoverage())
-			.coverage("method", item.getMethodMetrics().getCoverage())
-			.coverage("block", item.getBlockMetrics().getCoverage());
-		writeClasses(item.classes);
-		writer.endSourceFile();
+	Element buildSource(SourceItem item) {
+		return new Element("srcfile")
+			.attr("name", item.getSimpleName())
+			.append(buildCoverage("class", item.getClassMetrics().getCoverage()))
+			.append(buildCoverage("method", item.getMethodMetrics().getCoverage()))
+			.append(buildCoverage("block", item.getBlockMetrics().getCoverage()))
+			.append(buildClasses(item.classes));
 	}
 	
-	void writeClasses(Collection<ClassItem> items) {
+	List<Element> buildClasses(Collection<ClassItem> items) {
+		List<Element> result = new ArrayList<Element>();
 		for (ClassItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
-			writeClass(each);
+			result.add(buildClass(each));
 		}
+		return result;
 	}
 
-	void writeClass(ClassItem item) {
-		writer.class_(item.getSimpleName())
-			.coverage("class", new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1))
-			.coverage("method", item.getMethodMetrics().getCoverage())
-			.coverage("block", item.getBlockMetrics().getCoverage());
-		writeMethods(item.methods);
-		writer.endClass();
+	Element buildClass(ClassItem item) {
+		return new Element("class").attr("name", item.getSimpleName())
+			.append(buildCoverage("class", new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1)))
+			.append(buildCoverage("method", item.getMethodMetrics().getCoverage()))
+			.append(buildCoverage("block", item.getBlockMetrics().getCoverage()))
+			.append(buildMethods(item.methods));
 	}
 	
-	void writeMethods(Collection<MethodItem> items) {
+	List<Element> buildMethods(Collection<MethodItem> items) {
+		List<Element> result = new ArrayList<Element>();
 		for (MethodItem each : items) {
 			if (!each.getBlockMetrics().isExecutable()) {
 				continue;
 			}
-			writeMethod(each);
+			result.add(buildMethod(each));
 		}
+		return result;
 	}
 
-	void writeMethod(MethodItem item) {
-		writer.method(item.getDisplayName())
-			.coverage("method", new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1))
-			.coverage("block", item.getBlockMetrics().getCoverage())
-			.endMethod();
+	Element buildMethod(MethodItem item) {
+		return new Element("method")
+			.attr("name", item.getDisplayName())
+			.append(buildCoverage("method", new Proportion(item.getBlockMetrics().isExecuted() ? 1 : 0, 1)))
+			.append(buildCoverage("block", item.getBlockMetrics().getCoverage()));
 	}
 }
