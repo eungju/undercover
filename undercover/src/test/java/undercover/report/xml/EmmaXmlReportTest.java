@@ -22,7 +22,7 @@ public class EmmaXmlReportTest {
 
 	@Before public void beforeEach() {
 		writer = mock(EmmaXmlWriter.class);
-		dut = new EmmaXmlReport();
+		dut = new EmmaXmlReport(null);
 		dut.writer = writer;
 
 		when(writer.document()).thenReturn(writer);

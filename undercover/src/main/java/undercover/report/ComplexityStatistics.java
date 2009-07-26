@@ -24,6 +24,10 @@ public class ComplexityStatistics {
 	}
 
 	public double getAverage() {
+		if (items.value().size() == 0) {
+			return 0;
+		}
+		
 		int result = 0;
 		for (Item each : items.value()) {
 			result += each.getBlockMetrics().getComplexity();
@@ -32,6 +36,10 @@ public class ComplexityStatistics {
 	};
 	
 	public double getVariance() {
+		if (items.value().size() == 0) {
+			return 0;
+		}
+
 		Collection<? extends Item> elements = items.value();
 		double avg = getAverage();
 		double v = 0;

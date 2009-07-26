@@ -20,9 +20,8 @@ public class EmmaXmlReport {
 	private ReportData reportData;
 	EmmaXmlWriter writer;
 	
-	public EmmaXmlReport with(ReportData reportData) {
+	public EmmaXmlReport(ReportData reportData) {
 		this.reportData = reportData;
-		return this;
 	}
 	
 	public void writeTo(File file, String encoding) throws IOException {

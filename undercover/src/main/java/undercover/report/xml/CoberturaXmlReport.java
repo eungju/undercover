@@ -3,7 +3,7 @@ package undercover.report.xml;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.PrintWriter;
 import java.util.Collection;
 
 import undercover.report.ClassItem;
@@ -12,115 +12,103 @@ import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.support.FileUtils;
 import undercover.support.HtmlUtils;
+import undercover.support.xml.Element;
+import undercover.support.xml.XmlWriter;
 
 public class CoberturaXmlReport {
 	private ReportData reportData;
-	private File output;
-	private String encoding = "UTF-8";
 	
-	public void setReportData(ReportData reportData) {
+	public CoberturaXmlReport(ReportData reportData) {
 		this.reportData = reportData;
 	}
-	
-	public void setOutput(File output) {
-		this.output = output;
-	}
 
-	public void generate() throws IOException {
-		StringBuilder builder = new StringBuilder();
-		writeCoverage(builder, reportData);
-		Writer writer = null;
+	public void writeTo(File file, String encoding) throws IOException {
+		PrintWriter writer = null;
 		try {
-			writer = new OutputStreamWriter(FileUtils.openOutputStream(output), encoding);
-			writer.write(builder.toString());
+			writer = new PrintWriter(new OutputStreamWriter(FileUtils.openOutputStream(file), encoding));
+			writer.format("<?xml version=\"1.0\" encoding=\"%s\" ?>", encoding).println();
+			writer.println("<!DOCTYPE coverage SYSTEM \"http://cobertura.sourceforge.net/xml/coverage-04.dtd\">");
+			Element root = buildCoverage(reportData);
+			root.accept(new XmlWriter(writer));
 		} finally {
 			writer.close();
 		}
 	}
 
-	void writeCoverage(StringBuilder builder, ReportData reportData) {
+	Element buildCoverage(ReportData reportData) {
 		ReportData item = reportData;
-		builder.append("<?xml version=\"1.0\"")
-				.append(" encoding=\"").append(encoding).append("\"")
-				.append("?>\n");
-		builder.append("<!DOCTYPE coverage SYSTEM \"http://cobertura.sourceforge.net/xml/coverage-04.dtd\">\n");
-		builder.append("<coverage")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" lines-covered=\"").append(item.getBlockMetrics().getCoverage().part).append("\"")
-			.append(" lines-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
-			.append(" branches-covered=\"").append(item.getBlockMetrics().getCoverage().part).append("\"")
-			.append(" branches-valid=\"").append(item.getBlockMetrics().getCoverage().whole).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
-			.append(" version=\"").append("1.9.2").append("\"")
-			.append(" timestamp=\"").append(System.currentTimeMillis()).append("\"")
-			.append(">\n");
-		writePackages(builder, reportData.getPackages());
-		builder.append("</coverage>\n");
+		Element result = new Element("coverage");
+		result.attr("line-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("branch-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("lines-covered", item.getBlockMetrics().getCoverage().part);
+		result.attr("lines-valid", item.getBlockMetrics().getCoverage().whole);
+		result.attr("branches-covered", item.getBlockMetrics().getCoverage().part);
+		result.attr("branches-valid", item.getBlockMetrics().getCoverage().whole);
+		result.attr("complexity", item.getMethodMetrics().getComplexity().getAverage());
+		result.attr("version", "1.9.2");
+		result.attr("timestamp", System.currentTimeMillis());
+		result.append(buildPackages(reportData.getPackages()));
+		return result;
 	}
 
-	void writePackages(StringBuilder builder, Collection<PackageItem> items) {
-		builder.append("<packages>\n");
+	Element buildPackages(Collection<PackageItem> items) {
+		Element result = new Element("packages");
 		for (PackageItem each : items) {
-			writePackage(builder, each);
+			result.append(buildPackage(each));
 		}
-		builder.append("</packages>\n");
+		return result;
 	}
 
-	void writePackage(StringBuilder builder, PackageItem item) {
-		builder.append("<package")
-			.append(" name=\"").append(item.getDisplayName()).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
-			.append(">\n");
-		writeClasses(builder, item.classes);
-		builder.append("</package>\n");
+	Element buildPackage(PackageItem item) {
+		Element result = new Element("package");
+		result.attr("name", item.getDisplayName());
+		result.attr("line-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("branch-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("complexity", item.getMethodMetrics().getComplexity().getAverage());
+		result.append(buildClasses(item.classes));
+		return result;
 	}
 
-	void writeClasses(StringBuilder builder,	Collection<ClassItem> items) {
-		builder.append("<classes>\n");
+	Element buildClasses(Collection<ClassItem> items) {
+		Element result = new Element("classes");
 		for (ClassItem each : items) {
-			writeClass(builder, each);
+			result.append(buildClass(each));
 		}
-		builder.append("</classes>\n");
+		return result;
 	}
 
-	void writeClass(StringBuilder builder, ClassItem item) {
-		builder.append("<class")
-			.append(" name=\"").append(item.getDisplayName()).append("\"")
-			.append(" filename=\"").append(item.source.getName()).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" complexity=\"").append(item.getMethodMetrics().getComplexity().getAverage()).append("\"")
-			.append(">\n");
-		writeMethods(builder, item.methods);
-		builder.append("</class>\n");
+	Element buildClass(ClassItem item) {
+		Element result = new Element("class");
+		result.attr("name", item.getDisplayName());
+		result.attr("filename", item.source.getName());
+		result.attr("line-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("branch-rate", item.getBlockMetrics().getCoverage().getRatio());
+		result.attr("complexity", item.getMethodMetrics().getComplexity().getAverage());
+		result.append(buildMethods(item.methods), buildLines());
+		return result;
 	}
 
-	void writeMethods(StringBuilder builder,	Collection<MethodItem> items) {
-		builder.append("<methods>\n");
+	Element buildMethods(Collection<MethodItem> items) {
+		Element result = new Element("methods");
 		for (MethodItem each : items) {
-			writeMethod(builder, each);
+			result.append(buildMethod(each));
 		}
-		builder.append("</methods>\n");
+		return result;
 	}
 	
-	void writeMethod(StringBuilder builder, MethodItem item) {
+	Element buildMethod(MethodItem item) {
 		int startOfDesc = item.getName().indexOf('(');
 		String name = item.getName().substring(0, startOfDesc);
 		String desc = item.getName().substring(startOfDesc);
-		builder.append("<method")
-			.append(" name=\"").append(HtmlUtils.escape(name)).append("\"")
-			.append(" signature=\"").append(desc).append("\"")
-			.append(" line-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(" branch-rate=\"").append(item.getBlockMetrics().getCoverage().getRatio()).append("\"")
-			.append(">\n");
-		writeLines(builder);
-		builder.append("</method>\n");
+		return new Element("method")
+			.attr("name", HtmlUtils.escape(name))
+			.attr("signature", desc)
+			.attr("line-rate", item.getBlockMetrics().getCoverage().getRatio())
+			.attr("branch-rate", item.getBlockMetrics().getCoverage().getRatio())
+			.append(buildLines());
 	}
 
-	void writeLines(StringBuilder builder) {
-		builder.append("<lines></lines>\n");
+	Element buildLines() {
+		return new Element("lines");
 	}
 }

@@ -149,10 +149,7 @@ public class ReportTask extends UndercoverTask {
     public static class CoberturaXmlFormat extends ReportFormat {
 		public void generate() throws IOException {
 			checkEncoding();
-			CoberturaXmlReport report = new CoberturaXmlReport();
-			report.setReportData(reportData);
-			report.setOutput(output);
-			report.generate();
+			new CoberturaXmlReport(reportData).writeTo(output, encoding);
 		}
 		
 		void checkEncoding() {
@@ -166,7 +163,7 @@ public class ReportTask extends UndercoverTask {
 		public void generate() throws IOException {
 			checkEncoding();
 			
-			new EmmaXmlReport().with(reportData).writeTo(output, encoding);
+			new EmmaXmlReport(reportData).writeTo(output, encoding);
 		}
 		
 		void checkEncoding() {
