@@ -15,6 +15,14 @@ public class XmlWriter implements NodeVisitor {
 		depth = 0;
 	}
 	
+	public void visitXmlDeclaration(XmlDeclaration node) {
+		out.format("<?xml version=\"%s\" encoding=\"%s\"?>", node.version, node.encoding).println();
+	}
+	
+	public void visitDoctypeDeclaration(DoctypeDeclaration node) {
+		out.format("<!DOCTYPE %s SYSTEM \"%s\">", node.name, node.uriReference).println();
+	}
+	
 	public void enterElement(Element node) {
 		if (onElement) {
 			newline();

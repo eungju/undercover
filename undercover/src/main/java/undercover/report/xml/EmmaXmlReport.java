@@ -18,6 +18,7 @@ import undercover.report.SourceItem;
 import undercover.support.FileUtils;
 import undercover.support.Proportion;
 import undercover.support.xml.Element;
+import undercover.support.xml.XmlDeclaration;
 import undercover.support.xml.XmlWriter;
 
 public class EmmaXmlReport {
@@ -40,8 +41,9 @@ public class EmmaXmlReport {
 	}
 	
 	public void writeTo(PrintWriter writer, String encoding) {
-		writer.format("<?xml version=\"1.0\" encoding=\"%s\" ?>", encoding).println();
-		buildReport(reportData).accept(new XmlWriter(writer));		
+		XmlWriter xmlWriter = new XmlWriter(writer);
+		xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", encoding));
+		buildReport(reportData).accept(xmlWriter);		
 	}
 
 	Element buildReport(ReportData reportData) {

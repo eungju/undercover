@@ -12,7 +12,9 @@ import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.support.FileUtils;
 import undercover.support.HtmlUtils;
+import undercover.support.xml.DoctypeDeclaration;
 import undercover.support.xml.Element;
+import undercover.support.xml.XmlDeclaration;
 import undercover.support.xml.XmlWriter;
 
 public class CoberturaXmlReport {
@@ -26,13 +28,18 @@ public class CoberturaXmlReport {
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new OutputStreamWriter(FileUtils.openOutputStream(file), encoding));
-			writer.format("<?xml version=\"1.0\" encoding=\"%s\" ?>", encoding).println();
-			writer.println("<!DOCTYPE coverage SYSTEM \"http://cobertura.sourceforge.net/xml/coverage-04.dtd\">");
-			Element root = buildCoverage(reportData);
-			root.accept(new XmlWriter(writer));
+			writeTo(writer, encoding);
 		} finally {
 			writer.close();
 		}
+	}
+
+	public void writeTo(PrintWriter writer, String encoding) {
+		XmlWriter xmlWriter = new XmlWriter(writer);
+		xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", encoding));
+		xmlWriter.visitDoctypeDeclaration(new DoctypeDeclaration("coverage", "http://cobertura.sourceforge.net/xml/coverage-04.dtd"));
+		Element root = buildCoverage(reportData);
+		root.accept(xmlWriter);
 	}
 
 	Element buildCoverage(ReportData reportData) {
