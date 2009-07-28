@@ -90,7 +90,7 @@ public class HtmlReport {
 			template.setAttribute("project", reportData);
 			output.write("project-packages.html", template.toString());
 		} else {
-			write(new MenuPage().build(reportData), "project-packages.html");
+			write(new MenuPage(reportData).build(), "project-packages.html");
 		}
 	}
 	
@@ -112,9 +112,13 @@ public class HtmlReport {
 	}
 
 	void generateProjectClasses() throws IOException {
-		StringTemplate template = getTemplate("projectClasses");
-		template.setAttribute("classes", reportData.getClasses());
-		output.write("project-classes.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("projectClasses");
+			template.setAttribute("classes", reportData.getClasses());
+			output.write("project-classes.html", template.toString());
+		} else {
+			write(new ProjectClassListPage(reportData).build(), "project-classes.html");
+		}
 	}
 
 	void generatePackageReports() throws IOException {

@@ -1,7 +1,6 @@
 package undercover.report.html;
 
 import undercover.report.Item;
-import undercover.report.ReportData;
 import undercover.support.xml.Comment;
 import undercover.support.xml.Element;
 import undercover.support.xml.Text;
@@ -51,10 +50,42 @@ public abstract class HtmlPage {
 		return new Element("li");
 	}
 
+	public Element table() {
+		return new Element("table");
+	}
+	
+	public Element colgroup() {
+		return new Element("colgroup");
+	}
+
+	public Element col() {
+		return new Element("col");
+	}
+
+	public Element thead() {
+		return new Element("thead");
+	}
+
+	public Element tbody() {
+		return new Element("tbody");
+	}
+
+	public Element tr() {
+		return new Element("tr");
+	}
+	
+	public Element th() {
+		return new Element("th");
+	}
+	
+	public Element td() {
+		return new Element("td");
+	}
+
 	public Element a() {
 		return new Element("a");
 	}
-	
+
 	public Text text(String value) {
 		return new Text(value);
 	}
@@ -93,5 +124,5 @@ public abstract class HtmlPage {
 		return text(item.getBlockMetrics().isExecutable() ? percent : "N/A");
 	}
 	
-	public abstract Element build(ReportData reportData);
+	public abstract Element build();
 }

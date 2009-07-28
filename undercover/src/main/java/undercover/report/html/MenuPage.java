@@ -7,8 +7,13 @@ import undercover.report.ReportData;
 import undercover.support.xml.Element;
 
 public class MenuPage extends HtmlPage {
-	@Override
-	public Element build(ReportData reportData) {
+	private ReportData reportData;
+
+	public MenuPage(ReportData reportData) {
+		this.reportData = reportData;
+	}
+	
+	public Element build() {
 		return html().append(
 				defaultHead("Undercover"),
 				body().append(
