@@ -58,15 +58,23 @@ public abstract class HtmlPage {
 	public Text text(String value) {
 		return new Text(value);
 	}
+	
+	public Element javascript(String src) {
+		return script().attr("src", src).attr("type", "text/javascript");
+	}
+
+	public Element css(String href) {
+		return link().attr("href", href).attr("rel", "stylesheet").attr("type", "text/css");
+	}
 
 	protected Element defaultHead(String title) {
 		return head()
 			.append(title().append(text(title)))
-			.append(link().attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css"))
-			.append(script().attr("src", "jquery-1.3.2.min.js").attr("type", "text/javascript"))
+			.append(css("style.css"))
+			.append(javascript("jquery-1.3.2.min.js"))
 			.append(new Comment("[if IE]><script src=\"excanvas.pack.js\" type=\"text/javascript\"></script><![endif]"))
-			.append(script().attr("src", "jquery.flot.pack.js").attr("type", "text/javascript"))
-			.append(script().attr("src", "undercover.js").attr("type", "text/javascript"));
+			.append(javascript("jquery.flot.pack.js"))
+			.append(javascript("undercover.js"));
 	}
 
 	protected Element roundedBox(Element innerBox) {
