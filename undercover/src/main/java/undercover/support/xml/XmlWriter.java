@@ -32,20 +32,12 @@ public class XmlWriter implements NodeVisitor {
 			out.append(' ').append(each.name);
 			out.append("=\"").append(HtmlUtils.escape(each.value)).append('"');
 		}
-		if (node.children.isEmpty()) {
-			out.append(" />");
-		} else {
-			out.append(">");
-			onElement = true;
-			depth++;
-		}
+		out.append(">");
+		onElement = true;
+		depth++;
 	}
 	
 	public void leaveElement(Element node) {
-		if (node.children.isEmpty()) {
-			return;
-		}
-		
 		depth--;
 		if (onElement) {
 			newline();
@@ -57,6 +49,14 @@ public class XmlWriter implements NodeVisitor {
 	public void visitText(Text node) {
 		out.print(HtmlUtils.escape(node.value));
 		onElement = false;
+	}
+
+	public void visitComment(Comment node) {
+		if (onElement) {
+			newline();
+		}
+		out.append("<!-- ").append(node.value).append(" -->");
+		onElement = true;
 	}
 
 	void newline() {

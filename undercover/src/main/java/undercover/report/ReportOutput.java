@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import undercover.support.FileUtils;
@@ -43,6 +44,10 @@ public class ReportOutput {
 		}
 	}
 
+	public Writer openWriter(String path) throws IOException {
+		return new OutputStreamWriter(openOutputStream(path), encoding);
+	}
+	
 	OutputStream openOutputStream(String path) throws IOException {
 		return FileUtils.openOutputStream(getOutputFile(path));
 	}

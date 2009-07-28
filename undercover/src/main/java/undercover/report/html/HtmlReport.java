@@ -3,6 +3,7 @@ package undercover.report.html;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +20,11 @@ import undercover.report.ReportData;
 import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
 import undercover.support.IOUtils;
+import undercover.support.xml.Comment;
+import undercover.support.xml.Element;
+import undercover.support.xml.Text;
+import undercover.support.xml.XmlDeclaration;
+import undercover.support.xml.XmlWriter;
 
 public class HtmlReport {
 	final String templateEncoding = "UTF-8";
@@ -81,9 +87,122 @@ public class HtmlReport {
 	}
 	
 	void generateProjectPackages() throws IOException {
-		StringTemplate template = getTemplate("projectPackages");
-		template.setAttribute("project", reportData);
-		output.write("project-packages.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("projectPackages");
+			template.setAttribute("project", reportData);
+			output.write("project-packages.html", template.toString());
+		} else {
+			write(buildProjectPackagesPage(), "project-packages.html");
+		}
+	}
+	
+	void write(Element root, String path) throws IOException {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(output.openWriter(path));
+			XmlWriter xmlWriter = new XmlWriter(writer);
+			xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", "UTF-8"));
+			root.accept(xmlWriter);
+		} finally {
+			IOUtils.closeQuietly(writer);
+		}
+	}
+
+	public static Element html() {
+		return new Element("html");
+	}
+	
+	public static Element body() {
+		return new Element("body");
+	}
+	
+	public static Element head() {
+		return new Element("head");
+	}
+
+	public static Element title() {
+		return new Element("title");
+	}
+
+	public static Element link() {
+		return new Element("link");
+	}
+
+	public static Element script() {
+		return new Element("script");
+	}
+
+	public static Element div() {
+		return new Element("div");
+	}
+
+	public static Element ul() {
+		return new Element("ul");
+	}
+	
+	public static Element li() {
+		return new Element("li");
+	}
+
+	public static Element a() {
+		return new Element("a");
+	}
+
+	Element head(String title) {
+		return head()
+			.append(title().append(new Text(title)))
+			.append(link().attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css"))
+			.append(script().attr("src", "jquery-1.3.2.min.js").attr("type", "text/javascript"))
+			.append(new Comment("[if IE]><script src=\"excanvas.pack.js\" type=\"text/javascript\"></script><![endif]"))
+			.append(script().attr("src", "jquery.flot.pack.js").attr("type", "text/javascript"))
+			.append(script().attr("src", "undercover.js").attr("type", "text/javascript"));
+	}
+
+	Element roundedBox(Element innerBox) {
+		return div().attr("class", "rounded-box")
+			.append(div().attr("class", "round4"))
+			.append(div().attr("class", "round2"))
+			.append(div().attr("class", "round1"))
+			.append(div().attr("class", "box-inner").append(innerBox))
+			.append(div().attr("class", "round1"))
+			.append(div().attr("class", "round2"))
+			.append(div().attr("class", "round4"));
+	}
+	
+	Text coveragePercent(Item item) {
+		if (item.getBlockMetrics().isExecutable()) {
+			return new Text(DoubleRenderer.trimZeros(String.format("%.1f", item.getBlockMetrics().getCoverage().getRatio() * 100)) + "%");
+		} else {
+			return new Text("N/A");
+		}
+	}
+	
+	Element buildProjectPackagesPage() {
+		return html()	.append(
+				head("Undercover"),
+				body().append(
+						roundedBox(new Element("h2").append(new Text("Undercover Coverage Report"))),
+						div().attr("class", "navigation").append(
+								buildNavigationMenu(),
+								new Element("h3").append(new Text("Packages")),
+								buildNavigationPackages())));
+	}
+	
+	Element buildNavigationMenu() {
+		return ul().attr("class", "menu")
+			.append(li().append(a().attr("href", "project-dashboard.html").attr("target", "classPane").append(new Text("Dashboard"))))
+			.append(li().append(a().attr("href", "project-summary.html").attr("target", "classPane").append(new Text("Coverage"))));
+	}
+	
+	Element buildNavigationPackages() {
+		Element result = ul().attr("class", "package-list");
+		for (PackageItem each : reportData.getPackages()) {
+			String summaryPage = "package-" + each.getLinkName() + "-summary.html";
+			result.append(li()
+					.append(a().attr("href", summaryPage).attr("target", "classPane").append(new Text(each.getDisplayName())))
+					.append(new Text(" ("), coveragePercent(each), new Text(")")));
+		}
+		return result;
 	}
 	
 	void generateProjectSummary() throws IOException {

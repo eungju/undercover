@@ -30,6 +30,11 @@ public class XmlWriterTest {
 		assertEquals("<!DOCTYPE root SYSTEM \"root.dtd\">" + LINE_SEPARATOR, buffer.toString());
 	}
 
+	@Test public void comment() {
+		new Comment("This is a comment").accept(dut);
+		assertEquals("<!-- This is a comment -->", buffer.toString());
+	}
+
 	@Test public void integration() {
 		new Element("div").append(new Element("a").attr("href", "#1").append(new Text("foo"))).accept(dut);
 		System.out.println(buffer.toString());

@@ -3,7 +3,7 @@ package undercover.report.html;
 import org.antlr.stringtemplate.AttributeRenderer;
 
 public class DoubleRenderer implements AttributeRenderer {
-	String trimZeros(String str) {
+	public static String trimZeros(String str) {
 		return str.replaceFirst("\\.?0+$", "");
 	}
 	
