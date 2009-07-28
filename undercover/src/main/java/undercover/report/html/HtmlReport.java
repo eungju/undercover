@@ -108,49 +108,61 @@ public class HtmlReport {
 		}
 	}
 
-	public static Element html() {
+	public Element html() {
 		return new Element("html");
 	}
 	
-	public static Element body() {
+	public Element body() {
 		return new Element("body");
 	}
 	
-	public static Element head() {
+	public Element head() {
 		return new Element("head");
 	}
 
-	public static Element title() {
+	public Element title() {
 		return new Element("title");
 	}
 
-	public static Element link() {
+	public Element link() {
 		return new Element("link");
 	}
 
-	public static Element script() {
+	public Element script() {
 		return new Element("script");
 	}
 
-	public static Element div() {
+	public Element div() {
 		return new Element("div");
 	}
 
-	public static Element ul() {
+	public Element h2() {
+		return new Element("h2");
+	}
+
+	public Element h3() {
+		return new Element("h3");
+	}
+	
+	public Element ul() {
 		return new Element("ul");
 	}
 	
-	public static Element li() {
+	public Element li() {
 		return new Element("li");
 	}
 
-	public static Element a() {
+	public Element a() {
 		return new Element("a");
+	}
+	
+	public Text text(String value) {
+		return new Text(value);
 	}
 
 	Element head(String title) {
 		return head()
-			.append(title().append(new Text(title)))
+			.append(title().append(text(title)))
 			.append(link().attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css"))
 			.append(script().attr("src", "jquery-1.3.2.min.js").attr("type", "text/javascript"))
 			.append(new Comment("[if IE]><script src=\"excanvas.pack.js\" type=\"text/javascript\"></script><![endif]"))
@@ -170,37 +182,34 @@ public class HtmlReport {
 	}
 	
 	Text coveragePercent(Item item) {
-		if (item.getBlockMetrics().isExecutable()) {
-			return new Text(DoubleRenderer.trimZeros(String.format("%.1f", item.getBlockMetrics().getCoverage().getRatio() * 100)) + "%");
-		} else {
-			return new Text("N/A");
-		}
+		String percent = DoubleRenderer.trimZeros(String.format("%.1f", item.getBlockMetrics().getCoverage().getRatio() * 100)) + "%";
+		return text(item.getBlockMetrics().isExecutable() ? percent : "N/A");
 	}
 	
 	Element buildProjectPackagesPage() {
-		return html()	.append(
+		return html().append(
 				head("Undercover"),
 				body().append(
-						roundedBox(new Element("h2").append(new Text("Undercover Coverage Report"))),
+						roundedBox(h2().append(text("Undercover Coverage Report"))),
 						div().attr("class", "navigation").append(
 								buildNavigationMenu(),
-								new Element("h3").append(new Text("Packages")),
+								h3().append(text("Packages")),
 								buildNavigationPackages())));
 	}
 	
 	Element buildNavigationMenu() {
-		return ul().attr("class", "menu")
-			.append(li().append(a().attr("href", "project-dashboard.html").attr("target", "classPane").append(new Text("Dashboard"))))
-			.append(li().append(a().attr("href", "project-summary.html").attr("target", "classPane").append(new Text("Coverage"))));
+		return ul().attr("class", "menu").append(
+				li().append(a().attr("href", "project-dashboard.html").attr("target", "classPane").append(text("Dashboard"))),
+				li().append(a().attr("href", "project-summary.html").attr("target", "classPane").append(text("Coverage"))));
 	}
 	
 	Element buildNavigationPackages() {
 		Element result = ul().attr("class", "package-list");
 		for (PackageItem each : reportData.getPackages()) {
 			String summaryPage = "package-" + each.getLinkName() + "-summary.html";
-			result.append(li()
-					.append(a().attr("href", summaryPage).attr("target", "classPane").append(new Text(each.getDisplayName())))
-					.append(new Text(" ("), coveragePercent(each), new Text(")")));
+			result.append(li().append(
+					a().attr("href", summaryPage).attr("target", "classPane").append(text(each.getDisplayName())),
+					text(" ("), coveragePercent(each), text(")")));
 		}
 		return result;
 	}
