@@ -20,9 +20,7 @@ import undercover.report.ReportData;
 import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
 import undercover.support.IOUtils;
-import undercover.support.xml.Comment;
 import undercover.support.xml.Element;
-import undercover.support.xml.Text;
 import undercover.support.xml.XmlDeclaration;
 import undercover.support.xml.XmlWriter;
 
@@ -92,7 +90,7 @@ public class HtmlReport {
 			template.setAttribute("project", reportData);
 			output.write("project-packages.html", template.toString());
 		} else {
-			write(buildProjectPackagesPage(), "project-packages.html");
+			write(new MenuPage().build(reportData), "project-packages.html");
 		}
 	}
 	
@@ -107,113 +105,6 @@ public class HtmlReport {
 			IOUtils.closeQuietly(writer);
 		}
 	}
-
-	public Element html() {
-		return new Element("html");
-	}
-	
-	public Element body() {
-		return new Element("body");
-	}
-	
-	public Element head() {
-		return new Element("head");
-	}
-
-	public Element title() {
-		return new Element("title");
-	}
-
-	public Element link() {
-		return new Element("link");
-	}
-
-	public Element script() {
-		return new Element("script");
-	}
-
-	public Element div() {
-		return new Element("div");
-	}
-
-	public Element h2() {
-		return new Element("h2");
-	}
-
-	public Element h3() {
-		return new Element("h3");
-	}
-	
-	public Element ul() {
-		return new Element("ul");
-	}
-	
-	public Element li() {
-		return new Element("li");
-	}
-
-	public Element a() {
-		return new Element("a");
-	}
-	
-	public Text text(String value) {
-		return new Text(value);
-	}
-
-	Element head(String title) {
-		return head()
-			.append(title().append(text(title)))
-			.append(link().attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css"))
-			.append(script().attr("src", "jquery-1.3.2.min.js").attr("type", "text/javascript"))
-			.append(new Comment("[if IE]><script src=\"excanvas.pack.js\" type=\"text/javascript\"></script><![endif]"))
-			.append(script().attr("src", "jquery.flot.pack.js").attr("type", "text/javascript"))
-			.append(script().attr("src", "undercover.js").attr("type", "text/javascript"));
-	}
-
-	Element roundedBox(Element innerBox) {
-		return div().attr("class", "rounded-box")
-			.append(div().attr("class", "round4"))
-			.append(div().attr("class", "round2"))
-			.append(div().attr("class", "round1"))
-			.append(div().attr("class", "box-inner").append(innerBox))
-			.append(div().attr("class", "round1"))
-			.append(div().attr("class", "round2"))
-			.append(div().attr("class", "round4"));
-	}
-	
-	Text coveragePercent(Item item) {
-		String percent = DoubleRenderer.trimZeros(String.format("%.1f", item.getBlockMetrics().getCoverage().getRatio() * 100)) + "%";
-		return text(item.getBlockMetrics().isExecutable() ? percent : "N/A");
-	}
-	
-	Element buildProjectPackagesPage() {
-		return html().append(
-				head("Undercover"),
-				body().append(
-						roundedBox(h2().append(text("Undercover Coverage Report"))),
-						div().attr("class", "navigation").append(
-								buildNavigationMenu(),
-								h3().append(text("Packages")),
-								buildNavigationPackages())));
-	}
-	
-	Element buildNavigationMenu() {
-		return ul().attr("class", "menu").append(
-				li().append(a().attr("href", "project-dashboard.html").attr("target", "classPane").append(text("Dashboard"))),
-				li().append(a().attr("href", "project-summary.html").attr("target", "classPane").append(text("Coverage"))));
-	}
-	
-	Element buildNavigationPackages() {
-		Element result = ul().attr("class", "package-list");
-		for (PackageItem each : reportData.getPackages()) {
-			String summaryPage = "package-" + each.getLinkName() + "-summary.html";
-			result.append(li().append(
-					a().attr("href", summaryPage).attr("target", "classPane").append(text(each.getDisplayName())),
-					text(" ("), coveragePercent(each), text(")")));
-		}
-		return result;
-	}
-	
 	void generateProjectSummary() throws IOException {
 		StringTemplate template = getTemplate("projectSummary");
 		template.setAttribute("project", reportData);
