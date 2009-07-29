@@ -135,9 +135,13 @@ public class HtmlReport {
 	}
 
 	void generatePackageClasses(PackageItem packageItem) throws IOException {
-		StringTemplate template = getTemplate("projectClasses");
-		template.setAttribute("classes", packageItem.classes);
-		output.write("package-" + packageItem.getLinkName() + "-classes.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("projectClasses");
+			template.setAttribute("classes", packageItem.classes);
+			output.write("package-" + packageItem.getLinkName() + "-classes.html", template.toString());
+		} else {
+			write(new PackageClassListPage(packageItem).build(), "package-" + packageItem.getLinkName() + "-classes.html");
+		}
 	}
 
 	void generateSourceReports() throws IOException {
