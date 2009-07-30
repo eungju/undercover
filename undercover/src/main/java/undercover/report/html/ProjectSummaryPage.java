@@ -5,7 +5,6 @@ import java.util.Collection;
 import undercover.report.ClassMetrics;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
-import undercover.support.xml.Cdata;
 import undercover.support.xml.Element;
 
 public class ProjectSummaryPage extends HtmlPage {
@@ -18,7 +17,7 @@ public class ProjectSummaryPage extends HtmlPage {
 	@Override
 	public Element build() {
 		return html().append(
-				defaultHead("Project summary").append(loadClassListScript("project-classes.html")),
+				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
 				body().append(
 						navigationPanel(),
 						itemStatisticsPanel(reportData),

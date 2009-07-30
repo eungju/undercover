@@ -136,9 +136,13 @@ public class HtmlReport {
 	}
 
 	void generatePackageSummary(PackageItem packageItem) throws IOException {
-		StringTemplate template = getTemplate("packageSummary");
-		template.setAttribute("package", packageItem);
-		output.write("package-" + packageItem.getLinkName() + "-summary.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("packageSummary");
+			template.setAttribute("package", packageItem);
+			output.write("package-" + packageItem.getLinkName() + "-summary.html", template.toString());
+		} else {
+			write(new PackageSummaryPage(packageItem).build(), "package-" + packageItem.getLinkName() + "-summary.html");
+		}
 	}
 
 	void generatePackageClasses(PackageItem packageItem) throws IOException {
