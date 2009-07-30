@@ -35,6 +35,11 @@ public class XmlWriterTest {
 		assertEquals("<!-- This is a comment -->", buffer.toString());
 	}
 
+	@Test public void cdata() {
+		new Cdata("This is a cdata").accept(dut);
+		assertEquals("<![CDATA[This is a cdata]]>", buffer.toString());
+	}
+
 	@Test public void integration() {
 		new Element("div").append(new Element("a").attr("href", "#1").append(new Text("foo"))).accept(dut);
 		System.out.println(buffer.toString());

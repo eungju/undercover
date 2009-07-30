@@ -20,6 +20,7 @@ import undercover.report.ReportData;
 import undercover.report.ReportOutput;
 import undercover.report.SourceItem;
 import undercover.support.IOUtils;
+import undercover.support.xml.DoctypeDeclaration;
 import undercover.support.xml.Element;
 import undercover.support.xml.XmlDeclaration;
 import undercover.support.xml.XmlWriter;
@@ -77,6 +78,19 @@ public class HtmlReport {
 			IOUtils.closeQuietly(input);
 		}
 	}
+	
+	void write(Element root, String path) throws IOException {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(output.openWriter(path));
+			XmlWriter xmlWriter = new XmlWriter(writer);
+			xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", "UTF-8"));
+			xmlWriter.visitDoctypeDeclaration(new DoctypeDeclaration("html", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "-//W3C//DTD XHTML 1.0 Transitional//EN"));
+			root.accept(xmlWriter);
+		} finally {
+			IOUtils.closeQuietly(writer);
+		}
+	}
 
 	void generateProjectReport() throws IOException {
 		generateProjectPackages();
@@ -93,22 +107,15 @@ public class HtmlReport {
 			write(new MenuPage(reportData).build(), "project-packages.html");
 		}
 	}
-	
-	void write(Element root, String path) throws IOException {
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(output.openWriter(path));
-			XmlWriter xmlWriter = new XmlWriter(writer);
-			xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", "UTF-8"));
-			root.accept(xmlWriter);
-		} finally {
-			IOUtils.closeQuietly(writer);
-		}
-	}
+
 	void generateProjectSummary() throws IOException {
-		StringTemplate template = getTemplate("projectSummary");
-		template.setAttribute("project", reportData);
-		output.write("project-summary.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("projectSummary");
+			template.setAttribute("project", reportData);
+			output.write("project-summary.html", template.toString());
+		} else {
+			write(new ProjectSummaryPage(reportData).build(), "project-summary.html");
+		}
 	}
 
 	void generateProjectClasses() throws IOException {

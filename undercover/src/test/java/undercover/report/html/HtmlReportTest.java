@@ -1,7 +1,6 @@
 package undercover.report.html;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -30,10 +29,7 @@ public class HtmlReportTest {
 	
 	@Test public void projectSummary() throws IOException {
 		ReportData data = new ReportData("xyz", Collections.<PackageItem>emptySet(), Collections.<ClassItem>emptySet(), Collections.<SourceItem>emptySet());
-		dut.setReportData(data);
-		dut.generateProjectSummary();
-
-		verify(output).write(eq("project-summary.html"), anyString());
+		new ProjectSummaryPage(data).build();
 	}
 	
 	@Test public void lowCoverageIsRisky() {

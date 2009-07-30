@@ -6,5 +6,6 @@ public interface NodeVisitor {
 	void enterElement(Element node);
 	void leaveElement(Element node);
 	void visitText(Text node);
+	void visitCdata(Cdata node);
 	void visitComment(Comment node);
 }

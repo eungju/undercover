@@ -20,7 +20,11 @@ public class XmlWriter implements NodeVisitor {
 	}
 	
 	public void visitDoctypeDeclaration(DoctypeDeclaration node) {
-		out.format("<!DOCTYPE %s SYSTEM \"%s\">", node.name, node.uriReference).println();
+		if (node.publicIdentifier == null) {
+			out.format("<!DOCTYPE %s SYSTEM \"%s\">", node.name, node.uriReference).println();
+		} else {
+			out.format("<!DOCTYPE %s PUBLIC \"%s\" \"%s\">", node.name, node.publicIdentifier, node.uriReference).println();
+		}
 	}
 	
 	public void enterElement(Element node) {
@@ -48,6 +52,11 @@ public class XmlWriter implements NodeVisitor {
 
 	public void visitText(Text node) {
 		out.print(HtmlUtils.escape(node.value));
+		onElement = false;
+	}
+
+	public void visitCdata(Cdata node) {
+		out.append("<![CDATA[").append(node.value).append("]]>");
 		onElement = false;
 	}
 
