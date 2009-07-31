@@ -157,9 +157,17 @@ public class HtmlReport {
 
 	void generateSourceReports() throws IOException {
 		for (SourceItem each : reportData.getSources()) {
+			generateSourceSummary(each);
+		}
+	}
+	
+	void generateSourceSummary(SourceItem sourceItem) throws IOException {
+		if (false) {
 			StringTemplate st = getTemplate("sourceSummary");
-			st.setAttribute("source", each);
-			output.write("source-" + each.getLinkName() + ".html", st.toString());
+			st.setAttribute("source", sourceItem);
+			output.write("source-" + sourceItem.getLinkName() + ".html", st.toString());
+		} else {
+			write(new SourceSummaryPage(sourceItem).build(), "source-" + sourceItem.getLinkName() + ".html");
 		}
 	}
 	
