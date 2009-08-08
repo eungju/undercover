@@ -23,8 +23,8 @@ public class DashboardPage extends HtmlPage {
 		return html().append(
 				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
 				body().append(
-						navigationPanel(),
-						itemStatisticsPanel(reportData),
+						new NavigationPanel().build(),
+						new ItemStatisticsPanel(reportData).build(),
 						table().attr("class", "layout").append(
 								colgroup().append(
 										col().attr("width", "*"),
@@ -66,7 +66,7 @@ public class DashboardPage extends HtmlPage {
 												)
 										)
 								),
-						copyright()
+						new CopyrightPanel().build()
 						)
 				);
 	}
@@ -108,7 +108,7 @@ public class DashboardPage extends HtmlPage {
 			tableBody.append(tr().append(
 					td().attr("class", "number").append(text(String.format("%d.", rank))),
 					td().attr("class", "coverage").append(coveragePercent(each)),
-					td().attr("class", "coverage").append(coverageBar(each)),
+					td().attr("class", "coverage").append(new CoverageBar(each).build()),
 					td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").append(text(each.getSimpleName())))
 					));
 			rank++;

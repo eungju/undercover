@@ -21,6 +21,10 @@ table.layout td, table.layout th {
 	vertical-align: baseline;
 }
 
+td.vertical-separator {
+	border-left: 1px solid #999;
+}
+
 /* Item */
 
 table.item-statistics {

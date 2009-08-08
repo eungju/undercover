@@ -19,11 +19,11 @@ public class ProjectSummaryPage extends HtmlPage {
 		return html().append(
 				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
 				body().append(
-						navigationPanel(),
-						itemStatisticsPanel(reportData),
+						new NavigationPanel().build(),
+						new ItemStatisticsPanel(reportData).build(),
 						h3().append(text("Packages")),
 						packageList(reportData.getPackages()),
-						copyright()
+						new CopyrightPanel().build()
 						)
 				);
 	}
@@ -60,7 +60,7 @@ public class ProjectSummaryPage extends HtmlPage {
 					td().append(a().attr("href", "pakcage-" + each.getLinkName() + "-summary.html").append(text(each.getDisplayName()))),
 					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
 					td().attr("class", "coverage").append(blockCoverage(each)),
-					td().attr("class", "coverage").append(coverageBar(each)),
+					td().attr("class", "coverage").append(new CoverageBar(each).build()),
 					td().attr("class", "number").append(text(String.valueOf(classMetrics.getCount()))),
 					td().attr("class", "complexity").append(text(String.format("%.2f", classMetrics.getComplexity().getAverage()))),
 					td().attr("class", "complexity").append(text(String.valueOf(classMetrics.getComplexity().getMaximum())))

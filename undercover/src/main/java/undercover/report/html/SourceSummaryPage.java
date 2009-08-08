@@ -21,13 +21,13 @@ public class SourceSummaryPage extends HtmlPage {
 		return html().append(
 				defaultHead(sourceItem.getDisplayName()),
 				body().append(
-						navigationPanel(),
-						itemStatisticsPanel(sourceItem),
+						new NavigationPanel().build(),
+						new ItemStatisticsPanel(sourceItem).build(),
 						h3().append(text("Classes")),
 						classList(sourceItem.classes),
 						h3().append(text("Source")),
 						sourceView(sourceItem),
-						copyright()
+						new CopyrightPanel().build()
 						)
 				);
 	}
@@ -67,14 +67,14 @@ public class SourceSummaryPage extends HtmlPage {
 					td().attr("class", "complexity").append(text(String.valueOf(methodMetrics.getComplexity().getMaximum()))),
 					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
 					td().attr("class", "coverage").append(blockCoverage(each)),
-					td().attr("class", "coverage").append(coverageBar(each))
+					td().attr("class", "coverage").append(new CoverageBar(each).build())
 					));
 			for (MethodItem methodItem : each.methods) {
 				result.append(tr().append(
 						td().attr("colspan", "4").append(text(methodItem.getDisplayName())),
 						td().attr("class", "complexity").append(text(String.valueOf(methodItem.getBlockMetrics().getComplexity()))),
 						td().attr("class", "coverage").append(blockCoverage(methodItem)),
-						td().attr("class", "coverage").append(coverageBar(methodItem))
+						td().attr("class", "coverage").append(new CoverageBar(methodItem).build())
 						));
 			}
 		}
