@@ -126,9 +126,13 @@ public abstract class HtmlPage {
 			.append(div().attr("class", "round2"))
 			.append(div().attr("class", "round4"));
 	}
+
+	String formatAsPercent(double value) {
+		return String.format("%.1f", value * 100).replaceFirst("\\.?0+$", "") + "%";
+	}
 	
 	protected Text coveragePercent(Item item) {
-		String percent = DoubleRenderer.trimZeros(String.format("%.1f", item.getBlockMetrics().getCoverage().getRatio() * 100)) + "%";
+		String percent = formatAsPercent(item.getBlockMetrics().getCoverage().getRatio());
 		return text(item.getBlockMetrics().isExecutable() ? percent : "N/A");
 	}
 
@@ -137,7 +141,7 @@ public abstract class HtmlPage {
 			return text("N/A");
 		}
 		Proportion coverage = item.getBlockMetrics().getCoverage();
-		return text(DoubleRenderer.trimZeros(String.format("%.1f", coverage.getRatio() * 100)) + "%" + String.format(" (%d/%d)", coverage.part, coverage.whole));
+		return text(formatAsPercent(coverage.getRatio()) + String.format(" (%d/%d)", coverage.part, coverage.whole));
 	}
 
 	protected Element coverageBar(Item item) {

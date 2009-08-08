@@ -24,13 +24,6 @@
 			<version>2.4</version>
 		</dependency>
 
-		<!-- Report -->
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>stringtemplate</artifactId>
-			<version>3.2</version>
-		</dependency>
-		
 		<!-- Ant -->
 		<dependency>
 			<groupId>org.apache.ant</groupId>
