@@ -37,7 +37,7 @@
 		
 	<path id="undercover.lib">
 		<pathelement location="${M2_REPO}/undercover/undercover/${undercover.version}/undercover-${undercover.version}.jar" />
-		<pathelement location="${M2_REPO}/asm/asm-all/3.1/asm-all-3.1.jar" />
+		<pathelement location="${M2_REPO}/asm/asm-all/3.2/asm-all-3.2.jar" />
 		<pathelement location="${M2_REPO}/commons-io/commons-io/1.4/commons-io-1.4.jar" />
 		<pathelement location="${M2_REPO}/commons-lang/commons-lang/2.4/commons-lang-2.4.jar" />
 		<pathelement location="${M2_REPO}/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar" />
