@@ -35,20 +35,12 @@ public class DashboardPage extends HtmlPage {
 										tr().append(
 												td().append(
 														h3().append(text("Coverage Distribution")),
-														div().attr("id", "coverage-distribution").append(
-																div().attr("class", "graph").attr("style", "width: 340px; height: 280px;"),
-																div().attr("class", "tooltip"),
-																javascriptInline("drawCoverageDistributionGraph(\"#coverage-distribution div.graph\", \"#coverage-distribution .tooltip\", " + formatCoverageDistributionData(new CoverageDistribution(reportData.getClasses())) + ");")
-																)
+														new CoverageDistributionGraph(reportData.getClasses()).build()
 														),
 												td(),
 												td().append(
 														h3().append(text("Coverage-Complexity")),
-														div().attr("id", "coverage-complexity").append(
-																div().attr("class", "graph").attr("style", "width: 340px; height: 280px;"),
-																div().attr("class", "tooltip"),
-																javascriptInline("drawCoverageComplexityGraph(\"#coverage-complexity div.graph\", \"#coverage-distribution .tooltip\", " + formatCoverageComplexityData(new CoverageComplexity(reportData.getClasses())) + ");")
-																)
+														new CoverageComplexityGraph(reportData.getClasses()).build()
 														)
 												),
 										tr().append(
@@ -69,37 +61,7 @@ public class DashboardPage extends HtmlPage {
 						new CopyrightPanel().build()
 						)
 				);
-	}
-	
-	String formatCoverageDistributionData(CoverageDistribution coverageDistribution) {
-		StringBuilder result = new StringBuilder("[");
-		int i = 0;
-		for (int each : coverageDistribution.getCounts()) {
-			if (i != 0) {
-				result.append(", ");
-			}
-			result.append('[').append(i * 10).append(',').append(each).append(']');
-			i++;
-		}
-		return result.append(']').toString();
-	}
-	
-	String formatCoverageComplexityData(CoverageComplexity coverageComplexity) {
-		StringBuilder result = new StringBuilder("[");
-		int i = 0;
-		for (ClassItem each : coverageComplexity.getItems()) {
-			if (i != 0) {
-				result.append(", ");
-			}
-			result.append('[')
-				.append(each.getBlockMetrics().getCoverage().getRatio() * 100).append(',')
-				.append(each.getBlockMetrics().getComplexity()).append(',')
-				.append('"').append(each.getSimpleName()).append('"').append(',')
-				.append('"').append("source-" + each.getSource().getLinkName() + ".html").append('"').append(']');
-			i++;
-		}
-		return result.append(']').toString();
-	}
+	}	
 
 	Element classRankingTable(Collection<ClassItem> items) {
 		Element tableBody = tbody();
