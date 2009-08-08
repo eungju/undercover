@@ -172,16 +172,20 @@ public class HtmlReport {
 	}
 	
 	void generateDashboardReport() throws IOException {
-		StringTemplate template = getTemplate("dashboard");
-		template.setAttribute("project", reportData);
-		CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getClasses());
-		template.setAttribute("coverageDistribution", coverageDistribution);
-		CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getClasses());
-		template.setAttribute("coverageComplexity", coverageComplexity);
-		template.setAttribute("mostRiskyClasses", mostRisky(reportData.getClasses(), 20));
-		template.setAttribute("mostComplexClasses", mostComplex(reportData.getClasses(), 10));
-		template.setAttribute("leastCoveredClasses", leastCovered(reportData.getClasses(), 10));
-		output.write("project-dashboard.html", template.toString());
+		if (false) {
+			StringTemplate template = getTemplate("dashboard");
+			template.setAttribute("project", reportData);
+			CoverageDistribution coverageDistribution = new CoverageDistribution(reportData.getClasses());
+			template.setAttribute("coverageDistribution", coverageDistribution);
+			CoverageComplexity coverageComplexity = new CoverageComplexity(reportData.getClasses());
+			template.setAttribute("coverageComplexity", coverageComplexity);
+			template.setAttribute("mostRiskyClasses", mostRisky(reportData.getClasses(), 20));
+			template.setAttribute("mostComplexClasses", mostComplex(reportData.getClasses(), 10));
+			template.setAttribute("leastCoveredClasses", leastCovered(reportData.getClasses(), 10));
+			output.write("project-dashboard.html", template.toString());
+		} else {
+			write(new DashboardPage(reportData).build(), "project-dashboard.html");
+		}
 	}
 
 	<T extends Item> List<T> takeTopN(Collection<T> candidates, Comparator<T> comparator, int max) {

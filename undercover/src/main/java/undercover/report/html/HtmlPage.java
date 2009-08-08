@@ -249,11 +249,15 @@ public abstract class HtmlPage {
 				);
 	}
 
-	protected Element loadClassListScript(String path) {
+	protected Element javascriptInline(String code) {
 		return new Element("script").attr("type", "text/javascript").append(
 				text("//"),
-				new Cdata("\n$(document).ready(function() { parent.classListPane.location = \"" + path + "\"; });\n//")
+				new Cdata("\n" + code + "\n//")
 				);
+	}
+	
+	protected Element loadClassListScript(String path) {
+		return javascriptInline("$(document).ready(function() { parent.classListPane.location = \"" + path + "\"; });");
 	}
 
 	public abstract Element build();
