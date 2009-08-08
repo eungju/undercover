@@ -27,7 +27,7 @@ public abstract class ClassListPage extends HtmlPage {
 		for (ClassItem each : classes) {
 			result.append(
 					tr().append(
-							td().append(a().attr("href", "source-" + each.getLinkName() + ".html").attr("target", "classPane").append(text(each.getSimpleName()))),
+							td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").attr("target", "classPane").append(text(each.getSimpleName()))),
 							td().attr("class", "coverage").append(coveragePercent(each))
 							)
 					);

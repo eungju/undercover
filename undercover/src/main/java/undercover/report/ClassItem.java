@@ -39,10 +39,6 @@ public class ClassItem implements Item {
 		return getSimpleName(name);
 	}
 	
-	public String getLinkName() {
-		return source.getName().replaceAll("/", ".");
-	}
-	
 	public void setSource(SourceItem source) {
 		this.source = source;
 	}

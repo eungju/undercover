@@ -17,10 +17,6 @@ public class ClassItemTest {
 		assertEquals("p.c", dut.getDisplayName());
 	}
 	
-	@Test public void getLinkName() {
-		assertEquals("p.c.java", dut.getLinkName());
-	}
-	
 	@Test public void getSimpleName() {
 		assertEquals("c", dut.getSimpleName());
 	}
