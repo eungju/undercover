@@ -13,7 +13,7 @@
 	<name>Undercover Maven Plugin</name>
 
 	<properties>
-		<maven.version>2.1.0</maven.version>
+		<maven.version>2.0.10</maven.version>
 	</properties>
 
 	<dependencies>
