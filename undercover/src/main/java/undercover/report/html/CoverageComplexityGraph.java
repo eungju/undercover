@@ -29,7 +29,7 @@ public class CoverageComplexityGraph extends HtmlPage {
 				result.append(", ");
 			}
 			result.append('[')
-				.append(each.getBlockMetrics().getCoverage().getRatio() * 100).append(',')
+				.append(String.format("%.1f", each.getBlockMetrics().getCoverage().getRatio() * 100)).append(',')
 				.append(each.getBlockMetrics().getComplexity()).append(',')
 				.append('"').append(each.getSimpleName()).append('"').append(',')
 				.append('"').append("source-" + each.getSource().getLinkName() + ".html").append('"').append(']');
