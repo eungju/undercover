@@ -61,19 +61,19 @@ table.item-children tbody th {
 	background: #F0FFF0;
 }
 
-div.coverageBarNegative {
+div.coverage-bar div.negative {
 	border: none; 
 	min-width: 50px; 
 	padding: 0px; 
 	background: #d00;
 }
 
-div.coverageBarPositive {
+div.coverage-bar div.positive {
 	background: #0d0;
 	height: 12px;
 }
 
-div.coverageBarNotAvailable {
+div.coverage-bar div.not-available {
 	border: none; 
 	min-width: 50px; 
 	padding: 0px; 

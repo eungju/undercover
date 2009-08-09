@@ -11,13 +11,13 @@ public class CoverageBar extends HtmlPage {
 	}
 	
 	public Element build() {
-		Element result = div().attr("class", "coverageBar");
+		Element result = div().attr("class", "coverage-bar");
 		if (!item.getBlockMetrics().isExecutable()) {
-			result.append(div().attr("class", "coverageBarNotAvailable"));
+			result.append(div().attr("class", "not-available"));
 			return result;
 		}
-		return result.append(div().attr("class", "coverageBarNegative").append(
-				div().attr("class", "coverageBarPositive").attr("style", String.format("width: %.1f%%;", item.getBlockMetrics().getCoverage().getRatio() * 100))
+		return result.append(div().attr("class", "negative").append(
+				div().attr("class", "positive").attr("style", String.format("width: %.1f%%;", item.getBlockMetrics().getCoverage().getRatio() * 100))
 				));
 	}
 }
