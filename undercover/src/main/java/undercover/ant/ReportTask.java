@@ -14,7 +14,6 @@ import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
-import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
@@ -135,7 +134,8 @@ public class ReportTask extends UndercoverTask {
 			checkEncoding();
 			HtmlReport report = new HtmlReport();
 			report.setReportData(reportData);
-			report.setOutput(new ReportOutput(output, encoding));
+			report.setOutputDirectory(output);
+			report.setEncoding(encoding);
 			report.generate();
 		}
 		

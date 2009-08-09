@@ -16,7 +16,6 @@ import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
-import undercover.report.ReportOutput;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
@@ -151,7 +150,8 @@ public class ReportMojo extends AbstractMavenReport {
 				if ("html".equals(format)) {
 					HtmlReport report = new HtmlReport();
 					report.setReportData(reportData);
-					report.setOutput(new ReportOutput(outputDirectory, "UTF-8"));
+					report.setOutputDirectory(outputDirectory);
+					report.setEncoding("UTF-8");
 					report.generate();
 				} else if ("coberturaxml".equals(format)) {
 					new CoberturaXmlReport(reportData).writeTo(new File(coberturaOutputDirectory, "coverage.xml"), "UTF-8");
