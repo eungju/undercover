@@ -17,6 +17,7 @@
 				<id>test</id>
 				<configuration>
 					<classesDirectory>${project.build.directory}/undercover/classes</classesDirectory>
+					<reportsDirectory>${project.build.directory}/undercover/surefire-reports</reportsDirectory>
 					<testFailureIgnore>true</testFailureIgnore>
 					<forkMode>once</forkMode>
 				</configuration>
