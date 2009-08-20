@@ -99,6 +99,8 @@ public class InstrumentMojo extends UndercoverMojo {
 	}
 
     protected void doExecute() throws MojoExecutionException {
+    	File classesDir = new File(outputDirectory, "classes");
+    	
     	try {
 	    	OfflineInstrument instrument = new OfflineInstrument();
 	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
@@ -110,11 +112,13 @@ public class InstrumentMojo extends UndercoverMojo {
 			UndercoverSettings settings = new UndercoverSettings();
 			settings.setCoverageSaveOnExit(true);
 			settings.setCoverageFile(coverageDataFile);
-			settings.save(new File(outputDirectory, "classes/undercover.properties"));
+			settings.save(new File(classesDir, "undercover.properties"));
     	} catch (Exception e) {
     		throw new MojoExecutionException("Failed to instrument", e);
     	}
+
     	addUndercoverDependenciesToTestClasspath();
+    	project.getBuild().setOutputDirectory(classesDir.getPath());
 	}
 
     /**
