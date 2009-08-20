@@ -118,7 +118,6 @@ public class InstrumentMojo extends UndercoverMojo {
     	}
 
     	addUndercoverDependenciesToTestClasspath();
-    	project.getBuild().setOutputDirectory(classesDir.getPath());
 	}
 
     /**
