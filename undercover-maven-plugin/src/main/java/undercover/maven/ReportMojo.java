@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.project.MavenProject;
@@ -179,11 +180,11 @@ public class ReportMojo extends AbstractMavenReport {
 	}
 
 	public String getDescription(Locale locale) {
-        return "Undercover Test Coverage Report";
+        return getResourceBundle(locale).getString("description");
 	}
 
 	public String getName(Locale locale) {
-        return "Undercover Test Coverage";
+        return getResourceBundle(locale).getString("name");
 	}
 
 	public String getOutputName() {
@@ -194,4 +195,8 @@ public class ReportMojo extends AbstractMavenReport {
     {
         return true;
     }
+	
+	ResourceBundle getResourceBundle(Locale locale) {
+		return ResourceBundle.getBundle(getClass().getPackage().getName() + ".Resources", locale);
+	}
 }
