@@ -52,7 +52,14 @@ public class ReportMojo extends AbstractMavenReport {
      */
     protected File outputDirectory;
 
-	/**
+    /**
+     * Output encoding.
+     *
+     * @parameter expression="${undercover.report.output.encoding}" default-value="UTF-8"
+     */
+    protected String outputEncoding;
+
+    /**
      * Source locations.
      *
      * @parameter
@@ -152,12 +159,12 @@ public class ReportMojo extends AbstractMavenReport {
 					HtmlReport report = new HtmlReport();
 					report.setReportData(reportData);
 					report.setOutputDirectory(outputDirectory);
-					report.setEncoding("UTF-8");
+					report.setEncoding(outputEncoding);
 					report.generate();
 				} else if ("coberturaxml".equals(format)) {
-					new CoberturaXmlReport(reportData).writeTo(new File(coberturaOutputDirectory, "coverage.xml"), "UTF-8");
+					new CoberturaXmlReport(reportData).writeTo(new File(coberturaOutputDirectory, "coverage.xml"), outputEncoding);
 				} else if ("emmaxml".equals(format)) {
-					new EmmaXmlReport(reportData).writeTo(new File(emmaOutputDirectory, "coverage.xml"), "UTF-8");
+					new EmmaXmlReport(reportData).writeTo(new File(emmaOutputDirectory, "coverage.xml"), outputEncoding);
 				} else {
 					getLog().warn("Unknown report format " + format);
 				}
