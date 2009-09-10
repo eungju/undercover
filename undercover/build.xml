@@ -28,7 +28,7 @@
 	</path>
 
 	<path id="test.dependencies" >
-		<pathelement location="${M2_REPO}/junit/junit-dep/4.4/junit-dep-4.4.jar" />
+		<pathelement location="${M2_REPO}/junit/junit/4.6/junit-4.6.jar" />
 		<pathelement location="${M2_REPO}/org/mockito/mockito-core/1.7/mockito-core-1.7.jar" />
 		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
 		<pathelement location="${M2_REPO}/org/objenesis/objenesis/1.0/objenesis-1.0.jar" />
@@ -89,7 +89,7 @@
 		</undercover-instrument>
 		
 		<mkdir dir="${output}/undercover/test-report" />
-		<junit fork="yes" forkMode="once">
+		<junit fork="yes" forkMode="once" haltonfailure="no">
 			<formatter type="plain" />
 			<classpath>
 				<pathelement location="${output}/undercover/classes" />
