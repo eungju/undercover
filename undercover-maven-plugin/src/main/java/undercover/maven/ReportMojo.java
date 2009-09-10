@@ -13,14 +13,12 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
-import undercover.data.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
 import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
 import undercover.report.xml.EmmaXmlReport;
-import undercover.runtime.CoverageData;
 
 /**
  * Instruments, tests, and generates an Undercover report.
@@ -145,13 +143,10 @@ public class ReportMojo extends AbstractMavenReport {
 		
 		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
 		try {
-			MetaData metaData = MetaData.load(metaDataFile);
-			CoverageData coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
-			ReportDataBuilder builder = new ReportDataBuilder(coverageData);
+			ReportDataBuilder builder = new ReportDataBuilder(metaDataFile, coverageDataFile);
 			builder.setProjectName(project.getName());
 			builder.setSourceFinder(sourceFinder);
-			metaData.accept(builder);
-			ReportData reportData = builder.getReportData();
+			ReportData reportData = builder.build();
 			
 			for (String format : formats) {
 				getLog().info("Generating " + format + " report");

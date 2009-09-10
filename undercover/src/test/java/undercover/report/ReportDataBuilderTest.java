@@ -23,7 +23,7 @@ public class ReportDataBuilderTest {
 
 	@Before public void beforeEach() {
 		coverageData = new CoverageData();
-		dut = new ReportDataBuilder(coverageData);
+		dut = new ReportDataBuilder(null, coverageData);
 	}
 	
 	@Test public void visitMetaData() {

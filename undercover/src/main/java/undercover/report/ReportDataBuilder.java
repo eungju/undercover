@@ -1,6 +1,7 @@
 package undercover.report;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,8 @@ import undercover.runtime.Coverage;
 import undercover.runtime.CoverageData;
 
 public class ReportDataBuilder implements MetaDataVisitor {
+	private final MetaData metaData;	
 	private final CoverageData coverageData;
-
 	private SourceFinder sourceFinder = new SourceFinder(new ArrayList<File>());
 	private String projectName = "Anonymous";
 	
@@ -34,7 +35,13 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	int methodIndex;
 	int blockIndex;
 	
-	public ReportDataBuilder(CoverageData coverageData) {
+	public ReportDataBuilder(File metaDataFile, File coverageDataFile) throws IOException {
+		metaData = MetaData.load(metaDataFile);
+		coverageData = coverageDataFile.exists() ? CoverageData.load(coverageDataFile) : new CoverageData();
+	}
+	
+	public ReportDataBuilder(MetaData metaData, CoverageData coverageData) {
+		this.metaData = metaData;
 		this.coverageData = coverageData;
 	}
 	
@@ -46,10 +53,11 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		this.sourceFinder = sourceFinder;
 	}
 	
-	public ReportData getReportData() {
+	public ReportData build() {
+		metaData.accept(this);
 		return reportData;
 	}
-
+	
 	public void visitEnter(MetaData metaData) {
 	}
 
