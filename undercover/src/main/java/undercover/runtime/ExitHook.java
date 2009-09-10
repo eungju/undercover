@@ -2,8 +2,6 @@ package undercover.runtime;
 
 import java.io.IOException;
 
-import undercover.data.CoverageData;
-
 public class ExitHook extends Thread {
 	private Probe probe;
 	private UndercoverSettings settings;

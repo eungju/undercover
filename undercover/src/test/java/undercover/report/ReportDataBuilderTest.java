@@ -11,10 +11,10 @@ import org.junit.Test;
 
 import undercover.data.BlockMeta;
 import undercover.data.ClassMeta;
-import undercover.data.Coverage;
-import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.data.MethodMeta;
+import undercover.runtime.Coverage;
+import undercover.runtime.CoverageData;
 import undercover.support.Proportion;
 
 public class ReportDataBuilderTest {

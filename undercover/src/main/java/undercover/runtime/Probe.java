@@ -1,7 +1,5 @@
 package undercover.runtime;
 
-import undercover.data.CoverageData;
-
 public class Probe {
 	public final static Probe INSTANCE = new Probe(UndercoverSettings.load());
 	

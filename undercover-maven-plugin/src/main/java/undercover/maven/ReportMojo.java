@@ -13,7 +13,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
-import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.report.ReportData;
 import undercover.report.ReportDataBuilder;
@@ -21,6 +20,7 @@ import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
 import undercover.report.xml.EmmaXmlReport;
+import undercover.runtime.CoverageData;
 
 /**
  * Instruments, tests, and generates an Undercover report.

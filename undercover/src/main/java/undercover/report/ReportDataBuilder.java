@@ -8,11 +8,11 @@ import java.util.Map;
 
 import undercover.data.BlockMeta;
 import undercover.data.ClassMeta;
-import undercover.data.Coverage;
-import undercover.data.CoverageData;
 import undercover.data.MetaData;
 import undercover.data.MetaDataVisitor;
 import undercover.data.MethodMeta;
+import undercover.runtime.Coverage;
+import undercover.runtime.CoverageData;
 
 public class ReportDataBuilder implements MetaDataVisitor {
 	private final CoverageData coverageData;
