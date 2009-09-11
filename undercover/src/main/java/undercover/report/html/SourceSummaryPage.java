@@ -112,22 +112,4 @@ public class SourceSummaryPage extends HtmlPage {
 				tbody
 				);
 	}
-	
-//	<table class="source">
-//	<colgroup>
-//		<col width="60" />
-//		<col width="40" />
-//		<col width="*" />
-//	</colgroup>
-//	<tbody>
-//	$source.lines:{ each |
-//		<tr$if(each.executable)$ class="$if(each.coverage.completelyCovered)$completely$elseif(each.coverage.partialyCovered)$partialy$else$not$endif$-covered"$endif$>
-//			<td class="line-number">$each.number$</td>
-//			<td class="line-touch">$if(each.executable)$$each.coverage.touchCount$$endif$</td>
-//			<td class="line-text">$each.text:html()$</td>
-//		</tr>
-//	}$
-//	</tbody>
-//</table>
-
 }
