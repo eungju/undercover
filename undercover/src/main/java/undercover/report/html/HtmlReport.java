@@ -48,8 +48,8 @@ public class HtmlReport {
 				"index.html",
 				"style.css",
 				"jquery-1.3.2.min.js",
-				"jquery.flot.pack.js",
-				"excanvas.pack.js",
+				"jquery.flot.js",
+				"excanvas.js",
 				"undercover.js",
 		};
 		for (String each : resources) {

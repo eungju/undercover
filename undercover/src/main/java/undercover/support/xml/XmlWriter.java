@@ -64,7 +64,7 @@ public class XmlWriter implements NodeVisitor {
 		if (onElement) {
 			newline();
 		}
-		out.append("<!-- ").append(node.value).append(" -->");
+		out.append("<!--").append(node.value).append("-->");
 		onElement = true;
 	}
 

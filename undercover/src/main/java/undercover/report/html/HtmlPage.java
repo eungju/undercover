@@ -121,8 +121,8 @@ public abstract class HtmlPage {
 			.append(new Element("meta").attr("http-equiv", "Content-Style-Type").attr("content", "text/css"))
 			.append(css("style.css"))
 			.append(javascript("jquery-1.3.2.min.js"))
-			.append(new Comment("[if IE]><script src=\"excanvas.pack.js\" type=\"text/javascript\"></script><![endif]"))
-			.append(javascript("jquery.flot.pack.js"))
+			.append(new Comment("[if IE]><script src=\"excanvas.js\" type=\"text/javascript\"></script><![endif]"))
+			.append(javascript("jquery.flot.js"))
 			.append(javascript("undercover.js"));
 	}
 

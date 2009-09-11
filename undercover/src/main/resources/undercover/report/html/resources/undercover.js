@@ -74,7 +74,7 @@ function drawCoverageComplexityGraph(graph, tooltip, data) {
                 
                 var coverage = item.datapoint[0];
                 var complexity = item.datapoint[1];
-                var className = item.datapoint[2];
+                var className = item.series.data[item.dataIndex][2];
                 var message = className + "(Coverage=" + coverage + "%,Complexity=" + complexity + ")";
                 showTooltip(tooltip, item.pageX, item.pageY, message);
             }
@@ -87,7 +87,7 @@ function drawCoverageComplexityGraph(graph, tooltip, data) {
 
     graph.bind("plotclick", function (event, pos, item) {
         if (item) {
-            var link = item.datapoint[3];
+            var link = item.series.data[item.dataIndex][3];
             window.location = link;
         }
     });

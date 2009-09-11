@@ -32,7 +32,7 @@ public class XmlWriterTest {
 
 	@Test public void comment() {
 		new Comment("This is a comment").accept(dut);
-		assertEquals("<!-- This is a comment -->", buffer.toString());
+		assertEquals("<!--This is a comment-->", buffer.toString());
 	}
 
 	@Test public void cdata() {
