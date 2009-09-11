@@ -15,6 +15,7 @@ import undercover.instrument.filter.GlobFilter;
 
 public class Instrument {
 	static final String BLOCK_COVERAGE_FIELD_NAME = "$undercover$blockCoverage";
+	static final String BLOCK_COVERAGE_FIELD_TYPE = "[[I";
 	private final ExclusionSet exclusionSet;
 	private final MetaData metaData;
 	private final ClassAnalyzer classAnalyzer;

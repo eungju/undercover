@@ -134,8 +134,8 @@ public class BasicBlockAnalyzer {
 				if (each.getOpcode() == -1) {
 					continue;
 				}
-				
-				if (block.end - 1 == offset) {
+				boolean atEndOfBlock = block.end - 1 == offset;
+				if (atEndOfBlock) {
 					BlockMeta blockMeta = new BlockMeta(block.lines);
 					blockMetas.add(blockMeta);
 					installProbePoint(methodNode.instructions, each, blockMeta, className, methodIndex, blockIndex);
@@ -144,12 +144,10 @@ public class BasicBlockAnalyzer {
 						blockIndex++;
 					}
 				}
-				
 				offset++;
 			}
 			methodNode.maxStack += 4;
-		}		
-		
+		}
 		return new MethodMeta(methodNode.name, methodNode.desc, complexity(), blockMetas);
 	}
 	
@@ -163,7 +161,7 @@ public class BasicBlockAnalyzer {
 
     static void installProbePoint(InsnList instructions, AbstractInsnNode location, BlockMeta blockMeta, String className, int methodIndex, int blockIndex) {
        	InsnList ecode = new InsnList();
-       	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I"));
+       	ecode.add(new FieldInsnNode(GETSTATIC, className, Instrument.BLOCK_COVERAGE_FIELD_NAME, Instrument.BLOCK_COVERAGE_FIELD_TYPE));
        	ecode.add(new IntInsnNode(SIPUSH, methodIndex));
        	ecode.add(new InsnNode(AALOAD));
        	ecode.add(new IntInsnNode(SIPUSH, blockIndex));
@@ -176,14 +174,14 @@ public class BasicBlockAnalyzer {
     }
 
     boolean isConditionalBranch(int opcode) {
-    	return Arrays.binarySearch(branchOpcodes, opcode) > -1;
+    	return Arrays.binarySearch(BRANCH_OPCODES, opcode) > -1;
     }
     
     boolean isReturn(int opcode) {
     	return Arrays.binarySearch(returnOpcodes, opcode) > -1;
     }
     
-	private static final int[] branchOpcodes = new int[] {
+	private static final int[] BRANCH_OPCODES = new int[] {
 		IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE,
 		IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
 		IF_ACMPEQ, IF_ACMPNE,
@@ -195,7 +193,7 @@ public class BasicBlockAnalyzer {
 	};
 	
 	static {
-		Arrays.sort(branchOpcodes);
+		Arrays.sort(BRANCH_OPCODES);
 		Arrays.sort(returnOpcodes);
 	}
 }

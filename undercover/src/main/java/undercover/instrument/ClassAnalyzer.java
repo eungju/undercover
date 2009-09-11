@@ -53,17 +53,17 @@ public class ClassAnalyzer {
 	
 	void addCoverageField(ClassNode classNode) {
 		//Should be "public static final" for interfaces
-		classNode.fields.add(new FieldNode(ACC_SYNTHETIC | ACC_PUBLIC | ACC_FINAL | ACC_STATIC, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I", null, null));
+		classNode.fields.add(new FieldNode(ACC_SYNTHETIC | ACC_PUBLIC | ACC_FINAL | ACC_STATIC, Instrument.BLOCK_COVERAGE_FIELD_NAME, Instrument.BLOCK_COVERAGE_FIELD_TYPE, null, null));
 	}
 
 	void addCoverageFieldInitializer(ClassNode classNode, List<MethodMeta> methodMetas) {
 		InsnList code = new InsnList();
 		code.add(new IntInsnNode(SIPUSH, methodMetas.size()));
 		code.add(new TypeInsnNode(ANEWARRAY, "[I"));
-		code.add(new FieldInsnNode(PUTSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I"));
+		code.add(new FieldInsnNode(PUTSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, Instrument.BLOCK_COVERAGE_FIELD_TYPE));
 		int methodIndex = 0;
 		for (MethodMeta each : methodMetas) {
-			code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I"));
+			code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, Instrument.BLOCK_COVERAGE_FIELD_TYPE));
 			code.add(new IntInsnNode(SIPUSH, methodIndex));
 			code.add(new IntInsnNode(SIPUSH, each.blocks.size()));
 			code.add(new IntInsnNode(NEWARRAY, T_INT));
@@ -72,7 +72,7 @@ public class ClassAnalyzer {
 		}
 		code.add(new FieldInsnNode(GETSTATIC, "undercover/runtime/Probe", "INSTANCE", "Lundercover/runtime/Probe;"));
 		code.add(new LdcInsnNode(classNode.name));
-		code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, "[[I"));
+		code.add(new FieldInsnNode(GETSTATIC, classNode.name, Instrument.BLOCK_COVERAGE_FIELD_NAME, Instrument.BLOCK_COVERAGE_FIELD_TYPE));
 		code.add(new MethodInsnNode(INVOKEVIRTUAL, "undercover/runtime/Probe", "register", "(Ljava/lang/String;[[I)V"));
 
 		MethodNode clinitMethod = findClassInitializer(classNode);
