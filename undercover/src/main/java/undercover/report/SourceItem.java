@@ -13,10 +13,10 @@ import undercover.support.IOUtils;
 public class SourceItem implements Item {
 	private final SourceFile sourceFile;
 	public final SortedSet<ClassItem> classes;
-	private final LineCoverageAnalysis lineCoverageAnalysis = new LineCoverageAnalysis();
 	private BlockMetrics blockMetrics;
 	private MethodMetrics methodMetrics;
 	private ClassMetrics classMetrics;
+	private List<SourceLine> lines;
 	
 	public SourceItem(SourceFile sourceFile) {
 		this.sourceFile = sourceFile;
@@ -24,6 +24,7 @@ public class SourceItem implements Item {
 		blockMetrics = new BlockMetrics(classes);
 		methodMetrics = new MethodMetrics(classes);
 		classMetrics = new ClassMetrics(classes);
+		lines = readSourceLines(sourceFile);
 	}
 	
 	public String getName() {
@@ -47,31 +48,13 @@ public class SourceItem implements Item {
 		classes.add(classItem);
 	}
 	
-	public void addBlock(BlockMeta blockMeta, int blockCoverage) {
-		lineCoverageAnalysis.analyze(blockMeta, blockCoverage);
+	public void addBlock(BlockMeta blockMeta, int executionCount) {
+		if (sourceFile.isExist()) {
+			addUpLineCoverage(blockMeta, executionCount);
+		}
 	}
 	
 	public List<SourceLine> getLines() {
-		List<SourceLine> lines = new ArrayList<SourceLine>();
-		if (sourceFile.isExist()) {
-			BufferedReader input = null;
-			try {
-				input = new BufferedReader(sourceFile.openReader());
-				int lineNumber = 1;
-				while (true) {
-					String each = input.readLine();
-					if (each == null) {
-						break;
-					}
-					lines.add(new SourceLine(lineNumber, each, lineCoverageAnalysis.getLine(lineNumber)));
-					lineNumber++;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				IOUtils.closeQuietly(input);
-			}
-		}
 		return lines;
 	}
 
@@ -89,5 +72,36 @@ public class SourceItem implements Item {
 	
 	public PackageMetrics getPackageMetrics() {
 		return null;
+	}
+	
+	List<SourceLine> readSourceLines(SourceFile sourceFile) {
+		List<SourceLine> lines = new ArrayList<SourceLine>();
+		if (sourceFile.isExist()) {
+			BufferedReader input = null;
+			try {
+				input = new BufferedReader(sourceFile.openReader());
+				int lineNumber = 1;
+				while (true) {
+					String each = input.readLine();
+					if (each == null) {
+						break;
+					}
+					lines.add(new SourceLine(lineNumber, each));
+					lineNumber++;
+				}
+			} catch (IOException e) {
+				throw new RuntimeException("Unable to read source file " + sourceFile.path, e);
+			} finally {
+				IOUtils.closeQuietly(input);
+			}
+		}
+		return lines;
+	}
+	
+	void addUpLineCoverage(BlockMeta blockMeta, int executionCount) {
+		for (Integer each : blockMeta.lines) {
+			SourceLine sourceLine = lines.get(each - 1);
+			sourceLine.addBlock(executionCount);
+		}
 	}
 }

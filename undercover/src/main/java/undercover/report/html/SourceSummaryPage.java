@@ -87,9 +87,9 @@ public class SourceSummaryPage extends HtmlPage {
 			Element tr = tr();
 			if (each.isExecutable()) {
 				String styleClass = null;
-				if (each.coverage.isCompletelyCovered()) {
+				if (each.isCompletelyCovered()) {
 					styleClass = "completely-covered";
-				} else if (each.coverage.isPartialyCovered()) {
+				} else if (each.isPartialyCovered()) {
 					styleClass = "partialy-covered";
 				} else {
 					styleClass = "not-covered";
@@ -98,7 +98,7 @@ public class SourceSummaryPage extends HtmlPage {
 			}
 			tr.append(
 					td().attr("class", "line-number").append(text(String.valueOf(each.number))),
-					td().attr("class", "line-touch").append(text(each.isExecutable() ? String.valueOf(each.coverage.touchCount) : "")),
+					td().attr("class", "line-touch").append(text(each.isExecutable() ? String.valueOf(each.touchCount) : "")),
 					td().attr("class", "line-text").append(text(each.text))
 					);
 			tbody.append(tr);

@@ -3,15 +3,32 @@ package undercover.report;
 public class SourceLine {
 	public final int number;
 	public final String text;
-	public final LineCoverage coverage;
+	public int blockCount = 0;
+	public int coveredBlockCount = 0;
+	public int touchCount = 0;
 	
-	public SourceLine(int number, String text, LineCoverage coverage) {
+	public SourceLine(int number, String text) {
 		this.number = number;
 		this.text = text;
-		this.coverage = coverage;
+	}
+	
+	public void addBlock(int executionCount) {
+		blockCount++;
+		if (executionCount > 0) {
+			coveredBlockCount++;
+			touchCount = Math.max(touchCount, executionCount);
+		}
 	}
 	
 	public boolean isExecutable() {
-		return coverage != null;
+		return blockCount > 0;
+	}
+
+	public boolean isCompletelyCovered() {
+		return blockCount == coveredBlockCount;
+	}
+
+	public boolean isPartialyCovered() {
+		return coveredBlockCount > 0 && blockCount > coveredBlockCount;
 	}
 }
