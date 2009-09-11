@@ -122,7 +122,7 @@ public class HtmlReport {
 		try {
 			writer = new PrintWriter(openWriter(path));
 			XmlWriter xmlWriter = new XmlWriter(writer);
-			xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", "UTF-8"));
+			xmlWriter.visitXmlDeclaration(new XmlDeclaration("1.0", encoding));
 			xmlWriter.visitDoctypeDeclaration(new DoctypeDeclaration("html", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "-//W3C//DTD XHTML 1.0 Transitional//EN"));
 			root.accept(xmlWriter);
 		} finally {

@@ -121,7 +121,13 @@ public class ReportTask extends UndercoverTask {
     		this.encoding = encoding;
     	}
     		
-    	public abstract void generate() throws IOException ;
+		void checkEncoding() {
+			if (encoding == null) {
+				encoding = "UTF-8";
+			}
+		}
+
+		public abstract void generate() throws IOException ;
     }
     
     public static class HtmlFormat extends ReportFormat {
@@ -133,24 +139,12 @@ public class ReportTask extends UndercoverTask {
 			report.setEncoding(encoding);
 			report.generate();
 		}
-		
-		void checkEncoding() {
-			if (encoding == null) {
-				encoding = "UTF-8";
-			}
-		}
     }
 
     public static class CoberturaXmlFormat extends ReportFormat {
 		public void generate() throws IOException {
 			checkEncoding();
 			new CoberturaXmlReport(reportData).writeTo(output, encoding);
-		}
-		
-		void checkEncoding() {
-			if (encoding == null) {
-				encoding = "UTF-8";
-			}
 		}
     }
 
@@ -159,12 +153,6 @@ public class ReportTask extends UndercoverTask {
 			checkEncoding();
 			
 			new EmmaXmlReport(reportData).writeTo(output, encoding);
-		}
-		
-		void checkEncoding() {
-			if (encoding == null) {
-				encoding = "UTF-8";
-			}
 		}
     }
 }

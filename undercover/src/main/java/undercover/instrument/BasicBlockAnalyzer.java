@@ -147,9 +147,8 @@ public class BasicBlockAnalyzer {
 				
 				offset++;
 			}
-		}
-		
-		methodNode.maxStack += 4;
+			methodNode.maxStack += 4;
+		}		
 		
 		return new MethodMeta(methodNode.name, methodNode.desc, complexity(), blockMetas);
 	}
