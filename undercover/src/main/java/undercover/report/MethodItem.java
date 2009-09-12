@@ -33,14 +33,14 @@ public class MethodItem implements Item {
 		StringBuffer result = new StringBuffer(name.substring(0, descPos)).append('(');
 		String desc = name.substring(descPos);
 		int i = 0;
-		for (Type type : Type.getArgumentTypes(desc)) {
+		for (JvmType type : JvmType.getArgumentTypes(desc)) {
 			if (i > 0) {
 				result.append(", ");
 			}
-			result.append(type.getSimpleClassName());
+			result.append(type.getSimpleName());
 			i++;
 		}
-		result.append(") : ").append(Type.getReturnType(desc).getSimpleClassName());
+		result.append(") : ").append(JvmType.getReturnType(desc).getSimpleName());
 		return result.toString();
 	}
 
