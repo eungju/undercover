@@ -3,69 +3,38 @@ package undercover.report;
 import java.util.ArrayList;
 import java.util.List;
 
-import undercover.support.ObjectSupport;
+public class JvmType {
+	private final String descriptor;
 
-public class JvmType extends ObjectSupport {
-	static final char VOID = 'V';
-	static final char BOOLEAN = 'Z';
-	static final char CHAR = 'C';
-	static final char BYTE = 'B';
-	static final char SHORT = 'S';
-	static final char INT = 'I';
-	static final char LONG = 'J';
-	static final char FLOAT = 'F';
-	static final char DOUBLE = 'D';
-	static final char OBJECT = 'L';
-	static final char ARRAY = '[';
-	
-	private final char sort;
-	private final String buf;
-	private final int offset;
-	private final int length;
-
-	public JvmType(String buf) {
-		this(buf, 0);
-	}
-	
-	public JvmType(String buf, int offset) {
-		this.buf = buf;
-		this.offset = offset;
-		sort = buf.charAt(offset);
-		if (sort == 'L') {
-			length = buf.indexOf(';', offset) - offset + 1;			
-		} else if (sort == '[') {
-			length = getDemension() + getElementType().length;
-		} else if ("VZCBSIJFD".indexOf(sort) >= 0) {
-			length = 1;
-		} else  {
-			throw new IllegalStateException("Unknown type " + buf.substring(offset, offset));				
-		}
+	JvmType(String descriptor) {
+		this.descriptor = descriptor;
 	}
 
 	public String getSimpleName() {
+		char sort = descriptor.charAt(0);
 		switch (sort) {
-		case VOID:
+		case 'V':
 			return "void";
-		case BOOLEAN:
+		case 'Z':
 			return "boolean";
-		case CHAR:
+		case 'C':
 			return "char";
-		case BYTE:
+		case 'B':
 			return "byte";
-		case SHORT:
+		case 'S':
 			return "short";
-		case INT:
+		case 'I':
 			return "int";
-		case LONG:
+		case 'J':
 			return "long";
-		case FLOAT:
+		case 'F':
 			return "float";
-		case DOUBLE:
+		case 'D':
 			return "double";
-		case OBJECT:
-			String className = buf.substring(offset + 1, offset + length - 1);
+		case 'L':
+			String className = descriptor.substring(1, descriptor.length() - 1);
 			return className.substring(className.lastIndexOf('/') + 1, className.length());
-		case ARRAY:
+		case '[':
 			int demension = getDemension();
 			StringBuilder result = new StringBuilder(getElementType().getSimpleName());
 			while (demension-- > 0) {
@@ -73,19 +42,32 @@ public class JvmType extends ObjectSupport {
 			}
 			return result.toString();
 		}
-		return null;
+		throw new IllegalStateException("Unknown type descriptor" + descriptor);
 	}
 	
 	int getDemension() {
-		int result = 1;
-		while (buf.charAt(offset + result) == '[') {
-			result++;
+		int demension = 1;
+		while (descriptor.charAt(demension) == '[') {
+			demension++;
 		}
-		return result;
+		return demension;
 	}
 	
 	JvmType getElementType() {
-		return new JvmType(buf, offset + getDemension());
+		return JvmType.getType(descriptor, getDemension());
+	}
+
+	public String toString() {
+		return descriptor;
+	}
+	
+	public int hashCode() {
+		return toString().hashCode();
+	}
+	
+	public boolean equals(Object o) {
+		JvmType other = (JvmType) o;
+		return descriptor.equals(other.descriptor);
 	}
 
 	public static JvmType getReturnType(String methodDescriptor) {
@@ -96,10 +78,25 @@ public class JvmType extends ObjectSupport {
 		List<JvmType> result = new ArrayList<JvmType>();
 		int offset = 1;
 		while (methodDescriptor.charAt(offset) != ')') {
-			JvmType argumentType = new JvmType(methodDescriptor, offset);
-			offset += argumentType.length;
+			JvmType argumentType = JvmType.getType(methodDescriptor, offset);
 			result.add(argumentType);
+			offset += argumentType.descriptor.length();
 		}
 		return result;
+	}
+
+	public static JvmType getType(String buf, int offset) {
+		char sort = buf.charAt(offset);
+		if (sort == 'L') {
+			return new JvmType(buf.substring(offset, buf.indexOf(';', offset) + 1));			
+		} else if (sort == '[') {
+			int demension = 1;
+			while (buf.charAt(offset + demension) == '[') {
+				demension++;
+			}
+			return new JvmType(buf.substring(offset, offset + demension + getType(buf, offset + demension).descriptor.length()));
+		} else  {
+			return new JvmType(buf.substring(offset, offset + 1));
+		}
 	}
 }

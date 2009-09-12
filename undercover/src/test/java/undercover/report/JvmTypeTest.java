@@ -65,9 +65,10 @@ public class JvmTypeTest {
 
 	@Test public void methodArgumentTypes() {
 		assertEquals(Arrays.asList(), JvmType.getArgumentTypes("()I"));
-		assertEquals(Arrays.asList(new JvmType("(I)I", 1)), JvmType.getArgumentTypes("(I)I"));
-		assertEquals(Arrays.asList(new JvmType("(II)I", 1), new JvmType("(II)I", 2)), JvmType.getArgumentTypes("(II)I"));
-		assertEquals(Arrays.asList(new JvmType("(Ljava/lang/Object;)I", 1)), JvmType.getArgumentTypes("(Ljava/lang/Object;)I"));
-		assertEquals(Arrays.asList(new JvmType("([I)I", 1)), JvmType.getArgumentTypes("([I)I"));
+		assertEquals(Arrays.asList(new JvmType("S")), JvmType.getArgumentTypes("(S)I"));
+		assertEquals(Arrays.asList(new JvmType("B"), new JvmType("S")), JvmType.getArgumentTypes("(BS)I"));
+		assertEquals(Arrays.asList(new JvmType("Ljava/lang/Object;")), JvmType.getArgumentTypes("(Ljava/lang/Object;)I"));
+		assertEquals(Arrays.asList(new JvmType("[I")), JvmType.getArgumentTypes("([I)I"));
+		assertEquals(Arrays.asList(new JvmType("[[I")), JvmType.getArgumentTypes("([[I)I"));
 	}
 }
