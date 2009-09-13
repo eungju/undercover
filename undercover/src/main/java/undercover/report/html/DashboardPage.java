@@ -114,7 +114,11 @@ public class DashboardPage extends HtmlPage {
 	public <T extends Item> List<T> leastCovered(Collection<T> candidates, int max) {
 		return takeTopN(candidates, new Comparator<T>() {
 			public int compare(T a, T b) {
-				return (int) Math.signum(a.getBlockMetrics().getCoverage().getRatio() - b.getBlockMetrics().getCoverage().getRatio());
+				int result = (int) Math.signum(a.getBlockMetrics().getCoverage().getRatio() - b.getBlockMetrics().getCoverage().getRatio());
+				if (result == 0) {
+					result = b.getBlockMetrics().getComplexity() - a.getBlockMetrics().getComplexity();
+				}
+				return result;
 			}
 		}, max);
 	}
