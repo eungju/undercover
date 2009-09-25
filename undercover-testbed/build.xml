@@ -25,8 +25,7 @@
 	</path>
 
 	<path id="test.dependencies" >
-		<pathelement location="${M2_REPO}/junit/junit/4.6/junit-4.6.jar" />
-		<pathelement location="${M2_REPO}/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
+		<pathelement location="${M2_REPO}/junit/junit/4.7/junit-4.7.jar" />
 	</path>
 
 	<path id="test.classpath" >
