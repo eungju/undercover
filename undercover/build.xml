@@ -28,7 +28,7 @@
 	</path>
 
 	<path id="test.dependencies" >
-		<pathelement location="${M2_REPO}/junit/junit/4.6/junit-4.6.jar" />
+		<pathelement location="${M2_REPO}/junit/junit/4.7/junit-4.7.jar" />
 		<pathelement location="${M2_REPO}/org/jmock/jmock/2.5.1/jmock-2.5.1.jar" />
 		<pathelement location="${M2_REPO}/org/jmock/jmock-legacy/2.5.1/jmock-legacy-2.5.1.jar" />
 		<pathelement location="${M2_REPO}/org/jmock/jmock-junit4/2.5.1/jmock-junit4-2.5.1.jar" />
