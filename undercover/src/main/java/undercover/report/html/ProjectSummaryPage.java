@@ -57,7 +57,7 @@ public class ProjectSummaryPage extends HtmlPage {
 		for (PackageItem each : items) {
 			ClassMetrics classMetrics = each.getClassMetrics();
 			result.append(tr().append(
-					td().append(a().attr("href", "pakcage-" + each.getLinkName() + "-summary.html").append(text(each.getDisplayName()))),
+					td().append(a().attr("href", "package-" + each.getLinkName() + "-summary.html").append(text(each.getDisplayName()))),
 					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
 					td().attr("class", "coverage").append(blockCoverage(each)),
 					td().attr("class", "coverage").append(new CoverageBar(each).build()),
