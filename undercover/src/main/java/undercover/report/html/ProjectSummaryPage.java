@@ -32,20 +32,20 @@ public class ProjectSummaryPage extends HtmlPage {
 		return table().attr("class", "item-children").append(
 				colgroup().append(
 						col().attr("width", "*"),
-						col().attr("width", "80"),
-						col().attr("width", "150"),
-						col().attr("width", "150"),
 						col().attr("width", "70"),
 						col().attr("width", "60"),
-						col().attr("width", "60")
+						col().attr("width", "60"),
+						col().attr("width", "80"),
+						col().attr("width", "120"),
+						col().attr("width", "150")
 						),
 				thead().append(
 						tr().append(
 								th().append(text("Package")),
-								th().append(text("Complexity")),
-								th().append(text("Coverage")).attr("colspan", "2"),
 								th().append(text("Classes")),
-								th().append(text("Class Complexity (Avg.,Max.)")).attr("colspan", "2")
+								th().append(text("Class Complexity (Avg.,Max.)")).attr("colspan", "2"),
+								th().append(text("Complexity")),
+								th().append(text("Coverage")).attr("colspan", "2")
 								)
 						),
 				packageListBody(items)
@@ -58,12 +58,12 @@ public class ProjectSummaryPage extends HtmlPage {
 			ClassMetrics classMetrics = each.getClassMetrics();
 			result.append(tr().append(
 					td().append(a().attr("href", "package-" + each.getLinkName() + "-summary.html").append(text(each.getDisplayName()))),
-					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
-					td().attr("class", "coverage").append(blockCoverage(each)),
-					td().attr("class", "coverage").append(new CoverageBar(each).build()),
 					td().attr("class", "number").append(text(String.valueOf(classMetrics.getCount()))),
 					td().attr("class", "complexity").append(text(String.format("%.2f", classMetrics.getComplexity().getAverage()))),
-					td().attr("class", "complexity").append(text(String.valueOf(classMetrics.getComplexity().getMaximum())))
+					td().attr("class", "complexity").append(text(String.valueOf(classMetrics.getComplexity().getMaximum()))),
+					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
+					td().attr("class", "coverage").append(blockCoverage(each)),
+					td().attr("class", "coverage").append(new CoverageBar(each).build())
 					));
 		}
 		return result;

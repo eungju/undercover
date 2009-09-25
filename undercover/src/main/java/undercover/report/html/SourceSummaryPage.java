@@ -40,7 +40,7 @@ public class SourceSummaryPage extends HtmlPage {
 						col().attr("width", "60"),
 						col().attr("width", "60"),
 						col().attr("width", "80"),
-						col().attr("width", "100"),
+						col().attr("width", "120"),
 						col().attr("width", "150")
 						),
 				thead().append(
