@@ -16,6 +16,7 @@ import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
 import undercover.report.xml.EmmaXmlReport;
+import undercover.support.Logger;
 
 public class ReportTask extends UndercoverTask {
 	Path sourcePath;
@@ -88,9 +89,12 @@ public class ReportTask extends UndercoverTask {
 			return;
 		}
 
+		Logger logger = new AntLogger(this);
 		SourceFinder sourceFinder = new SourceFinder(sourcePaths, sourceEncoding);
+		sourceFinder.setLogger(logger);
 		try {
 			ReportDataBuilder builder = new ReportDataBuilder(metaDataFile, coverageDataFile);
+			builder.setLogger(logger);
 			builder.setProjectName(getProject().getName());
 			builder.setSourceFinder(sourceFinder);
 			ReportData reportData = builder.build();

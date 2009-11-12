@@ -14,8 +14,11 @@ import undercover.data.MetaDataVisitor;
 import undercover.data.MethodMeta;
 import undercover.runtime.Coverage;
 import undercover.runtime.CoverageData;
+import undercover.support.JdkLogger;
+import undercover.support.Logger;
 
 public class ReportDataBuilder implements MetaDataVisitor {
+	private Logger logger = new JdkLogger();
 	private final MetaData metaData;	
 	private final CoverageData coverageData;
 	private SourceFinder sourceFinder = new SourceFinder(new ArrayList<File>());
@@ -43,6 +46,10 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	public ReportDataBuilder(MetaData metaData, CoverageData coverageData) {
 		this.metaData = metaData;
 		this.coverageData = coverageData;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 	
 	public void setProjectName(String projectName) {
@@ -79,6 +86,8 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(ClassMeta classMeta) {
+		logger.debug("Reading metadata for class " + classMeta.name);
+		
 		String packageName = classMeta.getPackageName();
 		packageItem = packageItems.get(packageName);
 		if (packageItem == null) {
@@ -89,6 +98,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 		sourceItem = sourceItems.get(sourceFile.path);
 		if (sourceItem == null) {
 			sourceItem = new SourceItem(sourceFile);
+			logger.debug(sourceItem.getName() + " has " + sourceItem.getLines().size() + " lines.");
 		}
 		
 		if (classMeta.isAnonymous()) {
@@ -119,6 +129,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visitEnter(MethodMeta methodMeta) {
+		logger.debug("Reading metadata for method " + methodMeta.name + methodMeta.descriptor);
 		blockIndex = 0;
 	}
 
@@ -130,6 +141,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	}
 
 	public void visit(BlockMeta blockMeta) {
+		logger.debug("Reading metadata for block " + blockMeta.toString());
 		int executionCount = classCoverage == null ? 0 : classCoverage.countExecution(methodIndex, blockIndex);
 		sourceItem.addBlock(blockMeta, executionCount);
 		blockIndex++;

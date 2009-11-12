@@ -19,6 +19,7 @@ import undercover.report.SourceFinder;
 import undercover.report.html.HtmlReport;
 import undercover.report.xml.CoberturaXmlReport;
 import undercover.report.xml.EmmaXmlReport;
+import undercover.support.Logger;
 
 /**
  * Instruments, tests, and generates an Undercover report.
@@ -141,9 +142,12 @@ public class ReportMojo extends AbstractMavenReport {
 			return;
 		}
 		
+		Logger logger = new MavenLogger(getLog());
 		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
+		sourceFinder.setLogger(logger);
 		try {
 			ReportDataBuilder builder = new ReportDataBuilder(metaDataFile, coverageDataFile);
+			builder.setLogger(logger);
 			builder.setProjectName(project.getName());
 			builder.setSourceFinder(sourceFinder);
 			ReportData reportData = builder.build();
