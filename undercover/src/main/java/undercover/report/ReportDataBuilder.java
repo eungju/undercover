@@ -21,7 +21,7 @@ public class ReportDataBuilder implements MetaDataVisitor {
 	private Logger logger = new JdkLogger();
 	private final MetaData metaData;	
 	private final CoverageData coverageData;
-	private SourceFinder sourceFinder = new SourceFinder(new ArrayList<File>());
+	private SourceFinder sourceFinder = new SourceFinder();
 	private String projectName = "Anonymous";
 	
 	final Map<String, PackageItem> packageItems = new HashMap<String, PackageItem>();

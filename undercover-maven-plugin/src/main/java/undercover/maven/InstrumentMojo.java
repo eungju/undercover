@@ -78,7 +78,6 @@ public class InstrumentMojo extends UndercoverMojo {
             		paths.add(file);
             	}
         	}
-			getLog().info("Instrumentation paths: " + paths);
 			instrumentationPaths = paths.toArray(new File[paths.size()]);
 		}
 		
@@ -99,10 +98,10 @@ public class InstrumentMojo extends UndercoverMojo {
 	}
 
     protected void doExecute() throws MojoExecutionException {
-    	File classesDir = new File(outputDirectory, "classes");
-    	
+    	getLog().info("Instrumenting...");
     	try {
 	    	OfflineInstrument instrument = new OfflineInstrument();
+	    	instrument.setLogger(new MavenLogger(getLog()));
 	    	instrument.setInstrumentPaths(Arrays.asList(instrumentationPaths));
 	    	instrument.setOutputDirectory(outputDirectory);
 	    	instrument.setMetaDataFile(metaDataFile);
@@ -112,7 +111,7 @@ public class InstrumentMojo extends UndercoverMojo {
 			UndercoverSettings settings = new UndercoverSettings();
 			settings.setCoverageSaveOnExit(true);
 			settings.setCoverageFile(coverageDataFile);
-			settings.save(new File(classesDir, "undercover.properties"));
+			settings.save(new File(new File(outputDirectory, "classes"), "undercover.properties"));
     	} catch (Exception e) {
     		throw new MojoExecutionException("Failed to instrument", e);
     	}

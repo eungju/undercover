@@ -34,10 +34,6 @@ public class ClassMeta extends ObjectSupport implements Serializable {
 		return lastSeparator == -1 ? name : name.substring(0, lastSeparator);
 	}
 
-	public String getExpectedSourcePath() {
-		return getPackageName() + "/" + source;
-	}
-
 	public MethodMeta getMethod(String name, String descriptor) {
 		for (MethodMeta each : methods) {
 			if (each.name.equals(name) && each.descriptor.equals(descriptor)) {

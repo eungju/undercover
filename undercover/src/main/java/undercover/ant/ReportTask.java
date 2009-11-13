@@ -71,7 +71,6 @@ public class ReportTask extends UndercoverTask {
 	    		sourcePaths.add(new File(each));
 	    	}
     	}
-		log("Source path: " + sourcePaths);
 	}
 	
 	void checkSourceEncoding() {
@@ -90,8 +89,10 @@ public class ReportTask extends UndercoverTask {
 		}
 
 		Logger logger = new AntLogger(this);
-		SourceFinder sourceFinder = new SourceFinder(sourcePaths, sourceEncoding);
+		SourceFinder sourceFinder = new SourceFinder();
 		sourceFinder.setLogger(logger);
+		sourceFinder.setSourcePaths(sourcePaths);
+		sourceFinder.setSourceEncoding(sourceEncoding);
 		try {
 			ReportDataBuilder builder = new ReportDataBuilder(metaDataFile, coverageDataFile);
 			builder.setLogger(logger);

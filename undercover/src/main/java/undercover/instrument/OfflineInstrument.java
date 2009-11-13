@@ -11,13 +11,20 @@ import java.util.List;
 import undercover.instrument.filter.GlobFilter;
 import undercover.support.FileUtils;
 import undercover.support.IOUtils;
+import undercover.support.JdkLogger;
+import undercover.support.Logger;
 
 public class OfflineInstrument {
+	private Logger logger = new JdkLogger();
 	private Instrument instrument;
 	private List<File> instrumentPaths;
 	private File outputDirectory;
 	private File metaDataFile;
 	private GlobFilter filter;
+	
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 	
 	public void setInstrumentPaths(List<File> instrumentPaths) {
 		this.instrumentPaths = instrumentPaths;
@@ -36,6 +43,9 @@ public class OfflineInstrument {
 	}
 
 	public void fullcopy() throws Exception {
+		logger.info("Instrument paths: " + instrumentPaths);
+		logger.info("Output directory: " + outputDirectory);
+		
 		File classesDir = new File(outputDirectory, "classes");
 		instrument = new Instrument();
 		instrument.addFilter(filter);
@@ -43,14 +53,14 @@ public class OfflineInstrument {
 		instrument.getMetaData().save(metaDataFile);
 	}
 	
-	public void instrumentDirs(List<File> inputDirs, File outputDir) throws IOException {
+	void instrumentDirs(List<File> inputDirs, File outputDir) throws IOException {
 		outputDir.mkdirs();
 		for (File each : inputDirs) {
 			instrumentDir(each, outputDir);
 		}
 	}
 	
-	public void instrumentDir(File inputDir, File outputDir) throws IOException {
+	void instrumentDir(File inputDir, File outputDir) throws IOException {
 		outputDir.mkdir();
 		for (File each : inputDir.listFiles()) {
 			String name = each.getName();
@@ -65,10 +75,12 @@ public class OfflineInstrument {
 	}
 
 	void copyFile(File inputFile, File outputFile) throws IOException {
+		logger.debug("Copying file " + inputFile);
 		FileUtils.copyFile(inputFile, outputFile);
 	}
 
-	public void instrumentFile(File inputFile, File outputFile) throws IOException {
+	void instrumentFile(File inputFile, File outputFile) throws IOException {
+		logger.debug("Instrumenting file " + inputFile);
 		InputStream input = null;
 		OutputStream output = null;
 		try {

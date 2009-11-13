@@ -125,7 +125,6 @@ public class ReportMojo extends AbstractMavenReport {
             		paths.add(file);
             	}
         	}
-			getLog().info("Source paths: " + paths);
 			sourcePaths = paths.toArray(new File[paths.size()]);
 		}
         
@@ -143,8 +142,10 @@ public class ReportMojo extends AbstractMavenReport {
 		}
 		
 		Logger logger = new MavenLogger(getLog());
-		SourceFinder sourceFinder = new SourceFinder(Arrays.asList(sourcePaths), sourceEncoding);
+		SourceFinder sourceFinder = new SourceFinder();
 		sourceFinder.setLogger(logger);
+		sourceFinder.setSourcePaths(Arrays.asList(sourcePaths));
+		sourceFinder.setSourceEncoding(sourceEncoding);
 		try {
 			ReportDataBuilder builder = new ReportDataBuilder(metaDataFile, coverageDataFile);
 			builder.setLogger(logger);

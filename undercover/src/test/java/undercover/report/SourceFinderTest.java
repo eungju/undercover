@@ -21,7 +21,8 @@ public class SourceFinderTest {
 		src = File.createTempFile("src", "");
 		src.delete();
 		src.mkdirs();
-		dut = new SourceFinder(Arrays.asList(src));
+		dut = new SourceFinder();
+		dut.setSourcePaths(Arrays.asList(src));
 	}
 	
 	@After public void afterEach() throws IOException {

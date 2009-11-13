@@ -62,7 +62,6 @@ public class InstrumentTask extends UndercoverTask {
 		for (String each : (String[]) instrumentPath.list()) {
 			instrumentPaths.add(new File(each));
 		}
-		log("Instrument path: " + instrumentPaths);
 	}
 
 	void checkDestDir() {
@@ -91,6 +90,7 @@ public class InstrumentTask extends UndercoverTask {
         log("Instrumenting...");
         checkParameters();
     	try {
+    		instrument.setLogger(new AntLogger(this));
     		instrument.setInstrumentPaths(instrumentPaths);
     		instrument.setOutputDirectory(destDir);
     		instrument.setMetaDataFile(metaDataFile);
