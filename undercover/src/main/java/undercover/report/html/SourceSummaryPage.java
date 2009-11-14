@@ -9,23 +9,22 @@ import undercover.report.SourceItem;
 import undercover.report.SourceLine;
 import undercover.support.xml.Element;
 
-public class SourceSummaryPage extends HtmlPage {
+public class SourceSummaryPage extends SummaryPage {
 	private SourceItem sourceItem;
 
 	public SourceSummaryPage(SourceItem sourceItem) {
 		this.sourceItem = sourceItem;
 	}
 	
-	@Override
 	public Element build() {
 		return html().append(
 				defaultHead(sourceItem.getDisplayName()),
 				body().append(
 						new NavigationPanel().build(),
 						new ItemStatisticsPanel(sourceItem).build(),
-						h3().append(text("Classes")),
+						h3().append("Classes"),
 						classList(sourceItem.classes),
-						h3().append(text("Source")),
+						h3().append("Source"),
 						sourceView(sourceItem),
 						new CopyrightPanel().build()
 						)
@@ -45,11 +44,11 @@ public class SourceSummaryPage extends HtmlPage {
 						),
 				thead().append(
 						tr().append(
-								th().append(text("Class")),
-								th().append(text("Methods")),
-								th().append(text("Method Complexity (Avg.,Max.)")).attr("colspan", "2"),
-								th().append(text("Complexity")),
-								th().append(text("Coverage")).attr("colspan", "2")
+								th().append("Class"),
+								th().append("Methods"),
+								th().append("Method Complexity (Avg.,Max.)").attr("colspan", "2"),
+								th().append("Complexity"),
+								th().append("Coverage").attr("colspan", "2")
 								)
 						),
 				classListBody(items)
@@ -61,19 +60,19 @@ public class SourceSummaryPage extends HtmlPage {
 		for (ClassItem each : items) {
 			MethodMetrics methodMetrics = each.getMethodMetrics();
 			result.append(tr().append(
-					th().append(text(each.getSimpleName())),
-					td().attr("class", "number").append(text(String.valueOf(methodMetrics.getCount()))),
-					td().attr("class", "complexity").append(text(String.format("%.2f", methodMetrics.getComplexity().getAverage()))),
-					td().attr("class", "complexity").append(text(String.valueOf(methodMetrics.getComplexity().getMaximum()))),
-					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
-					td().attr("class", "coverage").append(blockCoverage(each)),
+					th().append(each.getSimpleName()),
+					td().attr("class", "number").append(String.valueOf(methodMetrics.getCount())),
+					td().attr("class", "complexity").append(String.format("%.2f", methodMetrics.getComplexity().getAverage())),
+					td().attr("class", "complexity").append(String.valueOf(methodMetrics.getComplexity().getMaximum())),
+					td().attr("class", "complexity").append(String.valueOf(each.getBlockMetrics().getComplexity())),
+					td().attr("class", "coverage").append(CoverageFormat.percentDetailed(each.getBlockMetrics().getCoverage())),
 					td().attr("class", "coverage").append(new CoverageBar(each).build())
 					));
 			for (MethodItem methodItem : each.methods) {
 				result.append(tr().append(
-						td().attr("colspan", "4").append(text(methodItem.getDisplayName())),
-						td().attr("class", "complexity").append(text(String.valueOf(methodItem.getBlockMetrics().getComplexity()))),
-						td().attr("class", "coverage").append(blockCoverage(methodItem)),
+						td().attr("colspan", "4").append(methodItem.getDisplayName()),
+						td().attr("class", "complexity").append(String.valueOf(methodItem.getBlockMetrics().getComplexity())),
+						td().attr("class", "coverage").append(CoverageFormat.percentDetailed(methodItem.getBlockMetrics().getCoverage())),
 						td().attr("class", "coverage").append(new CoverageBar(methodItem).build())
 						));
 			}
@@ -97,9 +96,9 @@ public class SourceSummaryPage extends HtmlPage {
 				tr.attr("class", styleClass);
 			}
 			tr.append(
-					td().attr("class", "line-number").append(text(String.valueOf(each.number))),
-					td().attr("class", "line-touch").append(text(each.isExecutable() ? String.valueOf(each.touchCount) : "")),
-					td().attr("class", "line-text").append(text(each.text))
+					td().attr("class", "line-number").append(String.valueOf(each.number)),
+					td().attr("class", "line-touch").append(each.isExecutable() ? String.valueOf(each.touchCount) : ""),
+					td().attr("class", "line-text").append(each.text)
 					);
 			tbody.append(tr);
 		}

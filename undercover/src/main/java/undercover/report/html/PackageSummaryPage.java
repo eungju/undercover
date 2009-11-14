@@ -7,21 +7,20 @@ import undercover.report.MethodMetrics;
 import undercover.report.PackageItem;
 import undercover.support.xml.Element;
 
-public class PackageSummaryPage extends HtmlPage {
+public class PackageSummaryPage extends SummaryPage {
 	private PackageItem packageItem;
 
 	public PackageSummaryPage(PackageItem packageItem) {
 		this.packageItem = packageItem;
 	}
 	
-	@Override
 	public Element build() {
 		return html().append(
 				defaultHead(packageItem.getDisplayName()).append(loadClassListScript("package-" + packageItem.getLinkName() + "-classes.html")),
 				body().append(
 						new NavigationPanel().build(),
 						new ItemStatisticsPanel(packageItem).build(),
-						h3().append(text("Classes")),
+						h3().append("Classes"),
 						classList(packageItem.classes),
 						new CopyrightPanel().build()
 						)
@@ -41,11 +40,11 @@ public class PackageSummaryPage extends HtmlPage {
 						),
 				thead().append(
 						tr().append(
-								th().append(text("Class")),
-								th().append(text("Classes")),
-								th().append(text("Method Complexity (Avg.,Max.)")).attr("colspan", "2"),
-								th().append(text("Complexity")),
-								th().append(text("Coverage")).attr("colspan", "2")
+								th().append("Class"),
+								th().append("Classes"),
+								th().append("Method Complexity (Avg.,Max.)").attr("colspan", "2"),
+								th().append("Complexity"),
+								th().append("Coverage").attr("colspan", "2")
 								)
 						),
 				classListBody(items)
@@ -57,12 +56,12 @@ public class PackageSummaryPage extends HtmlPage {
 		for (ClassItem each : items) {
 			MethodMetrics methodMetrics = each.getMethodMetrics();
 			result.append(tr().append(
-					td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").append(text(each.getSimpleName()))),
-					td().attr("class", "number").append(text(String.valueOf(methodMetrics.getCount()))),
-					td().attr("class", "complexity").append(text(String.format("%.2f", methodMetrics.getComplexity().getAverage()))),
-					td().attr("class", "complexity").append(text(String.valueOf(methodMetrics.getComplexity().getMaximum()))),
-					td().attr("class", "complexity").append(text(String.valueOf(each.getBlockMetrics().getComplexity()))),
-					td().attr("class", "coverage").append(blockCoverage(each)),
+					td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").append(each.getSimpleName())),
+					td().attr("class", "number").append(String.valueOf(methodMetrics.getCount())),
+					td().attr("class", "complexity").append(String.format("%.2f", methodMetrics.getComplexity().getAverage())),
+					td().attr("class", "complexity").append(String.valueOf(methodMetrics.getComplexity().getMaximum())),
+					td().attr("class", "complexity").append(String.valueOf(each.getBlockMetrics().getComplexity())),
+					td().attr("class", "coverage").append(CoverageFormat.percentDetailed(each.getBlockMetrics().getCoverage())),
 					td().attr("class", "coverage").append(new CoverageBar(each).build())
 					));
 		}

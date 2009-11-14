@@ -1,18 +1,19 @@
 package undercover.report.html;
 
+import static undercover.report.html.HtmlElements.*;
+
 import java.util.Collection;
 
 import undercover.report.Item;
 import undercover.support.xml.Element;
 
-public class CoverageDistributionGraph extends HtmlPage {
+public class CoverageDistributionGraph implements HtmlFragment {
 	private final Collection<? extends Item> items;
 
 	public CoverageDistributionGraph(Collection<? extends Item> items) {
 		this.items = items;
 	}
 	
-	@Override
 	public Element build() {
 		int[] counts = new int[10];
 		for (Item each : items) {

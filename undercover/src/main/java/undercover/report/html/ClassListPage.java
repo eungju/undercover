@@ -5,7 +5,7 @@ import java.util.Collection;
 import undercover.report.ClassItem;
 import undercover.support.xml.Element;
 
-public abstract class ClassListPage extends HtmlPage {
+public abstract class ClassListPage extends ReportPage {
 	protected Element classList(Collection<ClassItem> classes) {
 		return table().attr("class", "item-children").append(
 				colgroup().append(
@@ -14,8 +14,8 @@ public abstract class ClassListPage extends HtmlPage {
 						),
 				thead().append(
 						tr().append(
-								th().append(text("Class")),
-								th().append(text("Coverage"))
+								th().append("Class"),
+								th().append("Coverage")
 								)
 						),
 				classListBody(classes)
@@ -27,8 +27,8 @@ public abstract class ClassListPage extends HtmlPage {
 		for (ClassItem each : classes) {
 			result.append(
 					tr().append(
-							td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").attr("target", "classPane").append(text(each.getSimpleName()))),
-							td().attr("class", "coverage").append(coveragePercent(each))
+							td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").attr("target", "classPane").append(each.getSimpleName())),
+							td().attr("class", "coverage").append(CoverageFormat.percentShort(each.getBlockMetrics().getCoverage()))
 							)
 					);
 		}

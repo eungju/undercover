@@ -11,14 +11,13 @@ import undercover.report.Item;
 import undercover.report.ReportData;
 import undercover.support.xml.Element;
 
-public class DashboardPage extends HtmlPage {
+public class DashboardPage extends SummaryPage {
 	private ReportData reportData;
 
 	public DashboardPage(ReportData reportData) {
 		this.reportData = reportData;
 	}
 	
-	@Override
 	public Element build() {
 		return html().append(
 				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
@@ -34,25 +33,25 @@ public class DashboardPage extends HtmlPage {
 								tbody().append(
 										tr().append(
 												td().append(
-														h3().append(text("Coverage Distribution")),
+														h3().append("Coverage Distribution"),
 														new CoverageDistributionGraph(reportData.getClasses()).build()
 														),
 												td(),
 												td().append(
-														h3().append(text("Coverage-Complexity")),
+														h3().append("Coverage-Complexity"),
 														new CoverageComplexityGraph(reportData.getClasses()).build()
 														)
 												),
 										tr().append(
 												td().append(
-														h3().append(text("Heaviest Classes")),
+														h3().append("Heaviest Classes"),
 														classRankingTable(mostComplex(reportData.getClasses(), 10)),
-														h3().append(text("Least Exercised Classes")),
+														h3().append("Least Exercised Classes"),
 														classRankingTable(leastCovered(reportData.getClasses(), 10))
 														),
 												td(),
 												td().append(
-														h3().append(text("Weakest Classes")),
+														h3().append("Weakest Classes"),
 														classRankingTable(mostRisky(reportData.getClasses(), 20))
 														)
 												)
@@ -68,10 +67,10 @@ public class DashboardPage extends HtmlPage {
 		int rank = 1;
 		for (ClassItem each : items) {
 			tableBody.append(tr().append(
-					td().attr("class", "number").append(text(String.format("%d.", rank))),
-					td().attr("class", "coverage").append(coveragePercent(each)),
+					td().attr("class", "number").append(String.format("%d.", rank)),
+					td().attr("class", "coverage").append(CoverageFormat.percentShort(each.getBlockMetrics().getCoverage())),
 					td().attr("class", "coverage").append(new CoverageBar(each).build()),
-					td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").append(text(each.getSimpleName())))
+					td().append(a().attr("href", "source-" + each.getSource().getLinkName() + ".html").append(each.getSimpleName()))
 					));
 			rank++;
 		}

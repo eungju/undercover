@@ -52,6 +52,11 @@ public class Element implements Node {
 		children.addAll(nodes);
 		return this;
 	}
+	
+	public Element append(String text) {
+		append(new Text(text));
+		return this;
+	}
 
 	public void accept(NodeVisitor visitor) {
 		visitor.enterElement(this);

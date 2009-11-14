@@ -1,10 +1,11 @@
 package undercover.report.html;
 
+import static undercover.report.html.HtmlElements.*;
 import undercover.report.ComplexityStatistics;
 import undercover.report.Item;
 import undercover.support.xml.Element;
 
-public class ItemStatisticsPanel extends HtmlPage {
+public class ItemStatisticsPanel implements HtmlFragment {
 	private final Item item;
 
 	public ItemStatisticsPanel(Item item) {
@@ -13,8 +14,8 @@ public class ItemStatisticsPanel extends HtmlPage {
 	
 	public Element build() {
 		return div().append(
-				h1().append(text(item.getDisplayName())),
-				roundedBox(createContent(item))
+				h1().append(item.getDisplayName()),
+				new RoundedPanel(createContent(item)).build()
 				);
 	}
 	
@@ -42,12 +43,12 @@ public class ItemStatisticsPanel extends HtmlPage {
 						),
 				tbody().append(
 						tr().append(
-								th().append(text("Complexity")),
-								td().append(text(String.valueOf(item.getBlockMetrics().getComplexity())))
+								th().append("Complexity"),
+								td().append(String.valueOf(item.getBlockMetrics().getComplexity()))
 								),
 						tr().append(
-								th().append(text("Coverage")),
-								td().append(blockCoverage(item))
+								th().append("Coverage"),
+								td().append(CoverageFormat.percentDetailed(item.getBlockMetrics().getCoverage()))
 								),
 						tr().append(
 								td().attr("colspan", "2").append(new CoverageBar(item).build())
@@ -60,10 +61,10 @@ public class ItemStatisticsPanel extends HtmlPage {
 		Element tbody = tbody().append(
 				tr().append(
 						th(),
-						th().append(text("Count")),
-						th().append(text("Avg. Complexity")),
-						th().append(text("Max. Complexity")),
-						th().append(text("S.D. of Complexity"))
+						th().append("Count"),
+						th().append("Avg. Complexity"),
+						th().append("Max. Complexity"),
+						th().append("S.D. of Complexity")
 						)
 				);
 		if (item.getPackageMetrics() != null) {
@@ -78,11 +79,11 @@ public class ItemStatisticsPanel extends HtmlPage {
 	
 	Element itemStatisticsMetrics(String name, int count, ComplexityStatistics complexity) {
 		return tr().append(
-				th().append(text(name)),
-				td().attr("class", "number").append(text(String.valueOf(count))),
-				td().attr("class", "complexity").append(text(String.format("%.2f", complexity.getAverage()))),
-				td().attr("class", "complexity").append(text(String.valueOf(complexity.getMaximum()))),
-				td().attr("class", "complexity").append(text(String.format("%.2f", complexity.getStandardDeviation())))
+				th().append(name),
+				td().attr("class", "number").append(String.valueOf(count)),
+				td().attr("class", "complexity").append(String.format("%.2f", complexity.getAverage())),
+				td().attr("class", "complexity").append(String.valueOf(complexity.getMaximum())),
+				td().attr("class", "complexity").append(String.format("%.2f", complexity.getStandardDeviation()))
 				);
 	}
 }

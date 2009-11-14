@@ -1,9 +1,10 @@
 package undercover.report.html;
 
+import static undercover.report.html.HtmlElements.*;
 import undercover.report.Item;
 import undercover.support.xml.Element;
 
-public class CoverageBar extends HtmlPage {
+public class CoverageBar implements HtmlFragment {
 	private final Item item;
 
 	public CoverageBar(Item item) {

@@ -1,18 +1,19 @@
 package undercover.report.html;
 
+import static undercover.report.html.HtmlElements.*;
+
 import java.util.Collection;
 
 import undercover.report.ClassItem;
 import undercover.support.xml.Element;
 
-public class CoverageComplexityGraph extends HtmlPage {
+public class CoverageComplexityGraph implements HtmlFragment {
 	private final Collection<ClassItem> classItems;
 
 	public CoverageComplexityGraph(Collection<ClassItem> classItems) {
 		this.classItems = classItems;
 	}
 	
-	@Override
 	public Element build() {
 		return div().attr("id", "coverage-complexity").append(
 				div().attr("class", "graph").attr("style", "width: 340px; height: 280px;"),
