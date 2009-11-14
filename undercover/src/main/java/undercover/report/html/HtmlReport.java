@@ -47,9 +47,9 @@ public class HtmlReport {
 		final String[] resources = {
 				"index.html",
 				"style.css",
-				"jquery-1.3.2.min.js",
-				"jquery.flot.js",
-				"excanvas.js",
+				"jquery.min.js",
+				"jquery.flot.min.js",
+				"excanvas.min.js",
 				"undercover.js",
 		};
 		for (String each : resources) {
