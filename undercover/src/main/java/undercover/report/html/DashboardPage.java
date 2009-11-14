@@ -12,55 +12,63 @@ import undercover.report.ReportData;
 import undercover.support.xml.Element;
 
 public class DashboardPage extends SummaryPage {
-	private ReportData reportData;
+	private final ReportData reportData;
 
 	public DashboardPage(ReportData reportData) {
 		this.reportData = reportData;
 	}
 	
-	public Element build() {
-		return html().append(
-				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
-				body().append(
-						new NavigationPanel().build(),
-						new ItemStatisticsPanel(reportData).build(),
-						table().attr("class", "layout").append(
-								colgroup().append(
-										col().attr("width", "*"),
-										col().attr("width", "40"),
-										col().attr("width", "*")
-										),
-								tbody().append(
-										tr().append(
-												td().append(
-														h3().append("Coverage Distribution"),
-														new CoverageDistributionGraph(reportData.getClasses()).build()
-														),
-												td(),
-												td().append(
-														h3().append("Coverage-Complexity"),
-														new CoverageComplexityGraph(reportData.getClasses()).build()
-														)
+	@Override
+	public String getTitle() {
+		return reportData.getDisplayName();
+	}
+	
+	@Override
+	public Element getBody() {
+		return body().append(
+				new NavigationPanel().build(),
+				new ItemStatisticsPanel(reportData).build(),
+				table().attr("class", "layout").append(
+						colgroup().append(
+								col().attr("width", "*"),
+								col().attr("width", "40"),
+								col().attr("width", "*")
+								),
+						tbody().append(
+								tr().append(
+										td().append(
+												h3().append("Coverage Distribution"),
+												new CoverageDistributionGraph(reportData.getClasses()).build()
 												),
-										tr().append(
-												td().append(
-														h3().append("Heaviest Classes"),
-														classRankingTable(mostComplex(reportData.getClasses(), 10)),
-														h3().append("Least Exercised Classes"),
-														classRankingTable(leastCovered(reportData.getClasses(), 10))
-														),
-												td(),
-												td().append(
-														h3().append("Weakest Classes"),
-														classRankingTable(mostRisky(reportData.getClasses(), 20))
-														)
+										td(),
+										td().append(
+												h3().append("Coverage-Complexity"),
+												new CoverageComplexityGraph(reportData.getClasses()).build()
+												)
+										),
+								tr().append(
+										td().append(
+												h3().append("Heaviest Classes"),
+												classRankingTable(mostComplex(reportData.getClasses(), 10)),
+												h3().append("Least Exercised Classes"),
+												classRankingTable(leastCovered(reportData.getClasses(), 10))
+												),
+										td(),
+										td().append(
+												h3().append("Weakest Classes"),
+												classRankingTable(mostRisky(reportData.getClasses(), 20))
 												)
 										)
-								),
-						new CopyrightPanel().build()
-						)
+								)
+						),
+				new CopyrightPanel().build()
 				);
-	}	
+	}
+
+	@Override
+	public String getClassListFrameUrl() {
+		return "project-classes.html";
+	};
 
 	Element classRankingTable(Collection<ClassItem> items) {
 		Element tableBody = tbody();

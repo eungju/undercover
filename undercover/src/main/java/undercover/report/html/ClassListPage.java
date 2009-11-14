@@ -6,6 +6,13 @@ import undercover.report.ClassItem;
 import undercover.support.xml.Element;
 
 public abstract class ClassListPage extends ReportPage {
+	@Override
+	public Element getBody() {
+		return body().append(
+				classList(getClassItems())
+				);
+	}
+
 	protected Element classList(Collection<ClassItem> classes) {
 		return table().attr("class", "item-children").append(
 				colgroup().append(
@@ -34,4 +41,8 @@ public abstract class ClassListPage extends ReportPage {
 		}
 		return result;
 	}
+	
+	public abstract String getTitle();
+	
+	public abstract Collection<ClassItem> getClassItems();
 }

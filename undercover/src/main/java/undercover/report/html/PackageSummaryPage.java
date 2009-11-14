@@ -8,25 +8,33 @@ import undercover.report.PackageItem;
 import undercover.support.xml.Element;
 
 public class PackageSummaryPage extends SummaryPage {
-	private PackageItem packageItem;
+	private final PackageItem packageItem;
 
 	public PackageSummaryPage(PackageItem packageItem) {
 		this.packageItem = packageItem;
 	}
 	
-	public Element build() {
-		return html().append(
-				defaultHead(packageItem.getDisplayName()).append(loadClassListScript("package-" + packageItem.getLinkName() + "-classes.html")),
-				body().append(
-						new NavigationPanel().build(),
-						new ItemStatisticsPanel(packageItem).build(),
-						h3().append("Classes"),
-						classList(packageItem.classes),
-						new CopyrightPanel().build()
-						)
+	@Override
+	public String getTitle() {
+		return packageItem.getDisplayName();
+	}
+	
+	@Override
+	public Element getBody() {
+		return body().append(
+				new NavigationPanel().build(),
+				new ItemStatisticsPanel(packageItem).build(),
+				h3().append("Classes"),
+				classList(packageItem.classes),
+				new CopyrightPanel().build()
 				);
 	}
 	
+	@Override
+	public String getClassListFrameUrl() {
+		return "package-" + packageItem.getLinkName() + "-classes.html";
+	};
+
 	Element classList(Collection<ClassItem> items) {
 		return table().attr("class", "item-children").append(
 				colgroup().append(

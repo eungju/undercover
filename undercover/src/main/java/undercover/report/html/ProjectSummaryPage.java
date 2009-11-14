@@ -8,25 +8,33 @@ import undercover.report.ReportData;
 import undercover.support.xml.Element;
 
 public class ProjectSummaryPage extends SummaryPage {
-	private ReportData reportData;
+	private final ReportData reportData;
 
 	public ProjectSummaryPage(ReportData reportData) {
 		this.reportData = reportData;
 	}
 	
-	public Element build() {
-		return html().append(
-				defaultHead(reportData.getDisplayName()).append(loadClassListScript("project-classes.html")),
-				body().append(
-						new NavigationPanel().build(),
-						new ItemStatisticsPanel(reportData).build(),
-						h3().append("Packages"),
-						packageList(reportData.getPackages()),
-						new CopyrightPanel().build()
-						)
+	@Override
+	public String getTitle() {
+		return reportData.getDisplayName();
+	}
+	
+	@Override
+	public Element getBody() {
+		return body().append(
+				new NavigationPanel().build(),
+				new ItemStatisticsPanel(reportData).build(),
+				h3().append("Packages"),
+				packageList(reportData.getPackages()),
+				new CopyrightPanel().build()
 				);
 	}
 	
+	@Override
+	public String getClassListFrameUrl() {
+		return "project-classes.html";
+	};
+
 	Element packageList(Collection<PackageItem> items) {
 		return table().attr("class", "item-children").append(
 				colgroup().append(

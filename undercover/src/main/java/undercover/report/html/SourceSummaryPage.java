@@ -10,27 +10,30 @@ import undercover.report.SourceLine;
 import undercover.support.xml.Element;
 
 public class SourceSummaryPage extends SummaryPage {
-	private SourceItem sourceItem;
+	private final SourceItem sourceItem;
 
 	public SourceSummaryPage(SourceItem sourceItem) {
 		this.sourceItem = sourceItem;
 	}
 	
-	public Element build() {
-		return html().append(
-				defaultHead(sourceItem.getDisplayName()),
-				body().append(
-						new NavigationPanel().build(),
-						new ItemStatisticsPanel(sourceItem).build(),
-						h3().append("Classes"),
-						classList(sourceItem.classes),
-						h3().append("Source"),
-						sourceView(sourceItem),
-						new CopyrightPanel().build()
-						)
+	@Override
+	public String getTitle() {
+		return sourceItem.getDisplayName();
+	}
+	
+	@Override
+	public Element getBody() {
+		return body().append(
+				new NavigationPanel().build(),
+				new ItemStatisticsPanel(sourceItem).build(),
+				h3().append("Classes"),
+				classList(sourceItem.classes),
+				h3().append("Source"),
+				sourceView(sourceItem),
+				new CopyrightPanel().build()
 				);
 	}
-
+	
 	Element classList(Collection<ClassItem> items) {
 		return table().attr("class", "item-children").append(
 				colgroup().append(

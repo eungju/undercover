@@ -7,21 +7,27 @@ import undercover.report.ReportData;
 import undercover.support.xml.Element;
 
 public class MenuPage extends ReportPage {
-	private ReportData reportData;
+	private final ReportData reportData;
 
 	public MenuPage(ReportData reportData) {
 		this.reportData = reportData;
 	}
 	
-	public Element build() {
-		return html().append(
-				defaultHead("Undercover"),
-				body().append(
-						new RoundedPanel(h2().append("Undercover Coverage Report")).build(),
-						div().attr("class", "navigation").append(
-								mainMenu(),
-								h3().append("Packages"),
-								packageList(reportData.getPackages()))));
+	@Override
+	public String getTitle() {
+		return "Undercover Coverage Report";
+	}
+	
+	@Override
+	public Element getBody() {
+		return body().append(
+				new RoundedPanel(h2().append("Undercover Coverage Report")).build(),
+				div().attr("class", "navigation").append(
+						mainMenu(),
+						h3().append("Packages"),
+						packageList(reportData.getPackages())
+						)
+				);
 	}
 	
 	Element mainMenu() {
