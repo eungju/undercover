@@ -41,8 +41,6 @@ public abstract class ClassListPage extends ReportPage {
 		}
 		return result;
 	}
-	
-	public abstract String getTitle();
-	
+
 	public abstract Collection<ClassItem> getClassItems();
 }

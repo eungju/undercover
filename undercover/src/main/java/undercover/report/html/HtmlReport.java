@@ -18,6 +18,9 @@ import undercover.support.xml.Element;
 import undercover.support.xml.XmlDeclaration;
 import undercover.support.xml.XmlWriter;
 
+/**
+ * Produce HTML report. 
+ */
 public class HtmlReport {
 	private ReportData reportData;
 	private File outputDirectory;

@@ -3,6 +3,9 @@ package undercover.report.html;
 import static undercover.report.html.HtmlElements.*;
 import undercover.support.xml.Element;
 
+/**
+ * A panel which has rounded corners.
+ */
 public class RoundedPanel implements HtmlFragment {
 	private final Element element;
 
