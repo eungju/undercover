@@ -2,8 +2,6 @@ package undercover.support.xml;
 
 import java.io.PrintWriter;
 
-import undercover.support.HtmlUtils;
-
 public class XmlWriter implements NodeVisitor {
 	private final PrintWriter out;
 	private boolean onElement;
@@ -34,7 +32,7 @@ public class XmlWriter implements NodeVisitor {
 		out.append('<').append(node.name);
 		for (NameValuePair each : node.attributes) {
 			out.append(' ').append(each.name);
-			out.append("=\"").append(HtmlUtils.escape(each.value)).append('"');
+			out.append("=\"").append(XmlUtils.escape(each.value)).append('"');
 		}
 		out.append(">");
 		onElement = true;
@@ -51,7 +49,7 @@ public class XmlWriter implements NodeVisitor {
 	}
 
 	public void visitText(Text node) {
-		out.print(HtmlUtils.escape(node.value));
+		out.print(XmlUtils.escape(node.value));
 		onElement = false;
 	}
 

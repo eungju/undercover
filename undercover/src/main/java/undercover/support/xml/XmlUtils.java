@@ -1,9 +1,9 @@
-package undercover.support;
+package undercover.support.xml;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class HtmlUtils {
+public class XmlUtils {
 	private static final Map<Character, String> HTML_ESCAPE_CHARACTERS = new HashMap<Character, String>();
 	static {
 		HTML_ESCAPE_CHARACTERS.put('&', "&amp;");

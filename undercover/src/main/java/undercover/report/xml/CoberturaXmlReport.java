@@ -11,7 +11,6 @@ import undercover.report.MethodItem;
 import undercover.report.PackageItem;
 import undercover.report.ReportData;
 import undercover.support.FileUtils;
-import undercover.support.HtmlUtils;
 import undercover.support.xml.DoctypeDeclaration;
 import undercover.support.xml.Element;
 import undercover.support.xml.XmlDeclaration;
@@ -108,7 +107,7 @@ public class CoberturaXmlReport {
 		String name = item.getName().substring(0, startOfDesc);
 		String desc = item.getName().substring(startOfDesc);
 		return new Element("method")
-			.attr("name", HtmlUtils.escape(name))
+			.attr("name", name)
 			.attr("signature", desc)
 			.attr("line-rate", item.getBlockMetrics().getCoverage().getRatio())
 			.attr("branch-rate", item.getBlockMetrics().getCoverage().getRatio())
