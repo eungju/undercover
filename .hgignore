@@ -1,12 +1,18 @@
 syntax: glob
 
+target
 build.properties
-*.orig
-.DS_Store
+infinitest.log*
+
 .classpath
 .project
 .settings
-target
+
+*.iml
+*.ipr
+*.iws
+
+*.orig
 *~
 .#*
-infinitest.log*
+.DS_Store
