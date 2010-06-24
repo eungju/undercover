@@ -20,13 +20,9 @@ public class MetaData extends ObjectSupport implements Serializable {
 	private final List<ClassMeta> classes;
 
 	public MetaData() {
-		this(new ArrayList<ClassMeta>());
+		this.classes = new ArrayList<ClassMeta>();
 	}
 	
-	public MetaData(List<ClassMeta> classes) {
-		this.classes = classes;
-	}
-
 	public int addClass(ClassMeta classMeta) {
 		classes.add(classMeta);
 		return classes.size() - 1;
