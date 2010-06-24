@@ -3,10 +3,10 @@ package undercover.report;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JvmType {
+public class FieldType {
 	private final String descriptor;
 
-	JvmType(String descriptor) {
+	FieldType(String descriptor) {
 		this.descriptor = descriptor;
 	}
 
@@ -42,7 +42,7 @@ public class JvmType {
 			}
 			return result.toString();
 		}
-		throw new IllegalStateException("Unknown type descriptor" + descriptor);
+		throw new IllegalStateException("Unknown type descriptor " + descriptor);
 	}
 	
 	int getDemension() {
@@ -53,8 +53,8 @@ public class JvmType {
 		return demension;
 	}
 	
-	JvmType getElementType() {
-		return JvmType.getType(descriptor, getDemension());
+	FieldType getElementType() {
+		return FieldType.getType(descriptor, getDemension());
 	}
 
 	public String toString() {
@@ -66,37 +66,37 @@ public class JvmType {
 	}
 	
 	public boolean equals(Object o) {
-		JvmType other = (JvmType) o;
+		FieldType other = (FieldType) o;
 		return descriptor.equals(other.descriptor);
 	}
 
-	public static JvmType getReturnType(String methodDescriptor) {
-		return new JvmType(methodDescriptor.substring(methodDescriptor.lastIndexOf(')') + 1));		
+	public static FieldType getReturnType(String methodDescriptor) {
+		return new FieldType(methodDescriptor.substring(methodDescriptor.lastIndexOf(')') + 1));		
 	}
 
-	public static List<JvmType> getArgumentTypes(String methodDescriptor) {
-		List<JvmType> result = new ArrayList<JvmType>();
+	public static List<FieldType> getArgumentTypes(String methodDescriptor) {
+		List<FieldType> result = new ArrayList<FieldType>();
 		int offset = 1;
 		while (methodDescriptor.charAt(offset) != ')') {
-			JvmType argumentType = JvmType.getType(methodDescriptor, offset);
+			FieldType argumentType = FieldType.getType(methodDescriptor, offset);
 			result.add(argumentType);
 			offset += argumentType.descriptor.length();
 		}
 		return result;
 	}
 
-	public static JvmType getType(String buf, int offset) {
+	public static FieldType getType(String buf, int offset) {
 		char sort = buf.charAt(offset);
 		if (sort == 'L') {
-			return new JvmType(buf.substring(offset, buf.indexOf(';', offset) + 1));			
+			return new FieldType(buf.substring(offset, buf.indexOf(';', offset) + 1));			
 		} else if (sort == '[') {
 			int demension = 1;
 			while (buf.charAt(offset + demension) == '[') {
 				demension++;
 			}
-			return new JvmType(buf.substring(offset, offset + demension + getType(buf, offset + demension).descriptor.length()));
+			return new FieldType(buf.substring(offset, offset + demension + getType(buf, offset + demension).descriptor.length()));
 		} else  {
-			return new JvmType(buf.substring(offset, offset + 1));
+			return new FieldType(buf.substring(offset, offset + 1));
 		}
 	}
 }
