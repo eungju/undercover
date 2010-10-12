@@ -99,8 +99,11 @@ public class SourceItem implements Item {
 	}
 	
 	void addUpLineCoverage(BlockMeta blockMeta, int executionCount) {
-		for (Integer each : blockMeta.lines) {
-			SourceLine sourceLine = lines.get(each - 1);
+		for (int lineNumber : blockMeta.lines) {
+			if (lines.size() < lineNumber) {
+				continue;
+			}
+			SourceLine sourceLine = lines.get(lineNumber - 1);
 			sourceLine.addBlock(executionCount);
 		}
 	}
