@@ -5,6 +5,7 @@
         <groupId>undercover</groupId>
         <artifactId>undercover-parent</artifactId>
         <version>0.8.3-SNAPSHOT</version>
+        <relativePath>../undercover-parent/pom.xml</relativePath>
     </parent>
 
 	<artifactId>undercover</artifactId>
