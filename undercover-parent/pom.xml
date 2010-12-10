@@ -3,7 +3,7 @@
 	<groupId>undercover</groupId>
 	<artifactId>undercover-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>0.8.3</version>
+	<version>0.8.4-SNAPSHOT</version>
 
 	<name>Undercover Parent</name>
 	<inceptionYear>2009</inceptionYear>
