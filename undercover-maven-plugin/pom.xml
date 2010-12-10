@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>undercover</groupId>
 			<artifactId>undercover</artifactId>
-			<version>${project.version}</version>
+			<version>${pom.parent.version}</version>
 		</dependency>
 
 		<!-- Maven Plugin -->
