@@ -164,11 +164,11 @@
 	<distributionManagement>
 		<repository>
 			<id>undercover</id>
-			<url>dav:https://undercover.googlecode.com/svn/maven/repository</url>
+			<url>https://undercover.googlecode.com/svn/maven/repository</url>
 		</repository>
 		<snapshotRepository>
 			<id>undercover-snapshot</id>
-			<url>dav:https://undercover.googlecode.com/svn/maven/snapshot-repository</url>
+			<url>https://undercover.googlecode.com/svn/maven/snapshot-repository</url>
 		</snapshotRepository>
 	</distributionManagement>
 
