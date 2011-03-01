@@ -1,52 +1,17 @@
 package undercover.support;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 
 public class IOUtils {
-	public static void closeQuietly(InputStream input) {
+	public static void closeQuietly(Closeable closeable) {
         try {
-            if (input != null) {
-                input.close();
+            if (closeable != null) {
+                closeable.close();
             }
         } catch (IOException ioe) {
             // ignore
         }
     }
-
-	public static void closeQuietly(OutputStream output) {
-        try {
-            if (output != null) {
-                output.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
-    }
-
-	public static void closeQuietly(Reader reader) {
-        try {
-            if (reader != null) {
-                reader.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
-	}
-
-	public static void closeQuietly(Writer writer) {
-        try {
-            if (writer != null) {
-            	writer.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
-	}
 
 	public static void copy(InputStream input, OutputStream output) throws IOException {
 		byte[] buffer = new byte[4 * 1024];

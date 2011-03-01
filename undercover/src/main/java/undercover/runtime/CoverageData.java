@@ -10,10 +10,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import undercover.support.IOUtils;
-import undercover.support.ObjectSupport;
-
-public class CoverageData extends ObjectSupport implements Serializable {
+public class CoverageData implements Serializable {
 	private static final long serialVersionUID = -2867261294970889507L;
 
 	private final Map<String, Coverage> coverages = new HashMap<String, Coverage>();
@@ -32,19 +29,19 @@ public class CoverageData extends ObjectSupport implements Serializable {
 			output = new ObjectOutputStream(new FileOutputStream(file));
 			output.writeObject(this);
 		} finally {
-			IOUtils.closeQuietly(output);
+            Helper.closeQuietly(output);
 		}
 	}
 	
 	public static CoverageData load(File file) throws IOException {
-		ObjectInputStream output = null;
+		ObjectInputStream input = null;
 		try {
-			output = new ObjectInputStream(new FileInputStream(file));
-			return (CoverageData) output.readObject();
+			input = new ObjectInputStream(new FileInputStream(file));
+			return (CoverageData) input.readObject();
 		} catch (ClassNotFoundException e) {
-			throw new IOException(e.getMessage());
+			throw new IOException(e.getMessage(), e);
 		} finally {
-			IOUtils.closeQuietly(output);
+            Helper.closeQuietly(input);
 		}
 	}
 }

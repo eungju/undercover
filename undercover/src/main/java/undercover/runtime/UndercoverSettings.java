@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import undercover.support.IOUtils;
-
 public class UndercoverSettings {
-	private static final String LOCATION = "/undercover.properties";
+	private static final String LOCATION = "undercover.properties";
 	private static final String COVERAGEDATA_SAVE_ON_EXIT = "undercover.coveragedata.saveOnExit";
 	private static final String COVERAGEDATA_FILE = "undercover.coveragedata.file";
 	
@@ -21,14 +19,14 @@ public class UndercoverSettings {
 		Properties properties = new Properties(systemProperties);
 		InputStream input = null;
 		try {
-			input = UndercoverSettings.class.getResourceAsStream(LOCATION);
+			input = UndercoverSettings.class.getClassLoader().getResourceAsStream(LOCATION);
 			if (input != null) {
 				properties.load(input);
 			}
 		} catch (IOException e) {
 			throw new IllegalStateException("Unable to load properties from " + LOCATION, e);
 		} finally {
-			IOUtils.closeQuietly(input);
+            Helper.closeQuietly(input);
 		}
 		return new UndercoverSettings(properties);
 	}
@@ -47,7 +45,7 @@ public class UndercoverSettings {
 			output = new FileOutputStream(file);
 			properties.store(output, "Undercover settings");
 		} finally {
-			IOUtils.closeQuietly(output);
+            Helper.closeQuietly(output);
 		}
 	}
 	
