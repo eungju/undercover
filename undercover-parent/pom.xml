@@ -38,16 +38,19 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
 			<version>${jmock.version}</version>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-legacy</artifactId>
 			<version>${jmock.version}</version>
+            <scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -61,7 +64,7 @@
 					<encoding>${maven.compiler.encoding}</encoding>
 					<debug>true</debug>
 					<optimize>true</optimize>
-					<showDeprecations>true</showDeprecations>
+                    <showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
 			<plugin>
