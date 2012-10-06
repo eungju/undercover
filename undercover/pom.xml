@@ -13,16 +13,20 @@
 
 	<name>Undercover</name>
 
-	<dependencies>
+    <dependencies>
+
+        <!-- Internal dependencies -->
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm-all</artifactId>
-			<version>3.2</version>
+            <version>3.2</version>
+            <optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
+            <optional>true</optional>
 		</dependency>
 
 		<!-- Ant -->
@@ -32,7 +36,44 @@
 			<version>1.7.1</version>
 			<optional>true</optional>
 		</dependency>
-		
+
 	</dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>jarjar-maven-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jarjar</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>asm:asm-all</include>
+                                <include>commons-lang:commons-lang</include>
+                            </includes>
+                            <rules>
+                                <rule>
+                                    <pattern>org.objectweb.asm.**</pattern>
+                                    <result>undercover.internal.asm.@1</result>
+                                </rule>
+                                <rule>
+                                    <pattern>org.apache.commons.lang.**</pattern>
+                                    <result>undercover.internal.commons.lang.@1</result>
+                                </rule>
+                                <keep>
+                                    <pattern>undercover.**</pattern>
+                                </keep>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
